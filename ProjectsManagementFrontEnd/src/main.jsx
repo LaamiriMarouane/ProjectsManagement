@@ -5,10 +5,12 @@ import "./index.css";
 import store from "./Store";
 import { Provider } from "react-redux";
 import { BrowserRouter as Router } from "react-router-dom";
+import NavBar from "./components/NavBar.jsx";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Provider store={store}>
+    <Provider store={store}>     
+      <NavBar/>
       <App />
     </Provider>
   </React.StrictMode>
