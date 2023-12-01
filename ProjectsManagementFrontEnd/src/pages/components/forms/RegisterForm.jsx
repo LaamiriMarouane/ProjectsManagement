@@ -1,52 +1,73 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import bcrypt from 'bcryptjs';
+import { useDispatch } from 'react-redux';
+import registerUser from '../../../features/auth/registerSlice';
 
 const RegisterForm = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    const { register, handleSubmit, formState: { errors, isValid, isSubmitting }, watch } = useForm();
+    const dispatch = useDispatch();
 
-    const onSubmit = (data) => {
-        const hashedPassword = bcrypt.hashSync(data.password, 10);
+    const onSubmit = async (data) => {
 
-
-        console.log('New user registered:', { username: data.username, password: hashedPassword });
+        try {
+            await dispatch(
+                registerUser(data)
+            );
+            console.log('New user Registered', data);
+        } catch (error) {
+            console.error('Failed Registration', error);
+        }
     };
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto mt-8 bg-white p-8 rounded shadow-md">
-            <div className="flex w-full items-center justify-center p-2 text-xl font-bold">
-                S'authentifier vous
+        <form onSubmit={handleSubmit(onSubmit)} className="max-w-md mx-auto mt-8 bg-white p-8 rounded-xl shadow-lg">
+            <div className="flex w-full items-center justify-center p-2 text-2xl font-bold">
+                Veuillez s'authentifier
             </div>
             <div className="mb-4">
-            <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Username</label>
-                    <input className='shadow appearance-none border rounded w-full py-2 px-3 textgray-700 leading-tight focus:outline-none focus:shadow-outline' type="text" placeholder='username'
+                <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Username</label>
+                <input className=' appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400' type="text" placeholder='username'
                     {...register('username', { required: true })}
                 />
                 {errors.username && <span className="text-red-500">Username is required</span>}
             </div>
 
             <div className="mb-4">
-            <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Email</label>
-                    <input className='shadow appearance-none border rounded w-full py-2 px-3 textgray-700 leading-tight focus:outline-none focus:shadow-outline' type="email"  placeholder='example@gmail.com'
-                    {...register('email', { required: true , pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })}
+                <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Email</label>
+                <input className=' appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400' type="email" placeholder='example@gmail.com'
+                    {...register('email', { required: true })}
                 />
                 {
                     errors.email && <span className="text-red-500">Email is required</span>
-                    || (errors?.email?.type === "pattern" && (<p className='text-red-500'>Please write correct email address</p>))
                 }
             </div>
 
             <div className="mb-4">
-            <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Password</label>
-                    <input className='shadow appearance-none border rounded w-full py-2 px-3 textgray-700 leading-tight focus:outline-none focus:shadow-outline' type="password"  placeholder='********'
+                <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Password</label>
+                <input className=' appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400' type="password" placeholder='********'
                     {...register('password', { required: true })}
                 />
                 {errors.password && <span className="text-red-500">Password is required</span>}
             </div>
 
+            <div className="mb-4">
+                <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Confirm Password</label>
+                <input
+                    className='appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400'
+                    type="password"
+                    placeholder='********'
+                    {...register('confirmPassword', {
+                        required: 'Confirm Password is required',
+                        validate: value => value === watch('password') || "Passwords should match!"
+                    })}
+                />
+                {errors.confirmPassword && <span className="text-red-500">{errors.confirmPassword.message}</span>}
+            </div>
+
             <button
                 type="submit"
-                className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:shadow-outline-blue active:bg-blue-800"
+                className="text-white py-2 px-4 rounded w-full  focus:outline-none focus:shadow-outline-blue bg-btn"
+                disabled={!isValid || isSubmitting}
             >Register</button>
         </form>
     );

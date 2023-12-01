@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-export const register = createAsyncThunk("register", async (formData) => {
+export const registerUser = createAsyncThunk("register", async (formData) => {
   const res = await axios.post(
     "http://localhost:8080/api/v1/register",
     formData

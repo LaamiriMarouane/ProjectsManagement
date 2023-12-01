@@ -9,15 +9,13 @@ const NavBar = () => {
           MMH
         </a>
         <div className="flex justify-around items-center gap-5">
-          <Link to={"/register"} className={"font-bold text-lg"}>
+          <Link to={"/register"} className={"font-bold text-sm"}>
             Register
           </Link>
 
           <Link
             to="/login"
-            className={
-              "font-bold text-lg px-3 py-2 rounded-lg bg-black text-white"
-            }
+            className='font-bold text-sm px-3 py-2 rounded bg-black text-white'
           >
             Login
           </Link>
