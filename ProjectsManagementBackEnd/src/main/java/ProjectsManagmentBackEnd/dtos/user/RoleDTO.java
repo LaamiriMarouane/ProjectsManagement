@@ -1,15 +1,14 @@
 package ProjectsManagmentBackEnd.dtos.user;
 
 import ProjectsManagmentBackEnd.entity.ProjectRole;
-import ProjectsManagmentBackEnd.entity.User.Permission;
-import ProjectsManagmentBackEnd.entity.User.RoleType;
+import ProjectsManagmentBackEnd.entity.user.Permission;
+import ProjectsManagmentBackEnd.entity.user.RoleType;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 import java.util.Set;

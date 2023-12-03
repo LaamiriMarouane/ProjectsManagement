@@ -1,9 +1,7 @@
 package ProjectsManagmentBackEnd.repository;
 
-import ProjectsManagmentBackEnd.entity.User.Role;
-import ProjectsManagmentBackEnd.entity.User.RoleType;
-import ProjectsManagmentBackEnd.entity.User.User;
-import lombok.AllArgsConstructor;
+import ProjectsManagmentBackEnd.entity.user.Role;
+import ProjectsManagmentBackEnd.entity.user.RoleType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

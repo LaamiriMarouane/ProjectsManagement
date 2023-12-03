@@ -1,43 +1,49 @@
-import axios from 'axios';
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import axios from "axios";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 const ForgotPassword = () => {
-    const { register, handleSubmit, formState: { errors } } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-    const onSubmit = async (data) => {
-        const response = await axios.post('/email', {
-            body: 'Password reset requested for:' + data.email
-        });
+  const onSubmit = async (data) => {
+    console.log(data);
+  };
 
-        if (response.status === 200) {
-            console.log('Sending Email To Email successful');
-        } else {
-            console.error('Sending Email To Email failed : status -> ', response.status);
-        }
-    };
+  return (
+    <form
+      onSubmit={handleSubmit(onSubmit)}
+      className="max-w-md mx-auto mt-8 bg-white p-8 rounded-xl shadow-lg"
+    >
+      <div className="flex w-full items-center justify-center p-2 text-2xl font-bold">
+        Forgot Password!
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mt-3 mb-2">
+          Email
+        </label>
+        <input
+          className=" appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400"
+          type="email"
+          placeholder="example@gmail.com"
+          {...register("email", { required: true })}
+        />
+        {errors.email && (
+          <span className="text-red-500">Email is required</span>
+        )}
+      </div>
 
-    return (
-        <form onSubmit={handleSubmit(onSubmit)} className='max-w-md mx-auto mt-8 bg-white p-8 rounded-xl shadow-lg'>
-            <div className="flex w-full items-center justify-center p-2 text-2xl font-bold">
-                Forgot Password!
-            </div>
-            <div className="mb-4">
-                <label className='block text-gray-700 text-sm font-bold mt-3 mb-2'>Email</label>
-                <input className=' appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400' type="email" placeholder='example@gmail.com'
-                    {...register('email', { required: true })}
-                />
-                {
-                    errors.email && <span className="text-red-500">Email is required</span>
-                }
-            </div>
-
-            <button
-                type="submit"
-                className="text-white py-2 px-4 rounded w-full  focus:outline-none focus:shadow-outline-blue bg-btn"
-            >Reset Password</button>
-        </form>
-    );
+      <button
+        type="submit"
+        className="text-white py-2 px-4 rounded w-full  focus:outline-none focus:shadow-outline-blue bg-btn"
+      >
+        Reset Password
+      </button>
+    </form>
+  );
 };
 
 export default ForgotPassword;

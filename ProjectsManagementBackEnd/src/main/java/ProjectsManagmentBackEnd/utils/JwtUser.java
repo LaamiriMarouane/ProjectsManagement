@@ -1,8 +1,7 @@
 package ProjectsManagmentBackEnd.utils;
 
-import ProjectsManagmentBackEnd.entity.User.Permission;
-import ProjectsManagmentBackEnd.entity.User.Role;
-import ProjectsManagmentBackEnd.entity.User.User;
+import ProjectsManagmentBackEnd.entity.user.Role;
+import ProjectsManagmentBackEnd.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
@@ -10,10 +9,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data

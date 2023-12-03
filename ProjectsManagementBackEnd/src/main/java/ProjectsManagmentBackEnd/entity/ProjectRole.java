@@ -1,15 +1,12 @@
 package ProjectsManagmentBackEnd.entity;
 
-import ProjectsManagmentBackEnd.entity.ProjectGroup;
-import ProjectsManagmentBackEnd.entity.User.Role;
-import ProjectsManagmentBackEnd.entity.User.User;
+import ProjectsManagmentBackEnd.entity.user.Role;
+import ProjectsManagmentBackEnd.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-
-import java.util.List;
 
 @Entity
 @Getter

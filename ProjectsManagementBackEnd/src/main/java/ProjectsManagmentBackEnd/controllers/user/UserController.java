@@ -27,7 +27,7 @@ public class UserController {
     private UserServiceImp userService;
 
   //  private PasswordResetServiceImp passwordResetServiceImp;
-
+   @PreAuthorize("hasRole('projectAdmin:read')")
    @PostMapping(ApiPaths.AUTH)
     public ResponseEntity<JwtAuthenticationResponse> createAuthenticationToken(@RequestBody JwtAuthenticationRequest auth) throws AuthenticationException {
       return userService.login(auth);

@@ -21,14 +21,14 @@ const registerSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(register.pending, (state, action) => {
+      .addCase(registerUser.pending, (state, action) => {
         state.loading = true;
       })
-      .addCase(register.fulfilled, (state, { payload }) => {
+      .addCase(registerUser.fulfilled, (state, { payload }) => {
         state.userInfo = payload;
         state.loading = false;
       })
-      .addCase(register.rejected, (state, action) => {
+      .addCase(registerUser.rejected, (state, action) => {
         console.log("rejected", action.error?.message);
         state.loading = false;
       });

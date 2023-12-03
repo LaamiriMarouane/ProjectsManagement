@@ -1,5 +1,6 @@
-package ProjectsManagmentBackEnd.entity.User;
+package ProjectsManagmentBackEnd.entity.user;
 
+import ProjectsManagmentBackEnd.entity.demand.Demand;
 import ProjectsManagmentBackEnd.entity.Event;
 import ProjectsManagmentBackEnd.entity.ProjectGroup;
 import jakarta.persistence.*;
@@ -8,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,6 +51,9 @@ public class User {
     private Role role;
     @OneToMany
     private Set<Event> events;
+
+    @OneToMany
+    private List<Demand>demands;
 
     @Temporal(TemporalType.TIMESTAMP)
     private  java.sql.Timestamp lastPasswordResetDate;

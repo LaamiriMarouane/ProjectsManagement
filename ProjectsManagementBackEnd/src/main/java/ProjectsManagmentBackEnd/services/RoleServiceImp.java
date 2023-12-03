@@ -1,8 +1,8 @@
 package ProjectsManagmentBackEnd.services;
 
-import ProjectsManagmentBackEnd.entity.User.Permission;
-import ProjectsManagmentBackEnd.entity.User.Role;
-import ProjectsManagmentBackEnd.entity.User.RoleType;
+import ProjectsManagmentBackEnd.entity.user.Permission;
+import ProjectsManagmentBackEnd.entity.user.Role;
+import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.repository.RoleRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
@@ -22,7 +22,7 @@ public class RoleServiceImp {
         Role appUser = initializeRole(RoleType.APP_USER);
         Role appAdmin = initializeRole(RoleType.APP_ADMIN);
         Role projectAdmin = initializeRole(RoleType.PROJECT_ADMIN);
-        Role projectManager = initializeRole(RoleType.PROJECT_MANAGER);
+        Role projectManager = initializeRole(RoleType.PROJECT_MEMBER);
         Role roleGuest = initializeRole(RoleType.GUEST);
 
         // Add permissions to roles
@@ -36,26 +36,26 @@ public class RoleServiceImp {
                 Permission.PROJECT_ADMIN_CREATE,
                 Permission.PROJECT_ADMIN_UPDATE,
                 Permission.PROJECT_ADMIN_DELETE,
-                Permission.PROJECT_MANAGER_CREATE,
-                Permission.PROJECT_MANAGER_READ,
-                Permission.PROJECT_MANAGER_UPDATE,
-                Permission.PROJECT_MANAGER_DELETE
+                Permission.PROJECT_MEMBER_CREATE,
+                Permission.PROJECT_MEMBER_READ,
+                Permission.PROJECT_MEMBER_UPDATE,
+                Permission.PROJECT_MEMBER_DELETE
         ));
         projectAdmin.setPermissions(Set.of(
                 Permission.PROJECT_ADMIN_READ,
                 Permission.PROJECT_ADMIN_CREATE,
                 Permission.PROJECT_ADMIN_UPDATE,
                 Permission.PROJECT_ADMIN_DELETE,
-                Permission.PROJECT_MANAGER_CREATE,
-                Permission.PROJECT_MANAGER_READ,
-                Permission.PROJECT_MANAGER_UPDATE,
-                Permission.PROJECT_MANAGER_DELETE
+                Permission.PROJECT_MEMBER_CREATE,
+                Permission.PROJECT_MEMBER_READ,
+                Permission.PROJECT_MEMBER_UPDATE,
+                Permission.PROJECT_MEMBER_DELETE
         ));
         projectManager.setPermissions(Set.of(
-                Permission.PROJECT_MANAGER_CREATE,
-                Permission.PROJECT_MANAGER_READ,
-                Permission.PROJECT_MANAGER_UPDATE,
-                Permission.PROJECT_MANAGER_DELETE
+                Permission.PROJECT_MEMBER_CREATE,
+                Permission.PROJECT_MEMBER_READ,
+                Permission.PROJECT_MEMBER_UPDATE,
+                Permission.PROJECT_MEMBER_DELETE
         ));
         roleGuest.setPermissions(Set.of(Permission.GUEST_READ));
 

@@ -2,7 +2,7 @@ package ProjectsManagmentBackEnd.utils;
 
 
 
-import ProjectsManagmentBackEnd.entity.User.User;
+import ProjectsManagmentBackEnd.entity.user.User;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.interfaces.DecodedJWT;

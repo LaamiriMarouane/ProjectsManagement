@@ -1,4 +1,4 @@
-package ProjectsManagmentBackEnd.entity.User;
+package ProjectsManagmentBackEnd.entity.user;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,10 +14,10 @@ public enum Permission {
     PROJECT_ADMIN_UPDATE("projectAdmin:update"),
     PROJECT_ADMIN_CREATE("projectAdmin:create"),
     PROJECT_ADMIN_DELETE("projectAdmin:delete"),
-    PROJECT_MANAGER_READ("projectManager:read"),
-    PROJECT_MANAGER_UPDATE("projectManager:update"),
-    PROJECT_MANAGER_CREATE("projectManager:create"),
-    PROJECT_MANAGER_DELETE("projectManager:delete"),
+    PROJECT_MEMBER_READ("projectMember:read"),
+    PROJECT_MEMBER_UPDATE("projectMember:update"),
+    PROJECT_MEMBER_CREATE("projectMember:create"),
+    PROJECT_MEMBER_DELETE("projectMember:delete"),
     GUEST_READ("projectUserAdmin:read")
 
     ;

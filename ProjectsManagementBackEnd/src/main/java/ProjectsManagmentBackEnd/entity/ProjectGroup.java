@@ -1,6 +1,6 @@
 package ProjectsManagmentBackEnd.entity;
 
-import ProjectsManagmentBackEnd.entity.User.User;
+import ProjectsManagmentBackEnd.entity.user.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,20 +1,14 @@
-package ProjectsManagmentBackEnd.entity.User;
+package ProjectsManagmentBackEnd.entity.user;
 
 
 import ProjectsManagmentBackEnd.entity.ProjectRole;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
-
-import static ProjectsManagmentBackEnd.entity.User.Permission.*;
 
 @Entity
 @Getter

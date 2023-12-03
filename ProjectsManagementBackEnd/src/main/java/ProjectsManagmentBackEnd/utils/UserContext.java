@@ -1,12 +1,10 @@
 package ProjectsManagmentBackEnd.utils;
 
 
-import ProjectsManagmentBackEnd.entity.User.User;
+import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-
-import java.util.Optional;
 
 public interface UserContext {
 

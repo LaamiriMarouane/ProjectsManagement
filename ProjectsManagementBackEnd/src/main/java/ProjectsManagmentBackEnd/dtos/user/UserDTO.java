@@ -1,6 +1,6 @@
 package ProjectsManagmentBackEnd.dtos.user;
 
-import ProjectsManagmentBackEnd.entity.User.Role;
+import ProjectsManagmentBackEnd.entity.user.Role;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

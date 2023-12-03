@@ -1,9 +1,9 @@
-package ProjectsManagmentBackEnd.entity.User;
+package ProjectsManagmentBackEnd.entity.user;
 
 public enum RoleType {
         APP_USER,
         APP_ADMIN,
         PROJECT_ADMIN,
-        PROJECT_MANAGER,
+        PROJECT_MEMBER,
         GUEST
 }

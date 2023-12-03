@@ -2,7 +2,6 @@ package ProjectsManagmentBackEnd.config;
 
 
 
-import ProjectsManagmentBackEnd.entity.User.Role;
 import ProjectsManagmentBackEnd.holders.ApiPaths;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationTokenFilter;
 import lombok.RequiredArgsConstructor;

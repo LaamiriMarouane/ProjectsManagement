@@ -2,9 +2,9 @@ package ProjectsManagmentBackEnd.services;
 
 
 import ProjectsManagmentBackEnd.dtos.user.UserDTO;
-import ProjectsManagmentBackEnd.entity.User.Role;
-import ProjectsManagmentBackEnd.entity.User.RoleType;
-import ProjectsManagmentBackEnd.entity.User.User;
+import ProjectsManagmentBackEnd.entity.user.Role;
+import ProjectsManagmentBackEnd.entity.user.RoleType;
+import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.AuthenticationException;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.repository.RoleRepository;
@@ -36,7 +36,7 @@ public class UserServiceImp {
 
     private PasswordEncoder passwordEncoder;
 
-   private UserValidator userValidator;
+    private UserValidator userValidator;
 
     private AuthenticationManager authenticationManager;
 
@@ -53,9 +53,8 @@ public class UserServiceImp {
         user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         user.setUsername(userInfo.getUsername());
         user.setEnabled(true);
-      Role role =roleRepository.findByName(RoleType.APP_ADMIN).get();
+      Role role =roleRepository.findByName(RoleType.APP_USER).get();
         //to do set roles *********
-       // user.setAuthorities(Collections.singletonList(AuthorityName.ROLE_ADMIN));
        user.setRole(role);
         //to do set roles *********
          userRepository.save(user);
