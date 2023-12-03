@@ -10,6 +10,7 @@ public class ApiPaths {
         public static final String GROUPS = "/groups";
         public static final String USERS = "/users";
         public static final String EVENTS ="/events" ;
+        public static final String DEMANDS ="/demands" ;
         public static final String AUTH = "/auth";
         public static final String TOKEN = "/auth/access-token";
         public static final String  PASSWORD_RESET= "/reset-password";
