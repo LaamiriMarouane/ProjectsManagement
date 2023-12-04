@@ -31,5 +31,6 @@ public class Role {
     @OneToOne
     private ProjectRole projectRole;
 
+
 }
 

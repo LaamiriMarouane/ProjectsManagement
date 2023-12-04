@@ -20,7 +20,10 @@ public class Demand {
     private String id;
 
     private String projectName;
+
     private String description;
+
+    private boolean isPublic;
 
     @ManyToOne
     private User user;

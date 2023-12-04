@@ -19,7 +19,11 @@ public class DemandDTO {
 
     @NotBlank(message = "projectName must not be empty")
     private String projectName;
+
     private String description;
+
+    @NotNull(message = "project is public must not be null")
+    private boolean isPublic;
 
     private User user;
 

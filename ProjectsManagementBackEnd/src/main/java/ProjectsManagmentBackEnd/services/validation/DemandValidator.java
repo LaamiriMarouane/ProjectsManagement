@@ -2,9 +2,12 @@ package ProjectsManagmentBackEnd.services.validation;
 
 import ProjectsManagmentBackEnd.dtos.DemandDTO;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
-
+@Component
+@AllArgsConstructor
 public class DemandValidator {
     private ObjectValidator<DemandDTO> demandDTOObjectValidator;
     public  void demandValidate(DemandDTO demandDTO) throws BusinessException {

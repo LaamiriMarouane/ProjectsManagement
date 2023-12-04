@@ -51,7 +51,7 @@ public class UserServiceImp {
         user.setLastName(userInfo.getLastName());
         user.setEmail(userInfo.getEmail());
         user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-        user.setUsername(userInfo.getUsername());
+        user.setUsername(userInfo.getUserName());
         user.setEnabled(true);
       Role role =roleRepository.findByName(RoleType.APP_USER).get();
         //to do set roles *********

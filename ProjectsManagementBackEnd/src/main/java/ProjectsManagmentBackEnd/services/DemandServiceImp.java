@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-
 public class DemandServiceImp {
     private DemandValidator demandValidator;
     private DemandRepository demandRepository;
@@ -31,6 +30,7 @@ public class DemandServiceImp {
     public ResponseEntity<DemandDTO> create(DemandDTO demandDTO)  throws BusinessException {
         demandValidator.demandValidate(demandDTO);
         demandDTO.setUser(UserContext.currentUser());
+        demandDTO.setDemandState(DemandState.NEW);
         Demand newDemand=DemandMapper.convert(demandDTO);
         demandRepository.save(newDemand);
         return ResponseEntity.status(HttpStatus.CREATED).body(demandDTO);

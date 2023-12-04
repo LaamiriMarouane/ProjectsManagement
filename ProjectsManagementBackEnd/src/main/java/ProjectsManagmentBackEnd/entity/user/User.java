@@ -47,7 +47,7 @@ public class User {
    )
    private Set<ProjectGroup> userGroups;
 
-    @OneToOne
+    @ManyToOne
     private Role role;
     @OneToMany
     private Set<Event> events;

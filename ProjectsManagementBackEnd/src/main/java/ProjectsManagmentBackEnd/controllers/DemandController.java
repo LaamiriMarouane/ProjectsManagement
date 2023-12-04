@@ -8,23 +8,31 @@ import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
 import ProjectsManagmentBackEnd.services.DemandServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
+import java.util.List;
 
 @RestController
-@RequestMapping(ApiPaths.V1)
+@RequestMapping(ApiPaths.V1+ApiPaths.DEMANDS)
 @AllArgsConstructor
 public class DemandController {
 
     DemandServiceImp demandService;
 
-    @PostMapping(ApiPaths.DEMANDS)
+    @GetMapping()
+    public ResponseEntity<List<DemandDTO>> getAll()  {
+        return demandService.getAll();
+
+    }
+    @PostMapping()
     public ResponseEntity<DemandDTO> createDemand(@RequestBody DemandDTO demandDTO) throws BusinessException {
         return demandService.create(demandDTO);
+
+    }
+    @PostMapping("/validate/{id}")
+    public ResponseEntity<DemandDTO> validateDemand(@PathVariable("id") String DemandId) throws BusinessException {
+        return demandService.validate(DemandId);
 
     }
 }

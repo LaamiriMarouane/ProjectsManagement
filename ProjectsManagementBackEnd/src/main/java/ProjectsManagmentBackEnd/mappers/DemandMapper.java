@@ -15,6 +15,7 @@ public class DemandMapper {
             out.setDescription(in.getDescription());
             out.setProjectName(in.getProjectName());
             out.setValidationTime(in.getValidationTime());
+            out.setPublic(in.isPublic());
 
 
             return out;
@@ -32,6 +33,7 @@ public class DemandMapper {
             out.setDescription(in.getDescription());
             out.setProjectName(in.getProjectName());
             out.setValidationTime(in.getValidationTime());
+            out.setPublic(in.isPublic());
 
 
             return out;
