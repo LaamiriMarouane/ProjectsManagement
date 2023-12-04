@@ -13,6 +13,7 @@ const LoginForm = () => {
   const dispatch = useDispatch();
 
   const onSubmit = async (data) => {
+    console.log(data);
     dispatch(authentication(data));
   };
 

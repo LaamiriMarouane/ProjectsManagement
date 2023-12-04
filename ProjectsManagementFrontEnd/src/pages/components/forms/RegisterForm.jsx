@@ -1,7 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import registerUser from "../../../features/auth/registerSlice";
+import { registerUser } from "../../../features/auth/registerSlice";
 
 const RegisterForm = () => {
   const {
@@ -13,6 +13,7 @@ const RegisterForm = () => {
   const dispatch = useDispatch();
 
   const onSubmit = (data) => {
+    console.log(data);
     dispatch(registerUser(data));
   };
 
@@ -26,16 +27,44 @@ const RegisterForm = () => {
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mt-3 mb-2">
-          Username
+          UserName
         </label>
         <input
           className=" appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400"
           type="text"
-          placeholder="username"
-          {...register("username", { required: true })}
+          placeholder="userName"
+          {...register("userName", { required: true })}
         />
-        {errors.username && (
-          <span className="text-red-500">Username is required</span>
+        {errors.userName && (
+          <span className="text-red-500">UserName is required</span>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mt-3 mb-2">
+          FirstName
+        </label>
+        <input
+          className=" appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400"
+          type="text"
+          placeholder="firstName"
+          {...register("firstName", { required: true })}
+        />
+        {errors.firstName && (
+          <span className="text-red-500">FirstName is required</span>
+        )}
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700 text-sm font-bold mt-3 mb-2">
+          LastName
+        </label>
+        <input
+          className=" appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400"
+          type="text"
+          placeholder="lastName"
+          {...register("lastName", { required: true })}
+        />
+        {errors.lastName && (
+          <span className="text-red-500">LastName is required</span>
         )}
       </div>
 
@@ -77,14 +106,16 @@ const RegisterForm = () => {
           className="appearance-none outline-none bg-transparent w-full py-2 px-3 textgray-700 leading-tight border-b border-gray-400"
           type="password"
           placeholder="********"
-          {...register("confirmPassword", {
+          {...register("confirmationPassword", {
             required: "Confirm Password is required",
             validate: (value) =>
               value === watch("password") || "Passwords should match!",
           })}
         />
-        {errors.confirmPassword && (
-          <span className="text-red-500">{errors.confirmPassword.message}</span>
+        {errors.confirmationPassword && (
+          <span className="text-red-500">
+            {errors.confirmationPassword.message}
+          </span>
         )}
       </div>
 
