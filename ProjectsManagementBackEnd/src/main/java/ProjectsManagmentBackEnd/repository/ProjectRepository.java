@@ -10,10 +10,8 @@ import java.util.List;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project,String> {
-  //  List<Project> findAllByMembersGroupInOrAdminsGroupIn(List<ProjectGroup> memberGroups,List<ProjectGroup> adminGroups);
   @Query("SELECT e FROM Project e WHERE EXISTS (SELECT el FROM e.projectGroups el WHERE el IN :groupUsers)")
   List<Project> findAllByProjectGroupsContaining(List<ProjectGroup> groupUsers);
   List<Project> findAllByIsPublicIsAndIsActiveIs(boolean isPublic,boolean isActive);
-  List<Project> findAllByIsPublicIs(boolean isPublic);
 
 }

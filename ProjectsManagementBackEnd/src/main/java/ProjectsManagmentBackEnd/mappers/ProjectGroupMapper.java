@@ -25,7 +25,6 @@ public class ProjectGroupMapper {
             final ProjectGroup out = new ProjectGroup();
             out.setId(in.getId());
             out.setGroupName(in.getGroupName());
-           // out.setGroupType(in.getGroupType());
             out.setGroupType(in.getGroupType());
 
             return out;

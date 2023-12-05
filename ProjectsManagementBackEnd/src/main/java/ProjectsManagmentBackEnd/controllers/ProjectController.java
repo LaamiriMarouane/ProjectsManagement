@@ -21,7 +21,7 @@ public class ProjectController {
         return projectService.getAll();
     }
     @GetMapping("/{projectId}")
-    public ResponseEntity<List<ProjectDTO>> getDetails(@PathVariable String projectId)  {
+    public ResponseEntity<List<ProjectDTO>> getDetails(@PathVariable("projectId") String id)  {
         return projectService.getAll();
     }
     @PutMapping("/addMember/{projectId}/{userId}")

@@ -40,8 +40,8 @@ public class DemandController {
 
     }
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity deleteDemand( @PathVariable("id") String demandId)  {
-        return demandService.delete(demandId);
+    public ResponseEntity deleteDemand( @PathVariable("id") String id)  {
+        return demandService.delete(id);
 
     }
 }

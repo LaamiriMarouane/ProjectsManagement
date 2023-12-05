@@ -41,6 +41,7 @@ public class ProjectMapper {
             out.setLongName(in.getLongName());
             out.setShortName(in.getShortName());
             out.setLastUpdate(in.getLastUpdate());
+          //  out.setEvents(in.getEvents());
             out.setEvents(in.getEvents());
             out.setProjectGroups(in.getProjectGroups().stream().map(ProjectGroupMapper::convert).collect(Collectors.toList()));
             return out;

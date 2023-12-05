@@ -47,7 +47,7 @@ public class DemandServiceImp {
         }
         demand.get().setDemandState(DemandState.COMPLETED);
         demandRepository.save( demand.get());
-        // to do create a new Project
+        // to do create a new Project and change user roles
         projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
         return ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demand.get()));
     }
