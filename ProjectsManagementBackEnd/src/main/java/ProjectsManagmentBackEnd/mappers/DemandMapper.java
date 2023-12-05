@@ -47,7 +47,7 @@ public class DemandMapper {
         }
         return null;
     }
-    public static Project convertToProject(DemandDTO in) {
+    public static Project convertToProject(Demand in) {
 
         if (in != null) {
             final Project out = new Project();

@@ -39,6 +39,7 @@ public class DemandServiceImp {
     }
     public ResponseEntity<DemandDTO> validate(String demandId)  throws BusinessException {
        Optional<Demand> demand=demandRepository.findById(demandId);
+        User user=UserContext.currentUser();
         if (!demand.isPresent()){
             Map errorMap=new HashMap<>();
             errorMap.put("error validating demand ","demand not found.");
@@ -47,6 +48,7 @@ public class DemandServiceImp {
         demand.get().setDemandState(DemandState.COMPLETED);
         demandRepository.save( demand.get());
         // to do create a new Project
+        projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
         return ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demand.get()));
     }
     public ResponseEntity<List<DemandDTO>> getAll() {
