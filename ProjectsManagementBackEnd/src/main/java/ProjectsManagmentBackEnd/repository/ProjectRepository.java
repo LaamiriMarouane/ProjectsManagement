@@ -1,17 +1,18 @@
 package ProjectsManagmentBackEnd.repository;
 
-import ProjectsManagmentBackEnd.entity.Project;
-import ProjectsManagmentBackEnd.entity.ProjectGroup;
-import ProjectsManagmentBackEnd.entity.user.User;
-import org.springframework.context.annotation.DeferredImportSelector;
+import ProjectsManagmentBackEnd.entity.project.Project;
+import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Map;
 
 @Repository
 public interface ProjectRepository extends JpaRepository<Project,String> {
-    List<Project> findAllByMembersGroupInOrAdminsGroupIn(List<ProjectGroup> memberGroups,List<ProjectGroup> adminGroups);
+  //  List<Project> findAllByMembersGroupInOrAdminsGroupIn(List<ProjectGroup> memberGroups,List<ProjectGroup> adminGroups);
+  @Query("SELECT e FROM Project e WHERE EXISTS (SELECT el FROM e.projectGroups el WHERE el IN :groupUsers)")
+  List<Project> findAllByProjectGroupsContaining(List<ProjectGroup> groupUsers);
+    List<Project> findAllByIsPublicIsAndIsActiveIs(boolean isPublic,boolean isActive);
 
 }

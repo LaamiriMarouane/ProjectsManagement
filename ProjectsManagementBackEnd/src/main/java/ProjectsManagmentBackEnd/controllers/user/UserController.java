@@ -10,10 +10,7 @@ import ProjectsManagmentBackEnd.services.UserServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
 
@@ -33,7 +30,11 @@ public class UserController {
 
     }
 
+    @GetMapping(ApiPaths.USERS+ApiPaths.SEARCH+"={subString}")
+    public ResponseEntity search( @PathVariable("subString") String subString)  {
+        return userService.search(subString);
 
+    }
 
     @PostMapping(ApiPaths.REGISTER )
     public  void register(@RequestBody UserDTO userInfo) throws BusinessException {

@@ -40,7 +40,8 @@ public class WebSecurityConfig {
                         .requestMatchers(ApiPaths.V1 +ApiPaths.PASSWORD_RESET).permitAll()
                         .requestMatchers(ApiPaths.V1 + ApiPaths.REGISTER).permitAll()
                         .requestMatchers(ApiPaths.V1 + ApiPaths.FORGOT_PASSWORD).permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
+                        //.anyRequest().authenticated())
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(authenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();

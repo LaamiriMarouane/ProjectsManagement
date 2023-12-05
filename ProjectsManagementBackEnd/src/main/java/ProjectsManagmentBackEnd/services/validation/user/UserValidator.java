@@ -25,7 +25,7 @@ public class UserValidator {
 
             isValidErrors.put("passwordConf","passwords do not match");
         }
-        if(userRepository.existsUserByUsernameOrEmail(userInfo.getUserName(),userInfo.getEmail())){
+        if(userRepository.existsUserByUsernameOrEmail(userInfo.getUsername(),userInfo.getEmail())){
             isValidErrors=new HashMap<>();
             isValidErrors.put("exist","user account exist" );
         }

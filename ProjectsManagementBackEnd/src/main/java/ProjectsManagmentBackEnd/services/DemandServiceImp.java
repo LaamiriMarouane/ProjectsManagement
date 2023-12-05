@@ -7,7 +7,9 @@ import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.mappers.DemandMapper;
+import ProjectsManagmentBackEnd.mappers.UserMapper;
 import ProjectsManagmentBackEnd.repository.DemandRepository;
+import ProjectsManagmentBackEnd.repository.UserRepository;
 import ProjectsManagmentBackEnd.services.validation.DemandValidator;
 import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
@@ -15,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,14 +25,17 @@ import java.util.stream.Collectors;
 public class DemandServiceImp {
     private DemandValidator demandValidator;
     private DemandRepository demandRepository;
+    private ProjectServiceImp projectServiceImp;
+    private UserRepository userRepository;
 
     public ResponseEntity<DemandDTO> create(DemandDTO demandDTO)  throws BusinessException {
         demandValidator.demandValidate(demandDTO);
-        demandDTO.setUser(UserContext.currentUser());
+        demandDTO.setUser(UserMapper.convertShort(UserContext.currentUser()));
         demandDTO.setDemandState(DemandState.NEW);
-        Demand newDemand=DemandMapper.convert(demandDTO);
-        demandRepository.save(newDemand);
-        return ResponseEntity.status(HttpStatus.CREATED).body(demandDTO);
+        User user =userRepository.findById(demandDTO.getUser().getId()).get();
+        Demand newDemand=DemandMapper.convert(demandDTO,user);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(DemandMapper.convert( demandRepository.save(newDemand)));
     }
     public ResponseEntity<DemandDTO> validate(String demandId)  throws BusinessException {
        Optional<Demand> demand=demandRepository.findById(demandId);
@@ -58,12 +60,36 @@ public class DemandServiceImp {
         return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
 
     }
-
-    public void update(DemandDTO demandDTO) {
+    public ResponseEntity<List<DemandState>> getAllDemandStates() {
+        List<DemandState> demandDTOList;
+        User user=UserContext.currentUser();
+        if(user.getRole().getName()== RoleType.APP_ADMIN){
+            demandDTOList= Arrays.asList(DemandState.COMPLETED,DemandState.REJECTED);
+        }else{
+            demandDTOList= Arrays.asList(DemandState.CANCELLED);        }
+        return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
 
     }
 
-    public void delete(String id) {
+
+
+    public ResponseEntity<DemandDTO> update(DemandDTO demandDTO) throws BusinessException {
+        demandValidator.demandValidate(demandDTO);
+        Optional<Demand> demandToUpdate= demandRepository.findById(demandDTO.getId());
+        User user =userRepository.findById(demandDTO.getUser().getId()).get();
+        if(demandToUpdate.isPresent()){
+            Demand demandUpdated = demandRepository.save( DemandMapper.convert(demandDTO,user));
+
+          return   ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demandUpdated));
+        }else {
+            throw new BusinessException("Demand does not exist");
+        }
+
+    }
+
+    public ResponseEntity delete(String id) {
+        demandRepository.deleteById(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
 
     }
 }

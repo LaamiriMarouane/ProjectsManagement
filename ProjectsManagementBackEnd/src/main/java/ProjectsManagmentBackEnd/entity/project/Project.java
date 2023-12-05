@@ -1,12 +1,15 @@
-package ProjectsManagmentBackEnd.entity;
+package ProjectsManagmentBackEnd.entity.project;
 
 
+import ProjectsManagmentBackEnd.entity.Event;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -26,14 +29,16 @@ public class Project {
     private String type;
     private boolean isPublic;
     private boolean isActive;
+
+    private Date lastUpdate;
     @OneToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     private Set<ProjectDocs> resources ;
 
-   @OneToOne
-    private  ProjectGroup adminsGroup;
-    @OneToOne
-    private  ProjectGroup membersGroup;
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ProjectGroup> projectGroups;
+
     @OneToMany
     private Set<Event> events;
+
 
 }

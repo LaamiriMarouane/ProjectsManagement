@@ -4,7 +4,9 @@ package ProjectsManagmentBackEnd.utils;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.repository.UserRepository;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UserContext {
 
@@ -25,8 +27,11 @@ public interface UserContext {
     }
 
     static User currentUser() {
-        UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        Authentication authentication =  SecurityContextHolder.getContext().getAuthentication();
+
+
         JwtUser principal = (JwtUser) authentication.getPrincipal();
+
         return userRepository().findByUsernameOrEmail(principal.getUsername(), principal.getEmail()).get();
     }
 

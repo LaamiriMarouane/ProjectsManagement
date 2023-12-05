@@ -1,4 +1,4 @@
-package ProjectsManagmentBackEnd.entity;
+package ProjectsManagmentBackEnd.entity.project;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;

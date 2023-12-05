@@ -19,4 +19,5 @@ public class ApiPaths {
         public static final String REGISTER = "/register";
         public static final String UPLOAD = "/upload";
 
+    public static final String SEARCH ="/search";
 }

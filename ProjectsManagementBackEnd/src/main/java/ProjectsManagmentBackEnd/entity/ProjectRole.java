@@ -1,5 +1,6 @@
 package ProjectsManagmentBackEnd.entity;
 
+import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 import ProjectsManagmentBackEnd.entity.user.Role;
 import ProjectsManagmentBackEnd.entity.user.User;
 import jakarta.persistence.*;

@@ -1,17 +1,15 @@
 package ProjectsManagmentBackEnd.dtos;
 
 import ProjectsManagmentBackEnd.entity.Event;
-import ProjectsManagmentBackEnd.entity.ProjectGroup;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
+import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.GenericGenerator;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Setter
@@ -28,10 +26,10 @@ public class ProjectDTO {
 
     private String theme;
     private String type;
+    private Date lastUpdate;
     private boolean isPublic;
     private boolean isActive;
-
-    private ProjectGroup adminsGroup;
-    private  ProjectGroup membersGroup;
+    @JsonIgnore
+    private List<ProjectGroupDTO> projectGroups;
     private Set<Event> events;
 }

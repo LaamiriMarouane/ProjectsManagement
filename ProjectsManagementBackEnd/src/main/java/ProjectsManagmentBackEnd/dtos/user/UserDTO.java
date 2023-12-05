@@ -8,8 +8,9 @@ import lombok.Data;
 
 @Data
 public class UserDTO {
+    private String id;
     @NotBlank(message = "username must not be empty")
-    private String userName;
+    private String username;
     @NotBlank()
     @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d\\w\\W]{8,}$",message = "Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character:")
     private String password;

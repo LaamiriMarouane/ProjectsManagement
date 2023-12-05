@@ -7,6 +7,7 @@ import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.AuthenticationException;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
+import ProjectsManagmentBackEnd.mappers.UserMapper;
 import ProjectsManagmentBackEnd.repository.RoleRepository;
 import ProjectsManagmentBackEnd.repository.UserRepository;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationRequest;
@@ -15,17 +16,24 @@ import ProjectsManagmentBackEnd.services.validation.user.UserValidator;
 import ProjectsManagmentBackEnd.utils.JwtTokenUtil;
 import ProjectsManagmentBackEnd.utils.JwtUser;
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -51,7 +59,7 @@ public class UserServiceImp {
         user.setLastName(userInfo.getLastName());
         user.setEmail(userInfo.getEmail());
         user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
-        user.setUsername(userInfo.getUserName());
+        user.setUsername(userInfo.getUsername());
         user.setEnabled(true);
       Role role =roleRepository.findByName(RoleType.APP_USER).get();
         //to do set roles *********
@@ -62,9 +70,10 @@ public class UserServiceImp {
 
     public ResponseEntity<JwtAuthenticationResponse> login(JwtAuthenticationRequest auth) throws AuthenticationException {
 
-        authenticate(auth.getUsername(), auth.getPassword());
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getUsername());
+        authenticate(auth.getUsername(),auth.getPassword());
+
 
         final String token = jwtTokenUtil.generateToken(userDetails);
 
@@ -75,12 +84,14 @@ public class UserServiceImp {
 
 
 
-    private void authenticate(String username, String password) {
-        Objects.requireNonNull(username);
+    private void authenticate(String userName ,String password) {
+        Objects.requireNonNull(userName);
         Objects.requireNonNull(password);
 
+
         try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
+            Authentication authenticatedToken=   authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
+            SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
         } catch (DisabledException e) {
             throw new AuthenticationException("User is disabled!", e);
         } catch (BadCredentialsException e) {
@@ -92,5 +103,10 @@ public class UserServiceImp {
         catch (Exception e){
             System.out.println("msg->"+e);
         }
+    }
+
+    public ResponseEntity<List<UserDTO>> search(String subString) {
+       List<User> userList= userRepository.findAllByUsernameContainingOrEmailContaining(subString,subString);
+        return ResponseEntity.status(HttpStatus.OK).body(userList.stream().map(UserMapper::convert).collect(Collectors.toList()));
     }
 }

@@ -2,7 +2,7 @@ package ProjectsManagmentBackEnd.entity.user;
 
 import ProjectsManagmentBackEnd.entity.demand.Demand;
 import ProjectsManagmentBackEnd.entity.Event;
-import ProjectsManagmentBackEnd.entity.ProjectGroup;
+import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

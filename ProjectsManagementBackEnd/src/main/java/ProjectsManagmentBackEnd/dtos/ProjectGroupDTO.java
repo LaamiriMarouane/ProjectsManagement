@@ -1,7 +1,8 @@
 package ProjectsManagmentBackEnd.dtos;
 
 import ProjectsManagmentBackEnd.dtos.user.UserDTO;
-import ProjectsManagmentBackEnd.entity.Project;
+import ProjectsManagmentBackEnd.entity.project.GroupType;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,5 @@ public class ProjectGroupDTO {
 
     private String id;
     private  String groupName;
-    private Project project;
-    private Set<UserDTO> users;
+    private GroupType groupType;
 }

@@ -28,11 +28,15 @@ public class DemandController {
     @PostMapping()
     public ResponseEntity<DemandDTO> createDemand(@RequestBody DemandDTO demandDTO) throws BusinessException {
         return demandService.create(demandDTO);
+    }
+    @PutMapping("/update")
+    public ResponseEntity<DemandDTO> updateDemand(@RequestBody DemandDTO demandDTO ) throws BusinessException {
+        return demandService.update(demandDTO);
 
     }
-    @PostMapping("/validate/{id}")
-    public ResponseEntity<DemandDTO> validateDemand(@PathVariable("id") String DemandId) throws BusinessException {
-        return demandService.validate(DemandId);
+    @PutMapping("/validate/{id}")
+    public ResponseEntity<DemandDTO> validateDemand( @PathVariable("id") String demandId) throws BusinessException {
+        return demandService.validate(demandId);
 
     }
 }
