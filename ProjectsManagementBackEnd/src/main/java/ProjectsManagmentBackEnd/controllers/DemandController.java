@@ -39,4 +39,9 @@ public class DemandController {
         return demandService.validate(demandId);
 
     }
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity deleteDemand( @PathVariable("id") String demandId)  {
+        return demandService.delete(demandId);
+
+    }
 }

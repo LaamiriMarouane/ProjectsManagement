@@ -60,7 +60,7 @@ public class ProjectServiceImp {
         projectGroups.add(adminsGroup);
         projectGroups.add(membersGroup);
         project.setProjectGroups(projectGroups);
-        project.setActive(true);
+        //project.setActive(true);
         projectRepository.save(project);
 
     }

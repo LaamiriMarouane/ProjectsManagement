@@ -18,9 +18,9 @@ import java.util.Set;
 public class ProjectDTO {
 
     private String id;
-    @NotBlank(message = "shortName must not be empty")
+    @NotBlank(message = "shortName must not be empty.")
     private String shortName;
-    @NotBlank(message = "longName must not be empty")
+    @NotBlank(message = "longName must not be empty.")
     private String longName;
     private String description;
 

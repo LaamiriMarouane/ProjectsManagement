@@ -23,7 +23,7 @@ import java.util.Date;
 public class DemandDTO {
     private String id;
 
-    @NotBlank(message = "projectName must not be empty")
+    @NotBlank(message = "projectName must not be empty.")
     private String projectName;
 
     private String projectLongName;
@@ -34,7 +34,7 @@ public class DemandDTO {
 
     private String theme;
 
-    @NotNull(message = "project is public must not be null")
+    @NotNull(message = "project is public must not be null.")
     private boolean isPublic;
 
     private UserShortDTO user;

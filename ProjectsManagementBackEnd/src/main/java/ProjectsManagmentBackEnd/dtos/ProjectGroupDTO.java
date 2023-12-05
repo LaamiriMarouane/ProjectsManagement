@@ -16,5 +16,6 @@ public class ProjectGroupDTO {
 
     private String id;
     private  String groupName;
+    //private GroupType groupType;
     private GroupType groupType;
 }
