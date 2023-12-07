@@ -173,7 +173,6 @@ const AdminPlateformPage = () => {
       </div>
       {!isListProjects && <DemandeNotification handleApproval={handleApproval} demandeList={ demandeList.length !== 0 ? demandeList : initalListOfDemande } />}
       {isListProjects && <ListAcceptedProject data={listAcceptedProject} />}
-
     </div>
   );
 };
