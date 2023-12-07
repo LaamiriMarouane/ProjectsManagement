@@ -12,6 +12,7 @@ import RegisterPage from "./pages/auth/RegisterPage";
 import ForgoutPassPage from "./pages/auth/ForgotPassPage";
 import NavBar from "./pages/components/navBars/NavBar";
 import NavBarLayout from "./pages/Layout/NavBarLayout";
+import AdminPlateformPage from "./pages/Admins/AdminPlateformPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -26,6 +27,7 @@ const router = createBrowserRouter(
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgoutPassPage />} />
+          <Route path="/admin" element={<AdminPlateformPage />} />
         </Route>
       </Route>
 
