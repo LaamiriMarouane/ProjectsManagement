@@ -31,9 +31,8 @@ public class ProjectMemberShipInvitation {
     @ManyToOne
     private User to;
 
-    private ProjectMemberShipInvitationState addUserDemandState;
+    private ProjectMemberShipInvitationState state;
 
     private Date creationTime;
-
 
 }

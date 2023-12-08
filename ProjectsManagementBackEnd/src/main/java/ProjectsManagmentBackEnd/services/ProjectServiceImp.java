@@ -1,6 +1,6 @@
 package ProjectsManagmentBackEnd.services;
 
-import ProjectsManagmentBackEnd.dtos.ProjectDTO;
+import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
 import ProjectsManagmentBackEnd.entity.project.GroupType;
 import ProjectsManagmentBackEnd.entity.project.Project;
 import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
@@ -31,15 +31,18 @@ public class ProjectServiceImp {
         User user= UserContext.currentUser();
         if(user.getRole().getName()== RoleType.APP_ADMIN){
             projectDTOList=projectRepository.findAll().stream().map(ProjectMapper::convert).collect(Collectors.toList());
-        }else if(user.getRole().getName()== RoleType.GUEST){
+        }else{
             projectDTOList=projectRepository.findAllByIsPublicIsAndIsActiveIs(true,true).stream().map(ProjectMapper::convert).collect(Collectors.toList());
+        }
 
-        }
-        else{
-            List<ProjectGroup>userGroups=projectGroupRepository.findAllByUsersContaining(user);
-          //  projectDTOList=projectRepository.findAllByMembersGroupInOrAdminsGroupIn(userGroups,userGroups).stream().map(ProjectMapper::convert).collect(Collectors.toList());
-            projectDTOList=projectRepository.findAllByProjectGroupsContaining(userGroups).stream().map(ProjectMapper::convert).collect(Collectors.toList());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(projectDTOList);
+
+    } public ResponseEntity<List<ProjectDTO>> getAllByUser() {
+        List<ProjectDTO> projectDTOList;
+        User user= UserContext.currentUser();
+        List<ProjectGroup>userGroups=projectGroupRepository.findAllByUsersContaining(user);
+        projectDTOList=projectRepository.findAllByProjectGroupsContaining(userGroups).stream().map(ProjectMapper::convert).collect(Collectors.toList());
+
         return ResponseEntity.status(HttpStatus.OK).body(projectDTOList);
 
     }
@@ -83,6 +86,7 @@ public class ProjectServiceImp {
           }else{
               project.get().getProjectGroups().get(1).getUsers().add(member);
           }
+          projectRepository.save(project.get());
           return ResponseEntity.status(HttpStatus.OK).build();
 
       }else{

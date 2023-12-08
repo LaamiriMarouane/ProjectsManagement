@@ -1,5 +1,6 @@
 package ProjectsManagmentBackEnd.dtos;
 
+import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;

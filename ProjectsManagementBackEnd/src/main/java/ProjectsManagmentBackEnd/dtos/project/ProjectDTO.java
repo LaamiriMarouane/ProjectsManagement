@@ -1,5 +1,6 @@
-package ProjectsManagmentBackEnd.dtos;
+package ProjectsManagmentBackEnd.dtos.project;
 
+import ProjectsManagmentBackEnd.dtos.ProjectGroupDTO;
 import ProjectsManagmentBackEnd.entity.Event;
 import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +30,6 @@ public class ProjectDTO {
     private Date lastUpdate;
     private boolean isPublic;
     private boolean isActive;
-    @JsonIgnore
     private List<ProjectGroupDTO> projectGroups;
     private Set<Event> events;
 }

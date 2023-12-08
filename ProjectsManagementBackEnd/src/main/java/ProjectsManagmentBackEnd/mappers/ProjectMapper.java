@@ -1,6 +1,7 @@
 package ProjectsManagmentBackEnd.mappers;
 
-import ProjectsManagmentBackEnd.dtos.ProjectDTO;
+import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
+import ProjectsManagmentBackEnd.dtos.project.ProjectShortDTO;
 import ProjectsManagmentBackEnd.entity.project.Project;
 
 import java.util.stream.Collectors;
@@ -44,6 +45,17 @@ public class ProjectMapper {
           //  out.setEvents(in.getEvents());
             out.setEvents(in.getEvents());
             out.setProjectGroups(in.getProjectGroups().stream().map(ProjectGroupMapper::convert).collect(Collectors.toList()));
+            return out;
+        }
+        return null;
+    }
+    public static ProjectShortDTO convertShort(Project in) {
+
+        if (in != null) {
+            final ProjectShortDTO out = new ProjectShortDTO();
+            out.setId(in.getId());
+            out.setLongName(in.getLongName());
+            out.setShortName(in.getShortName());
             return out;
         }
         return null;

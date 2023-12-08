@@ -1,6 +1,5 @@
 package ProjectsManagmentBackEnd.mappers;
 
-import ProjectsManagmentBackEnd.dtos.ProjectDTO;
 import ProjectsManagmentBackEnd.dtos.user.UserDTO;
 import ProjectsManagmentBackEnd.dtos.user.UserShortDTO;
 import ProjectsManagmentBackEnd.entity.user.User;

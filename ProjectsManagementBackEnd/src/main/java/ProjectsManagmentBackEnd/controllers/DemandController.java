@@ -26,7 +26,8 @@ public class DemandController {
     @GetMapping("/demand-states")
     public ResponseEntity<List<DemandState>> getAllDemandStates()  {
         return demandService.getAllDemandStates();
-    } @GetMapping("/new")
+    }
+    @GetMapping("/new")
     public ResponseEntity<List<DemandDTO>> getNew()  {
         return demandService.getAllByDemandState(DemandState.NEW);
     }
@@ -42,16 +43,13 @@ public class DemandController {
     public ResponseEntity<DemandDTO> createDemand(@RequestBody DemandDTO demandDTO) throws BusinessException {
         return demandService.create(demandDTO);
     }
-
     @PutMapping("/update")
     public ResponseEntity<DemandDTO> updateDemand(@RequestBody DemandDTO demandDTO ) throws BusinessException {
         return demandService.update(demandDTO);
-
     }
     @PutMapping("/validate/{id}")
     public ResponseEntity<DemandDTO> validateDemand( @PathVariable("id") String demandId) throws BusinessException {
         return demandService.handleDemandDecision(demandId, DemandState.COMPLETED);
-
     }
     @PutMapping("/reject/{id}")
     public ResponseEntity<DemandDTO> rejectDemand( @PathVariable("id") String demandId) throws BusinessException {
@@ -60,6 +58,5 @@ public class DemandController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity deleteDemand( @PathVariable("id") String id)  {
         return demandService.delete(id);
-
     }
 }

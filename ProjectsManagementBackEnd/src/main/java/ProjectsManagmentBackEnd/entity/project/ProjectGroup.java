@@ -27,7 +27,7 @@ public class ProjectGroup {
 
     @ManyToOne
     @JoinColumn(name = "project_id")
-    @JsonIgnore
+
     private Project project;
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinTable(

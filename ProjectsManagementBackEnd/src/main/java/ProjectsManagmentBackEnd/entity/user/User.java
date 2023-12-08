@@ -1,5 +1,6 @@
 package ProjectsManagmentBackEnd.entity.user;
 
+import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitation;
 import ProjectsManagmentBackEnd.entity.demand.Demand;
 import ProjectsManagmentBackEnd.entity.Event;
 import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
@@ -51,6 +52,9 @@ public class User {
     private Role role;
     @OneToMany
     private Set<Event> events;
+
+    @OneToMany
+    private List<ProjectMemberShipInvitation> invitations;
 
     @OneToMany
     private List<Demand>demands;

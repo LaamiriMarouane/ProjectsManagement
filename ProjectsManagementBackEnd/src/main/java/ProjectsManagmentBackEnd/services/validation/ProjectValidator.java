@@ -1,7 +1,6 @@
 package ProjectsManagmentBackEnd.services.validation;
 
-import ProjectsManagmentBackEnd.dtos.ProjectDTO;
-import ProjectsManagmentBackEnd.dtos.ProjectGroupDTO;
+import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;

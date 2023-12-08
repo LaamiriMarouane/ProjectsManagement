@@ -12,6 +12,7 @@ public class ProjectGroupMapper {
             final ProjectGroupDTO out = new ProjectGroupDTO();
             out.setId(in.getId());
             out.setGroupName(in.getGroupName());
+            out.setUsers(in.getUsers().stream().map(UserMapper::convertShort).collect(Collectors.toSet()));
 
 
 
