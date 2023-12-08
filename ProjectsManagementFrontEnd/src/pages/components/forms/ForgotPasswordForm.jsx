@@ -1,5 +1,5 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
 const ForgotPassword = () => {
@@ -19,7 +19,7 @@ const ForgotPassword = () => {
     try {
       setLoading(true);
       const res = await axios.post(
-        "http://localhost:8080/api/v2/forgot-password",
+        "http://localhost:8080/api/v1/forgot-password",
         values
       );
       if (res.status == 200) {

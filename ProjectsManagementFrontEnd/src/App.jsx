@@ -10,16 +10,39 @@ import ErrorPage from "./pages/error/ErrorPage";
 import PrivateRoutes from "./utils/PrivateRoutes";
 import RegisterPage from "./pages/auth/RegisterPage";
 import ForgoutPassPage from "./pages/auth/ForgotPassPage";
-import NavBar from "./pages/components/navBars/NavBar";
 import NavBarLayout from "./pages/Layout/NavBarLayout";
-import AdminPlateformPage from "./pages/Admins/AdminPlateformPage";
+import AdminPlateformNewDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformNewDemandsPage";
+import AdminPlateformRejectedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformRejectedDemandsPage";
+import AdminPlateformAcceptedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformAcceptedDemandsPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
-      {/* <NavBar /> */}
       <Route element={<PrivateRoutes navto="/login" isLogedIn={true} />}>
-        <Route path="/" element={<div>home</div>} />
-        <Route path="/home" element={<div>home</div>} />
+        <Route path="/" element={<NavBarLayout />}>
+          <Route path="/" element={<div>home</div>} />
+          <Route path="/home" element={<div>home</div>} />
+        </Route>
+      </Route>
+      <Route element={<PrivateRoutes navto="/login" isLogedIn={true} />}>
+        <Route path="/" element={<NavBarLayout />}>
+          <Route
+            path="/admin/demands/"
+            element={<AdminPlateformNewDemandsPage />}
+          />
+          <Route
+            path="/admin/demands/new"
+            element={<AdminPlateformNewDemandsPage />}
+          />
+          <Route
+            path="/admin/demands/rejected"
+            element={<AdminPlateformRejectedDemandsPage />}
+          />
+          <Route
+            path="/admin/demands/accepted"
+            element={<AdminPlateformAcceptedDemandsPage />}
+          />
+          <Route path="/admin/projects" element={<div>home</div>} />
+        </Route>
       </Route>
 
       <Route element={<PrivateRoutes navto="/home" isLogedIn={false} />}>
@@ -27,7 +50,6 @@ const router = createBrowserRouter(
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/forgot-password" element={<ForgoutPassPage />} />
-          <Route path="/admin" element={<AdminPlateformPage />} />
         </Route>
       </Route>
 

@@ -21,8 +21,8 @@ public class ProjectController {
         return projectService.getAll();
     }
     @GetMapping("/{projectId}")
-    public ResponseEntity<List<ProjectDTO>> getDetails(@PathVariable("projectId") String id)  {
-        return projectService.getAll();
+    public ResponseEntity<ProjectDTO> getProjectDetails(@PathVariable("projectId") String id) throws BusinessException {
+        return projectService.getDetails(id);
     }
     @PutMapping("/addMember/{projectId}/{userId}")
     public ResponseEntity addMember(@PathVariable("projectId") String projectId, @PathVariable("userId") String userId) throws BusinessException {

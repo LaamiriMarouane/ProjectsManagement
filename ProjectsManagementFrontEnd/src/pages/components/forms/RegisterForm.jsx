@@ -23,7 +23,7 @@ const RegisterForm = () => {
       className="max-w-md mx-auto mt-8 bg-white p-8 rounded-xl shadow-lg"
     >
       <div className="flex w-full items-center justify-center p-2 text-2xl font-bold">
-        Veuillez s'authentifier
+        Sign in
       </div>
       <div className="mb-4">
         <label className="block text-gray-700 text-sm font-bold mt-3 mb-2">

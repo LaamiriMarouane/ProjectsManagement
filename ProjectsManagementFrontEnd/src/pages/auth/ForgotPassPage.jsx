@@ -1,5 +1,6 @@
 import React from "react";
 import ForgotPasswordForm from "../components/forms/ForgotPasswordForm";
+import Spinner from "../../utils/Spinner";
 
 const ForgotPassPage = () => {
   return (

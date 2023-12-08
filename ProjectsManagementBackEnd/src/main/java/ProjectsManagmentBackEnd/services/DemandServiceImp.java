@@ -37,7 +37,7 @@ public class DemandServiceImp {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(DemandMapper.convert( demandRepository.save(newDemand)));
     }
-    public ResponseEntity<DemandDTO> validate(String demandId)  throws BusinessException {
+    public ResponseEntity<DemandDTO> handleDemandDecision(String demandId,DemandState demandState)  throws BusinessException {
        Optional<Demand> demand=demandRepository.findById(demandId);
         User user=UserContext.currentUser();
         if (!demand.isPresent()){
@@ -45,12 +45,20 @@ public class DemandServiceImp {
             errorMap.put("error validating demand ","demand not found.");
             throw new BusinessException("error",errorMap);
         }
-        demand.get().setDemandState(DemandState.COMPLETED);
+        if(demandState==DemandState.COMPLETED){
+            demand.get().setDemandState(DemandState.COMPLETED);
+
+            projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
+
+        }else{
+            demand.get().setDemandState(DemandState.REJECTED);
+
+        }
         demandRepository.save( demand.get());
         // to do create a new Project and change user roles
-        projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
         return ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demand.get()));
     }
+
     public ResponseEntity<List<DemandDTO>> getAll() {
         List<DemandDTO> demandDTOList;
         User user=UserContext.currentUser();
@@ -62,6 +70,18 @@ public class DemandServiceImp {
         return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
 
     }
+    public ResponseEntity<List<DemandDTO>> getAllByDemandState(DemandState demandState) {
+        List<DemandDTO> demandDTOList;
+        User user=UserContext.currentUser();
+        if(user.getRole().getName()== RoleType.APP_ADMIN){
+            demandDTOList=demandRepository.findAllByDemandState(demandState).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
+        }else{
+            demandDTOList=demandRepository.findAllByUserAndDemandState(user,demandState).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
+
+    }
+
     public ResponseEntity<List<DemandState>> getAllDemandStates() {
         List<DemandState> demandDTOList;
         User user=UserContext.currentUser();
@@ -78,11 +98,17 @@ public class DemandServiceImp {
     public ResponseEntity<DemandDTO> update(DemandDTO demandDTO) throws BusinessException {
         demandValidator.demandValidate(demandDTO);
         Optional<Demand> demandToUpdate= demandRepository.findById(demandDTO.getId());
+
         User user =userRepository.findById(demandDTO.getUser().getId()).get();
         if(demandToUpdate.isPresent()){
-            Demand demandUpdated = demandRepository.save( DemandMapper.convert(demandDTO,user));
+            if(demandToUpdate.get().getDemandState()==DemandState.REJECTED){
+                throw new BusinessException("Demand can not be updated");
+            }else{
+                Demand demandUpdated = demandRepository.save( DemandMapper.convert(demandDTO,user));
+                return   ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demandUpdated));
 
-          return   ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demandUpdated));
+            }
+
         }else {
             throw new BusinessException("Demand does not exist");
         }

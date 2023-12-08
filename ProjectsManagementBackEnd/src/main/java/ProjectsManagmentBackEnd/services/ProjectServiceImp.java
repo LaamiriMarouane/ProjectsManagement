@@ -43,6 +43,15 @@ public class ProjectServiceImp {
         return ResponseEntity.status(HttpStatus.OK).body(projectDTOList);
 
     }
+    public ResponseEntity<ProjectDTO> getDetails(String id) throws BusinessException {
+        Optional<Project> project =projectRepository.findById(id) ;
+        if(project.isPresent()){
+            return ResponseEntity.status(HttpStatus.OK).body(ProjectMapper.convert(project.get()));
+
+        }else{
+            throw  new BusinessException("project not found");
+        }
+    }
     public void create(Project project, User user){
         //to do add admin role to the user in creating the demand
         ProjectGroup adminsGroup =new ProjectGroup();
@@ -97,6 +106,7 @@ public class ProjectServiceImp {
             throw  new BusinessException("project not found");
         }
     }
+
 
 
 }
