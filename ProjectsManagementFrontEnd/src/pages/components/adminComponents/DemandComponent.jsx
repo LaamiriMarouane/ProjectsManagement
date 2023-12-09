@@ -1,6 +1,6 @@
 import React from "react";
 
-function DemandComponent({ demand }) {
+function DemandComponent({ demand, demandType }) {
   const {
     id,
     projectName,
@@ -11,8 +11,8 @@ function DemandComponent({ demand }) {
     demandeCreatingtime,
     public: ispublic,
   } = demand;
-  const acceptDemand = (id) => {};
-  const rejectDemand = (id) => {};
+  const acceptDemand = (id) => { };
+  const rejectDemand = (id) => { };
 
   return (
     <div className=" p-2 mb-2 border-b border-b-slate-400 bg-gray-50">
@@ -36,18 +36,22 @@ function DemandComponent({ demand }) {
       </div>
       <div className="mt-2 flex justify-between items-center">
         <div>
-          <button
-            className="bg-green-600 text-white px-3 py-1 mr-2 rounded"
-            onClick={() => acceptDemand(id)}
-          >
-            Accept
-          </button>
-          <button
-            className="bg-red-600 text-white px-3 py-1 rounded"
-            onClick={() => rejectDemand(id)}
-          >
-            Reject
-          </button>
+          {(demandType === 'new' || demandType === 'reject') &&
+            <button
+              className="bg-green-200 text-green-800 font-semibold text-sm px-3 py-1 mr-2 rounded"
+              onClick={() => acceptDemand(id)}
+            >
+              Accept
+            </button>
+          }
+          {(demandType === 'new' || demandType === 'accept') &&
+            <button
+              className="bg-red-200 text-red-800 font-semibold text-sm px-3 py-1 rounded"
+              onClick={() => rejectDemand(id)}
+            >
+              Reject
+            </button>
+          }
         </div>
         <span className="py-[3px] px-[9px] text-xs font-semibold uppercase text-center rounded-full shadow bg-slate-700 text-slate-100">
           {" "}

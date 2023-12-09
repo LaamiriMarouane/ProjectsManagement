@@ -6,6 +6,70 @@ import {
   postCreateDemandApi,
 } from "../api/demandApi";
 
+function formatDate(date) {
+  const options = {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+  };
+  return new Intl.DateTimeFormat("en-US", options).format(date)
+};
+
+const userDemandList = [
+  {
+      id: 1,
+      projectName: "Dev Web",
+      user: "user-name",
+      status: false,
+      type: "IT",
+      theme: "Développement",
+      description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+      public: true,
+      demandeCreatingtime: formatDate(new Date()),
+  },
+  {
+      id: 2,
+      projectName: "Dev Web",
+      user: "user-name",
+      status: false,
+      type: "IT",
+      theme: "Développement",
+      description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+      public: true,
+      demandeCreatingtime: formatDate(new Date()),
+  },
+  {
+      id: 3,
+      projectName: "Dev Web",
+      user: "user-name",
+      status: false,
+      type: "IT",
+      theme: "Développement",
+      description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+      public: true,
+      demandeCreatingtime: formatDate(new Date()),
+  },
+  {
+      id: 4,
+      projectName: "Dev Web",
+      user: "user-name",
+      status: false,
+      type: "IT",
+      theme: "Développement",
+      description:
+          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+      public: true,
+      demandeCreatingtime: formatDate(new Date()),
+  },
+];
+
+
 export const PostCreateDemand = createAsyncThunk(
   "Demand/Add",
   async (formData, { _, rejectWithValue }) => {
@@ -58,10 +122,22 @@ export const getRejectedDemands = createAsyncThunk(
 const demandSlice = createSlice({
   name: "demand",
   initialState: {
-    Demands: [],
+    Demands: [...userDemandList],
     DemandErrors: "",
     DemandsLoading: true,
     DemandLoading: true,
+  },
+
+  reducers : {
+    getDemandToUpdate : ( state , { payload } ) => {
+      console.log( 'Demand : ', state.Demands );
+      console.log( 'State : ', state );
+      // return state.Demands.filter( (demand) => { 
+      //   console.log( 'demand : ', demand );
+      //   return demand.id === payload
+      // } );
+    },
+    
   },
 
   extraReducers: (builder) => {
@@ -112,10 +188,10 @@ const demandSlice = createSlice({
       .addCase(getRejectedDemands.rejected, (state, action) => {
         console.log("rejected", action.payload);
         state.DemandsLoading = false;
-      });
+      }) ;
   },
 });
 
-//export const { updateGuardain, resetGuardian } = demandSlice.actions;
+export const { getDemandToUpdate } = demandSlice.actions;
 
 export default demandSlice.reducer;

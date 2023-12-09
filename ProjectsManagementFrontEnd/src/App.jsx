@@ -14,6 +14,10 @@ import NavBarLayout from "./pages/Layout/NavBarLayout";
 import AdminPlateformNewDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformNewDemandsPage";
 import AdminPlateformRejectedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformRejectedDemandsPage";
 import AdminPlateformAcceptedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformAcceptedDemandsPage";
+import SideBarLayout from "./pages/Layout/SideBarLayout";
+import UserDemandCmdLayout from "./pages/Layout/UserDemandCmdLayout";
+import ConsultPage from "./pages/Actors/Users/demandsPages/ConsultPage";
+import CreateProjectPage from "./pages/Actors/Users/demandsPages/CreateProjectPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -42,6 +46,17 @@ const router = createBrowserRouter(
             element={<AdminPlateformAcceptedDemandsPage />}
           />
           <Route path="/admin/projects" element={<div>home</div>} />
+
+          <Route path="/user/demands" element={<SideBarLayout />} >
+            <Route
+              path="/user/demands"
+              element={<ConsultPage />}
+            />
+            <Route
+              path="/user/demands/new"
+              element={<CreateProjectPage />}
+            />
+          </Route>
         </Route>
       </Route>
 
