@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
   RouterProvider,
   createBrowserRouter,
@@ -15,9 +14,7 @@ import AdminPlateformNewDemandsPage from "./pages/Actors/Admins/demandsPages/Adm
 import AdminPlateformRejectedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformRejectedDemandsPage";
 import AdminPlateformAcceptedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformAcceptedDemandsPage";
 import SideBarLayout from "./pages/Layout/SideBarLayout";
-import UserDemandCmdLayout from "./pages/Layout/UserDemandCmdLayout";
 import ConsultPage from "./pages/Actors/Users/demandsPages/ConsultPage";
-import CreateProjectPage from "./pages/Actors/Users/demandsPages/CreateProjectPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -51,10 +48,6 @@ const router = createBrowserRouter(
             <Route
               path="/user/demands"
               element={<ConsultPage />}
-            />
-            <Route
-              path="/user/demands/new"
-              element={<CreateProjectPage />}
             />
           </Route>
         </Route>
