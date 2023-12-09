@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import {
   getNewDemandsApi,
   getRejectedDemandsApi,
@@ -6,69 +6,61 @@ import {
   postCreateDemandApi,
 } from "../api/demandApi";
 
-function formatDate(date) {
-  const options = {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit",
-  };
-  return new Intl.DateTimeFormat("en-US", options).format(date)
-};
-
 const userDemandList = [
   {
-      id: 1,
-      projectName: "Dev Web",
-      user: "user-name",
-      status: false,
-      type: "IT",
-      theme: "Développement",
-      description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-      public: true,
-      demandeCreatingtime: formatDate(new Date()),
+    id: 1,
+    projectName: "Dev Web",
+    projectLongName: "Dev Web for testing",
+    user: "user-name",
+    status: false,
+    type: "IT",
+    theme: "Développement",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+    public: false,
+    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
+  },
+
+  {
+    id: 2,
+    projectName: "Dev Web",
+    projectLongName: "Dev Web for testing",
+    user: "user-name",
+    status: false,
+    type: "IT",
+    theme: "Développement",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+    public: true,
+    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
   },
   {
-      id: 2,
-      projectName: "Dev Web",
-      user: "user-name",
-      status: false,
-      type: "IT",
-      theme: "Développement",
-      description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-      public: true,
-      demandeCreatingtime: formatDate(new Date()),
+    id: 3,
+    projectName: "Dev Web",
+    projectLongName: "Dev Web for testing",
+    user: "user-name",
+    status: false,
+    type: "IT",
+    theme: "Développement",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+    public: true,
+    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
   },
   {
-      id: 3,
-      projectName: "Dev Web",
-      user: "user-name",
-      status: false,
-      type: "IT",
-      theme: "Développement",
-      description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-      public: true,
-      demandeCreatingtime: formatDate(new Date()),
-  },
-  {
-      id: 4,
-      projectName: "Dev Web",
-      user: "user-name",
-      status: false,
-      type: "IT",
-      theme: "Développement",
-      description:
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-      public: true,
-      demandeCreatingtime: formatDate(new Date()),
+    id: 4,
+    projectName: "Dev Web",
+    projectLongName: "Dev Web for testing",
+    user: "user-name",
+    status: false,
+    type: "IT",
+    theme: "Développement",
+    description:
+      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
+    public: true,
+    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
   },
 ];
-
 
 export const PostCreateDemand = createAsyncThunk(
   "Demand/Add",
@@ -125,19 +117,8 @@ const demandSlice = createSlice({
     Demands: [...userDemandList],
     DemandErrors: "",
     DemandsLoading: true,
-    DemandLoading: true,
-  },
 
-  reducers : {
-    getDemandToUpdate : ( state , { payload } ) => {
-      console.log( 'Demand : ', state.Demands );
-      console.log( 'State : ', state );
-      // return state.Demands.filter( (demand) => { 
-      //   console.log( 'demand : ', demand );
-      //   return demand.id === payload
-      // } );
-    },
-    
+    DemandLoading: true,
   },
 
   extraReducers: (builder) => {
@@ -188,7 +169,7 @@ const demandSlice = createSlice({
       .addCase(getRejectedDemands.rejected, (state, action) => {
         console.log("rejected", action.payload);
         state.DemandsLoading = false;
-      }) ;
+      });
   },
 });
 

@@ -4,10 +4,9 @@ import { Outlet } from "react-router";
 
 function NavBarLayout() {
   return (
-    <div className="app">
+    <div className="app h-screen w-screen">
       <NavBar />
-      <div className="content">
-        {/* {pathname == "/" ? <DashBord /> : <Outlet />} */}
+      <div className="content  h-screen w-screen">
         <Outlet />
       </div>
     </div>

@@ -22,6 +22,9 @@ const router = createBrowserRouter(
         <Route path="/" element={<NavBarLayout />}>
           <Route path="/" element={<div>home</div>} />
           <Route path="/home" element={<div>home</div>} />
+          <Route path="/" element={<SideBarLayout />}>
+            <Route path="/user/demands" element={<ConsultPage />} />
+          </Route>
         </Route>
       </Route>
       <Route element={<PrivateRoutes navto="/login" isLogedIn={true} />}>
@@ -43,13 +46,6 @@ const router = createBrowserRouter(
             element={<AdminPlateformAcceptedDemandsPage />}
           />
           <Route path="/admin/projects" element={<div>home</div>} />
-
-          <Route path="/user/demands" element={<SideBarLayout />} >
-            <Route
-              path="/user/demands"
-              element={<ConsultPage />}
-            />
-          </Route>
         </Route>
       </Route>
 
