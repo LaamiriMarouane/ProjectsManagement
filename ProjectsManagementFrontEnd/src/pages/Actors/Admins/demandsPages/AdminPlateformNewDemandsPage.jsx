@@ -6,6 +6,7 @@ import { AiOutlinePoweroff } from "react-icons/ai";
 import DemandComponent from "../../../components/adminComponents/DemandComponent";
 import Spinner from "../../../../utils/Spinner";
 import { Link } from "react-router-dom";
+import AdminCommandComponent from "../../../components/adminComponents/AdminCommandComponent";
 
 function formatDate(date) {
   const options = {
@@ -145,29 +146,7 @@ const AdminPlateformNewDemandsPage = () => {
   return (
     <>
       <div className="container mx-auto mt-16 my-8">
-        <div className="flex justify-between items-center mb-4">
-          <div></div>
-          <div className="flex gap-3">
-            <button className="bg-blue-800 text-base font-semibold text-white px-4 py-2 rounded flex items-center gap-2">
-              <AiOutlinePoweroff />
-
-              <Link to={"/admin/demands/new"}> New Demandes</Link>
-            </button>
-            <button className="bg-blue-800 text-base font-semibold text-white px-4 py-2 rounded flex items-center gap-2">
-              <IoIosAddCircle size={20} />
-
-              <Link to={"/admin/demands/accepted"}>Accepted Demands</Link>
-            </button>
-            <button
-              className={`${
-                false ? "bg-blue-400" : "bg-blue-800"
-              } text-base font-semibold text-white px-4 py-2 rounded flex items-center gap-2`}
-            >
-              <FaTableList />
-              <Link to={"/admin/demands/rejected"}>Rejected Demandes</Link>
-            </button>
-          </div>
-        </div>
+        <AdminCommandComponent />
         <DemandeNotification
           demandeList={
             demandeList.length !== 0 ? demandeList : initalListOfDemande
@@ -190,7 +169,7 @@ const DemandeNotification = ({ demandeList = initalListOfDemande }) => {
         </div>
         {demandeList.length !== 0 && demandeList[0].id !== 0 ? (
           demandeList.map((demande) => (
-            <DemandComponent Key={demande.id} demand={demande} />
+            <DemandComponent Key={demande.id} demand={demande} demandType={ 'new' } />
           ))
         ) : (
           <div className="text-center w-full py-3">No Notification</div>

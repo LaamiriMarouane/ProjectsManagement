@@ -11,7 +11,7 @@ body {
     background-color: #E9E9E9;
 }
 
-form {
+.form {
     background-color: #bfbfbf;
     background-image: linear-gradient(336deg, #bfbfbf 0%, #fffbfb 100%);
 }
