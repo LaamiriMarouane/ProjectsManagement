@@ -1,4 +1,4 @@
-package ProjectsManagmentBackEnd.entity;
+package ProjectsManagmentBackEnd.entity.event;
 
 import ProjectsManagmentBackEnd.entity.project.Project;
 import jakarta.persistence.Entity;
@@ -23,7 +23,6 @@ public class Event  {
     private String startDate;
     private String endDate;
     private String color;
-    @ManyToOne
-    private Project project;
+
 
 }

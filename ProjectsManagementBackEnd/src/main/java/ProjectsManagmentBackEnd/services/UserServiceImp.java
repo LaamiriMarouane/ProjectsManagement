@@ -2,6 +2,7 @@ package ProjectsManagmentBackEnd.services;
 
 
 import ProjectsManagmentBackEnd.dtos.user.UserDTO;
+import ProjectsManagmentBackEnd.dtos.user.UserShortDTO;
 import ProjectsManagmentBackEnd.entity.user.Role;
 import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
@@ -15,6 +16,7 @@ import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
 import ProjectsManagmentBackEnd.services.validation.user.UserValidator;
 import ProjectsManagmentBackEnd.utils.JwtTokenUtil;
 import ProjectsManagmentBackEnd.utils.JwtUser;
+import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -105,8 +107,13 @@ public class UserServiceImp {
         }
     }
 
-    public ResponseEntity<List<UserDTO>> search(String subString) {
+    public ResponseEntity<List<UserShortDTO>> search(String subString) {
+        User currentUser= UserContext.currentUser();
        List<User> userList= userRepository.findAllByUsernameContainingOrEmailContaining(subString,subString);
-        return ResponseEntity.status(HttpStatus.OK).body(userList.stream().map(UserMapper::convert).collect(Collectors.toList()));
+       List<UserShortDTO> userShortDTOList=userList.stream()
+               .filter(user->!user.getUsername().equals(currentUser.getUsername()))
+               .map(UserMapper::convertShort)
+               .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(userShortDTOList);
     }
 }

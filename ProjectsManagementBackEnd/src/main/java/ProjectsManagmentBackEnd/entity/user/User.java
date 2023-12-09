@@ -2,7 +2,8 @@ package ProjectsManagmentBackEnd.entity.user;
 
 import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitation;
 import ProjectsManagmentBackEnd.entity.demand.Demand;
-import ProjectsManagmentBackEnd.entity.Event;
+import ProjectsManagmentBackEnd.entity.event.Event;
+import ProjectsManagmentBackEnd.entity.event.UserEvent;
 import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -51,7 +52,7 @@ public class User {
     @ManyToOne
     private Role role;
     @OneToMany
-    private Set<Event> events;
+    private Set<UserEvent> events;
 
     @OneToMany
     private List<ProjectMemberShipInvitation> invitations;

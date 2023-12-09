@@ -33,7 +33,6 @@ public class UserController {
     @GetMapping(ApiPaths.USERS+ApiPaths.SEARCH+"={subString}")
     public ResponseEntity search( @PathVariable("subString") String subString)  {
         return userService.search(subString);
-
     }
 
     @PostMapping(ApiPaths.REGISTER )

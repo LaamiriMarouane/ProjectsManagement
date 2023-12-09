@@ -51,6 +51,7 @@ public class ProjectMemberShipInvitationImp {
     }
     public ResponseEntity<ProjectMemberShipInvitationDTO> acceptInvitation(String InvitationId) throws BusinessException {
         User user= UserContext.currentUser();
+        //to do add roles to the user
         Optional<ProjectMemberShipInvitation> projectMemberShipInvitation=
                 projectMemberShipInvitationRepository.findByIdAndTo(InvitationId,user);
         if(projectMemberShipInvitation.isPresent()){

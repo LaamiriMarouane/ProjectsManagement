@@ -11,6 +11,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class EventDTO {
+    private String id;
     @NotBlank(message = "title must not be empty")
     private String title;
     @NotNull(message = "startDate must not be empty")

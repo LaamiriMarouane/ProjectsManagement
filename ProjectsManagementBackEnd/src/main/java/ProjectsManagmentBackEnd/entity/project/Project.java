@@ -1,7 +1,8 @@
 package ProjectsManagmentBackEnd.entity.project;
 
 
-import ProjectsManagmentBackEnd.entity.Event;
+import ProjectsManagmentBackEnd.entity.event.Event;
+import ProjectsManagmentBackEnd.entity.event.ProjectEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,7 +39,7 @@ public class Project {
     private List<ProjectGroup> projectGroups;
 
     @OneToMany
-    private Set<Event> events;
+    private Set<ProjectEvent> events;
 
 
 }

@@ -1,9 +1,7 @@
 package ProjectsManagmentBackEnd.dtos.project;
 
 import ProjectsManagmentBackEnd.dtos.ProjectGroupDTO;
-import ProjectsManagmentBackEnd.entity.Event;
-import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import ProjectsManagmentBackEnd.entity.event.Event;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
