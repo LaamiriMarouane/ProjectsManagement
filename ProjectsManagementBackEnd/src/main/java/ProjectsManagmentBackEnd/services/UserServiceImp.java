@@ -29,6 +29,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -71,10 +72,8 @@ public class UserServiceImp {
     }
 
     public ResponseEntity<JwtAuthenticationResponse> login(JwtAuthenticationRequest auth) throws AuthenticationException {
-
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getUsername());
         authenticate(auth.getUsername(),auth.getPassword());
+        final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getUsername());
 
 
         final String token = jwtTokenUtil.generateToken(userDetails);
@@ -85,6 +84,15 @@ public class UserServiceImp {
     }
 
 
+    public ResponseEntity<List<UserShortDTO>> search(String subString) {
+        User currentUser= UserContext.currentUser();
+       List<User> userList= userRepository.findAllByUsernameContainingOrEmailContaining(subString,subString);
+       List<UserShortDTO> userShortDTOList=userList.stream()
+               .filter(user->!user.getUsername().equals(currentUser.getUsername()))
+               .map(UserMapper::convertShort)
+               .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(userShortDTOList);
+    }
 
     private void authenticate(String userName ,String password) {
         Objects.requireNonNull(userName);
@@ -94,7 +102,10 @@ public class UserServiceImp {
         try {
             Authentication authenticatedToken=   authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
             SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
-        } catch (DisabledException e) {
+        }catch (UsernameNotFoundException ex) {
+            throw new AuthenticationException("User is not found!", ex);
+        }
+        catch (DisabledException e) {
             throw new AuthenticationException("User is disabled!", e);
         } catch (BadCredentialsException e) {
             throw new AuthenticationException("Bad credentials!", e);
@@ -105,15 +116,5 @@ public class UserServiceImp {
         catch (Exception e){
             System.out.println("msg->"+e);
         }
-    }
-
-    public ResponseEntity<List<UserShortDTO>> search(String subString) {
-        User currentUser= UserContext.currentUser();
-       List<User> userList= userRepository.findAllByUsernameContainingOrEmailContaining(subString,subString);
-       List<UserShortDTO> userShortDTOList=userList.stream()
-               .filter(user->!user.getUsername().equals(currentUser.getUsername()))
-               .map(UserMapper::convertShort)
-               .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(userShortDTOList);
     }
 }

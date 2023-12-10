@@ -2,10 +2,15 @@ package ProjectsManagmentBackEnd.services;
 
 import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.entity.event.Event;
+import ProjectsManagmentBackEnd.entity.event.UserEvent;
+import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.mappers.EventMapper;
+import ProjectsManagmentBackEnd.repository.ProjectEventRepository;
+import ProjectsManagmentBackEnd.repository.UserEventRepository;
 import ProjectsManagmentBackEnd.repository.UserRepository;
 import ProjectsManagmentBackEnd.services.validation.EventValidator;
+import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,37 +22,25 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class EventServiceImp {
-    /*private EventRepository eventRepository;
+    private UserEventRepository userEventRepository;
+    private ProjectEventRepository projectEventRepository;
     private EventValidator eventValidate;
     private UserRepository userRepository;
-    public List<EventDTO> getAllByProject() throws BusinessException {
-        List<EventDTO> events=  eventRepository.findAll().stream().map(EventMapper::convert).collect(Collectors.toList());
-        return events ;
-
-    }
     public List<EventDTO> getAllByUser() throws BusinessException {
-
-        List<EventDTO> events=  eventRepository.findAll().stream().map(EventMapper::convert).collect(Collectors.toList());
+        User user= UserContext.currentUser();
+        List<EventDTO> events=  userEventRepository.findAllByUser(user).stream().map(EventMapper::convert).collect(Collectors.toList());
         return events ;
 
     }
-    public List<EventDTO> getByToDayDate( ) throws BusinessException {
-        Date currentDate =new Date();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String formattedDate = dateFormat.format(currentDate);
-
-        List<EventDTO> events=  eventRepository.findAllByStartDate(formattedDate).stream().map(EventMapper::convert).collect(Collectors.toList());
-        return events ;
 
 
-    }
-
-    public EventDTO add(EventDTO eventDTO) throws BusinessException {
+    public EventDTO addEventToUserEvents(EventDTO eventDTO) throws BusinessException {
         eventValidate.eventValidate(eventDTO);
-        Event event = EventMapper.convert(eventDTO);
-
-        eventRepository.save(event);
+        UserEvent event =(UserEvent) EventMapper.convert(eventDTO);
+        User user= UserContext.currentUser();
+        event.setUser(user);
+        userEventRepository.save(event);
         return EventMapper.convert(event);
 
-    }*/
+    }
 }

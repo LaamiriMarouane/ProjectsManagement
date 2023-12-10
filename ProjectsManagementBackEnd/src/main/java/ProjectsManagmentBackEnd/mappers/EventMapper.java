@@ -2,6 +2,8 @@ package ProjectsManagmentBackEnd.mappers;
 
 import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.entity.event.Event;
+import ProjectsManagmentBackEnd.entity.event.ProjectEvent;
+import ProjectsManagmentBackEnd.entity.event.UserEvent;
 
 public class EventMapper {
     public static EventDTO convert(Event in) {
@@ -19,10 +21,25 @@ public class EventMapper {
         }
         return null;
     }
-    public static Event  convert(EventDTO in) {
+    public static UserEvent convert(EventDTO in) {
 
         if (in != null) {
-            final Event out = new Event();
+            final UserEvent out = new UserEvent();
+            out.setId(in.getId());
+            out.setStartDate(in.getStart());
+            out.setEndDate(in.getEnd());
+            out.setTitle(in.getTitle());
+            out.setColor(in.getColor());
+
+
+            return out;
+        }
+        return null;
+    }
+    public static ProjectEvent convertToProjectEvent(EventDTO in) {
+
+        if (in != null) {
+            final ProjectEvent out = new ProjectEvent();
             out.setId(in.getId());
             out.setStartDate(in.getStart());
             out.setEndDate(in.getEnd());

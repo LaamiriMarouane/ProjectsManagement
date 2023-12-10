@@ -47,7 +47,7 @@ public class DemandServiceImp {
         }
         if(demandState==DemandState.COMPLETED){
             demand.get().setDemandState(DemandState.COMPLETED);
-
+            demand.get().setValidationTime(new Date());
             projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
 
         }else{
@@ -88,7 +88,8 @@ public class DemandServiceImp {
         if(user.getRole().getName()== RoleType.APP_ADMIN){
             demandDTOList= Arrays.asList(DemandState.COMPLETED,DemandState.REJECTED);
         }else{
-            demandDTOList= Arrays.asList(DemandState.CANCELLED);        }
+            demandDTOList= Arrays.asList(DemandState.CANCELLED);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
 
     }

@@ -20,6 +20,5 @@ public class EventDTO {
     private String end;
     @NotBlank(message = "color must not be empty")
     private String color;
-    private ProjectDTO project;
 
 }
