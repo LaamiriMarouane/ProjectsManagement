@@ -15,6 +15,7 @@ import AdminPlateformRejectedDemandsPage from "./pages/Actors/Admins/demandsPage
 import AdminPlateformAcceptedDemandsPage from "./pages/Actors/Admins/demandsPages/AdminPlateformAcceptedDemandsPage";
 import SideBarLayout from "./pages/Layout/SideBarLayout";
 import ConsultPage from "./pages/Actors/Users/demandsPages/ConsultPage";
+import UserEventsPage from "./pages/Actors/Users/Events/userEventsPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
@@ -24,6 +25,7 @@ const router = createBrowserRouter(
           <Route path="/home" element={<div>home</div>} />
           <Route path="/" element={<SideBarLayout />}>
             <Route path="/user/demands" element={<ConsultPage />} />
+            <Route path="/user/agenda" element={<UserEventsPage />} />
           </Route>
         </Route>
       </Route>

@@ -6,11 +6,12 @@ const UserDemandComponent = ({ demand, setIsUpdate }) => {
   const {
     id,
     projectName,
+    projectLongName,
     user,
     description,
     type,
     theme,
-    demandeCreatingtime,
+    demandCreatingTime,
     public: ispublic,
   } = demand;
   const cancelDemand = (id) => {};
@@ -20,7 +21,7 @@ const UserDemandComponent = ({ demand, setIsUpdate }) => {
       <div className="border-b border-b-slate-300 pb-2">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold"> {projectName} </h2>
-          <p className="text-lg text-gray-500"> {user} </p>
+          <p className="text-lg text-gray-500"> {user.username} </p>
         </div>
         <p className="text-base text-slate-400"> {description} </p>
         <div className="flex items-center justify-between mt-2">
@@ -31,7 +32,7 @@ const UserDemandComponent = ({ demand, setIsUpdate }) => {
           </p>
           <p className="text-sm font-mono italic text-gray-500 float-right">
             {" "}
-            {demandeCreatingtime}{" "}
+            {demandCreatingTime}{" "}
           </p>
         </div>
       </div>

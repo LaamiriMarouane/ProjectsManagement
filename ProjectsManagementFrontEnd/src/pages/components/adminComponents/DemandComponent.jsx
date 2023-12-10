@@ -1,4 +1,9 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import {
+  putRejectDemand,
+  putValidateDemand,
+} from "../../../features/demandsSlice";
 
 function DemandComponent({ demand, demandType }) {
   const {
@@ -11,15 +16,20 @@ function DemandComponent({ demand, demandType }) {
     demandeCreatingtime,
     public: ispublic,
   } = demand;
-  const acceptDemand = (id) => { };
-  const rejectDemand = (id) => { };
+  const dispatch = useDispatch();
+  const acceptDemand = (id) => {
+    dispatch(putValidateDemand(id));
+  };
+  const rejectDemand = (id) => {
+    dispatch(putRejectDemand(id));
+  };
 
   return (
     <div className=" p-2 mb-2 border-b border-b-slate-400 bg-gray-50">
       <div className="border-b border-b-slate-300 pb-2">
         <div className="flex items-center justify-between">
           <h2 className="text-xl font-semibold"> {projectName} </h2>
-          <p className="text-lg text-gray-500"> {user} </p>
+          <p className="text-lg text-gray-500"> {user?.username} </p>
         </div>
         <p className="text-base text-slate-400"> {description} </p>
         <div className="flex items-center justify-between mt-2">
@@ -36,22 +46,22 @@ function DemandComponent({ demand, demandType }) {
       </div>
       <div className="mt-2 flex justify-between items-center">
         <div>
-          {(demandType === 'new' || demandType === 'reject') &&
+          {(demandType === "new" || demandType === "reject") && (
             <button
               className="bg-green-200 text-green-800 font-semibold text-sm px-3 py-1 mr-2 rounded"
               onClick={() => acceptDemand(id)}
             >
               Accept
             </button>
-          }
-          {(demandType === 'new' || demandType === 'accept') &&
+          )}
+          {(demandType === "new" || demandType === "accept") && (
             <button
               className="bg-red-200 text-red-800 font-semibold text-sm px-3 py-1 rounded"
               onClick={() => rejectDemand(id)}
             >
               Reject
             </button>
-          }
+          )}
         </div>
         <span className="py-[3px] px-[9px] text-xs font-semibold uppercase text-center rounded-full shadow bg-slate-700 text-slate-100">
           {" "}

@@ -1,12 +1,22 @@
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import {
+  PostCreateDemand,
+  putUpdateDemand,
+} from "../../../features/demandsSlice";
 
-const UserDemandFrom = ({ demandToUpdate, isUpdate }) => {
+const UserDemandFrom = ({
+  demandToUpdate,
+  isUpdate,
+  setIsUpdate,
+  setAddDemand,
+}) => {
   const {
     register,
     watch,
     handleSubmit,
+    setValue,
     formState: { errors, isValid, isSubmitting },
     reset,
   } = useForm({
@@ -14,11 +24,18 @@ const UserDemandFrom = ({ demandToUpdate, isUpdate }) => {
       ...demandToUpdate,
     },
   });
+  const dispatch = useDispatch();
 
   const onSubmit = (data) => {
-    console.log("send demand : ", data);
     if (isUpdate) {
+      dispatch(putUpdateDemand(data));
+      setIsUpdate({
+        demandToUpdate: {},
+        isUpdate: false,
+      });
     } else {
+      dispatch(PostCreateDemand(data));
+      setAddDemand(false);
     }
     reset();
   };
@@ -123,8 +140,8 @@ const UserDemandFrom = ({ demandToUpdate, isUpdate }) => {
           <label>
             <input
               type="checkbox"
-              value={false}
-              {...register("public", { required: true })}
+              // value={false}
+              {...register("public")}
               defaultChecked={watch("public")}
               onChange={(e) => setValue("public", e.target.checked)}
             />

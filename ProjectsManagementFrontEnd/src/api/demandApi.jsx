@@ -21,6 +21,9 @@ async function getdemandDetailsApi(id) {
 async function postCreateDemandApi(Data) {
   return await useAxios().post("/demands", Data);
 }
+async function putUpdateDemandApi(Data) {
+  return await useAxios().put("/demands/update", Data);
+}
 async function putValidateDemandApi(id) {
   return await useAxios().put(`/demands/validate/${id}`);
 }
@@ -42,4 +45,5 @@ export {
   putValidateDemandApi,
   putRejectDemanddApi,
   deleteDemanddApi,
+  putUpdateDemandApi,
 };

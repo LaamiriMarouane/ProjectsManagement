@@ -1,18 +1,34 @@
 import React, { useEffect, useState } from "react";
 import UserDemandComponent from "../../../components/userComponents/UserDemandComponent";
 import AcceptedDemandComponent from "../../../components/userComponents/AcceptedDemandComponent";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { IoMdClose } from "react-icons/io";
 import UserDemandFrom from "../../../components/forms/UserDemandFrom";
 import { MdAdd } from "react-icons/md";
+import {
+  getAcceptedDemands,
+  getNewDemands,
+} from "../../../../features/demandsSlice";
+import Spinner from "../../../../utils/Spinner";
 
 const ConsultPage = () => {
-  const { Demands } = useSelector((store) => store.demand);
   const [updateInfo, setIsUpdate] = useState({
     demandToUpdate: {},
     isUpdate: false,
   });
   const [addDemand, setAddDemand] = useState(false);
+  const {
+    newDemands,
+    acceptedDemands,
+    DemandErrors,
+    newDemandsLoading,
+    acceptedDemandsLoading,
+  } = useSelector((store) => store.demand);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(getNewDemands());
+    dispatch(getAcceptedDemands());
+  }, []);
 
   return (
     <div className="mt-16">
@@ -29,10 +45,13 @@ const ConsultPage = () => {
         <div className="w-[50%] h-screen px-3">
           <div className="rounded-lg border border-slate-300 bg-slate-100">
             <div className="bg-slate-200 px-3 py-1 border-b border-b-slate-300 rounded-tr-lg text-sm rounded-tl-lg">
-              You have {Demands?.length ? Demands.length : 0} demand made{" "}
+              You have {newDemands?.length > 0 ? newDemands.length : 0} demandes
+              created{" "}
             </div>
-            {Demands?.length ? (
-              Demands.map((demande) => (
+            {newDemandsLoading ? (
+              <Spinner />
+            ) : newDemands?.length ? (
+              newDemands.map((demande) => (
                 <UserDemandComponent
                   key={demande.id}
                   demand={demande}
@@ -40,16 +59,24 @@ const ConsultPage = () => {
                 />
               ))
             ) : (
-              <div className="text-center w-full py-3">No demand made</div>
+              <div className="text-center w-full py-3">No demand created</div>
             )}
           </div>
         </div>
         <div className="w-[50%] h-screen px-3">
           <div className="rounded-lg border border-slate-300 ">
             <div className="bg-slate-200 px-3 py-1 border-b border-b-slate-300 rounded-tr-lg text-sm rounded-tl-lg">
-              You have 1 demand accepted
+              You have {acceptedDemands?.length} demandes accepted
             </div>
-            <AcceptedDemandComponent />
+            {acceptedDemandsLoading ? (
+              <Spinner />
+            ) : acceptedDemands?.length ? (
+              acceptedDemands.map((demand) => (
+                <AcceptedDemandComponent key={demand?.id} demand={demand} />
+              ))
+            ) : (
+              <div className="text-center w-full py-3">No demand accepted</div>
+            )}
           </div>
         </div>
       </div>
@@ -72,12 +99,17 @@ const ConsultPage = () => {
               <IoMdClose />
             </div>
             {addDemand && (
-              <UserDemandFrom isUpdate={false} demandToUpdate={{}} />
+              <UserDemandFrom
+                isUpdate={false}
+                demandToUpdate={{}}
+                setAddDemand={setAddDemand}
+              />
             )}
             {updateInfo.isUpdate && (
               <UserDemandFrom
                 isUpdate={updateInfo.isUpdate}
                 demandToUpdate={updateInfo.demandToUpdate}
+                setIsUpdate={setIsUpdate}
               />
             )}
           </dialog>

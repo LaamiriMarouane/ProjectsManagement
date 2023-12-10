@@ -1,13 +1,11 @@
 import useAxios from "../../hooks/useAxios";
 
-async function getEventApi() {
-  return await useAxios().get("/events");
-}
-async function getTodayEventApi() {
-  return await useAxios().get("/events/today");
-}
-async function PostEventApi(formData) {
-  return await useAxios().post("/events", formData);
+async function getUserEventsApi() {
+  return await useAxios().get("/events/users");
 }
 
-export { getEventApi, PostEventApi, getTodayEventApi };
+async function PostUserEventApi(formData) {
+  return await useAxios().post("/events/users", formData);
+}
+
+export { getUserEventsApi, PostUserEventApi };

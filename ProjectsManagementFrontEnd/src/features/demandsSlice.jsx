@@ -1,72 +1,32 @@
 import { createAsyncThunk, createSlice, current } from "@reduxjs/toolkit";
 import {
+  getAcceptedDemandsApi,
   getNewDemandsApi,
   getRejectedDemandsApi,
   getdemandsApi,
   postCreateDemandApi,
+  putUpdateDemandApi,
+  putRejectDemanddApi,
+  putValidateDemandApi,
 } from "../api/demandApi";
-
-const userDemandList = [
-  {
-    id: 1,
-    projectName: "Dev Web",
-    projectLongName: "Dev Web for testing",
-    user: "user-name",
-    status: false,
-    type: "IT",
-    theme: "Développement",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-    public: false,
-    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
-  },
-
-  {
-    id: 2,
-    projectName: "Dev Web",
-    projectLongName: "Dev Web for testing",
-    user: "user-name",
-    status: false,
-    type: "IT",
-    theme: "Développement",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-    public: true,
-    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
-  },
-  {
-    id: 3,
-    projectName: "Dev Web",
-    projectLongName: "Dev Web for testing",
-    user: "user-name",
-    status: false,
-    type: "IT",
-    theme: "Développement",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-    public: true,
-    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
-  },
-  {
-    id: 4,
-    projectName: "Dev Web",
-    projectLongName: "Dev Web for testing",
-    user: "user-name",
-    status: false,
-    type: "IT",
-    theme: "Développement",
-    description:
-      "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-    public: true,
-    demandeCreatingtime: "12/09/2023, 05:22:20 PM",
-  },
-];
 
 export const PostCreateDemand = createAsyncThunk(
   "Demand/Add",
   async (formData, { _, rejectWithValue }) => {
     try {
       const res = await postCreateDemandApi(formData);
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+export const putUpdateDemand = createAsyncThunk(
+  "Demand/Update",
+  async (formData, { _, rejectWithValue }) => {
+    try {
+      const res = await putUpdateDemandApi(formData);
       return res.data;
     } catch (error) {
       const errorMsg = error?.response?.data?.message || error?.message;
@@ -110,28 +70,86 @@ export const getRejectedDemands = createAsyncThunk(
     }
   }
 );
+export const getAcceptedDemands = createAsyncThunk(
+  "Demands/getAccepted",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getAcceptedDemandsApi();
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+export const putValidateDemand = createAsyncThunk(
+  "Demand/accepte",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await putValidateDemandApi(id);
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+export const putRejectDemand = createAsyncThunk(
+  "Demand/reject",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await putRejectDemanddApi(id);
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
 
 const demandSlice = createSlice({
   name: "demand",
   initialState: {
-    Demands: [...userDemandList],
+    rejectedDemands: [],
+    acceptedDemands: [],
+    newDemands: [],
+    Demands: [],
     DemandErrors: "",
     DemandsLoading: true,
 
-    DemandLoading: true,
+    newDemandsLoading: true,
+    acceptedDemandsLoading: true,
+    rejectedDemandsLoading: true,
   },
 
   extraReducers: (builder) => {
     builder
       .addCase(PostCreateDemand.pending, (state, action) => {
-        state.DemandLoading = true;
+        state.newDemandsLoading = true;
       })
       .addCase(PostCreateDemand.fulfilled, (state, action) => {
-        state.Demands = [action.payload, ...state.Demands];
-        state.DemandLoading = false;
+        state.newDemands = [action.payload, ...state.newDemands];
+        state.newDemandsLoading = false;
       })
       .addCase(PostCreateDemand.rejected, (state, action) => {
-        state.DemandLoading = false;
+        state.newDemandsLoading = false;
+        state.DemandErrors = action.payload;
+      });
+    builder
+      .addCase(putUpdateDemand.pending, (state, action) => {
+        state.newDemandsLoading = true;
+      })
+      .addCase(putUpdateDemand.fulfilled, (state, { payload }) => {
+        state.newDemands = state.newDemands.map((demand) => {
+          if (demand.id == payload.id) {
+            return payload;
+          }
+          return demand;
+        });
+        state.newDemandsLoading = false;
+      })
+      .addCase(putUpdateDemand.rejected, (state, action) => {
+        state.newDemandsLoading = false;
         state.DemandErrors = action.payload;
       });
     builder
@@ -148,27 +166,73 @@ const demandSlice = createSlice({
       });
     builder
       .addCase(getNewDemands.pending, (state, action) => {
-        state.DemandsLoading = true;
+        state.newDemandsLoading = true;
       })
       .addCase(getNewDemands.fulfilled, (state, action) => {
-        state.Demands = [...action.payload];
-        state.DemandsLoading = false;
+        state.newDemands = [...action.payload];
+
+        state.newDemandsLoading = false;
       })
       .addCase(getNewDemands.rejected, (state, action) => {
         console.log("rejected", action.payload);
-        state.DemandsLoading = false;
+        state.newDemandsLoading = false;
       });
     builder
       .addCase(getRejectedDemands.pending, (state, action) => {
-        state.DemandsLoading = true;
+        state.rejectedDemandsLoading = true;
       })
       .addCase(getRejectedDemands.fulfilled, (state, action) => {
-        state.Demands = [...action.payload];
-        state.DemandsLoading = false;
+        state.rejectedDemands = [...action.payload];
+
+        state.rejectedDemandsLoading = false;
       })
       .addCase(getRejectedDemands.rejected, (state, action) => {
         console.log("rejected", action.payload);
-        state.DemandsLoading = false;
+        state.rejectedDemandsLoading = false;
+      });
+
+    builder
+      .addCase(getAcceptedDemands.pending, (state, action) => {
+        state.acceptedDemandsLoading = true;
+      })
+      .addCase(getAcceptedDemands.fulfilled, (state, action) => {
+        state.acceptedDemands = [...action.payload];
+
+        state.acceptedDemandsLoading = false;
+      })
+      .addCase(getAcceptedDemands.rejected, (state, action) => {
+        console.log("rejected", action.payload);
+        state.acceptedDemandsLoading = false;
+      });
+    builder
+      .addCase(putValidateDemand.pending, (state, action) => {
+        state.newDemandsLoading = true;
+      })
+      .addCase(putValidateDemand.fulfilled, (state, { payload }) => {
+        state.newDemands = state.newDemands.filter(
+          (demand) => demand.id !== payload.id
+        );
+
+        state.newDemandsLoading = false;
+      })
+      .addCase(putValidateDemand.rejected, (state, action) => {
+        console.log("rejected", action.payload);
+        state.newDemandsLoading = false;
+      });
+    builder
+      .addCase(putRejectDemand.pending, (state, action) => {
+        state.newDemandsLoading = true;
+      })
+      .addCase(putRejectDemand.fulfilled, (state, { payload }) => {
+        state.newDemands = state.newDemands.filter(
+          (demand) => demand.id !== payload.id
+        );
+
+        state.newDemandsLoading = false;
+      })
+      .addCase(putRejectDemand.rejected, (state, action) => {
+        console.log("rejected", action.payload);
+        state.newDemandsLoading = false;
       });
   },
 });
