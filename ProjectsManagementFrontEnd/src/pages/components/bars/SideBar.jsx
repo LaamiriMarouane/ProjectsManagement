@@ -34,6 +34,14 @@ function Sidebar() {
             to="/user/demands"
             className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
           >
+            All Projects
+          </Link>
+        </li>
+        <li className="flex items-center">
+          <Link
+            to="/user/demands"
+            className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
+          >
             Demands
           </Link>
         </li>
@@ -58,7 +66,7 @@ function Sidebar() {
             to="/user/invit"
             className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
           >
-            Invitation
+            Invitations
           </Link>
         </li>
       </ul>
