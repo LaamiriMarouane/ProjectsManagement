@@ -1,7 +1,6 @@
 package ProjectsManagmentBackEnd.entity.project;
 
 
-import ProjectsManagmentBackEnd.entity.event.Event;
 import ProjectsManagmentBackEnd.entity.event.ProjectEvent;
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -33,7 +31,7 @@ public class Project {
 
     private Date lastUpdate;
     @OneToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
-    private Set<ProjectDocs> resources ;
+    private Set<ProjectResource> resources ;
 
     @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private AdminsProjectGroup admins;
