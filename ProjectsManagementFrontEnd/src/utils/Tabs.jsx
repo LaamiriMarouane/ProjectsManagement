@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useLocation, useParams } from "react-router-dom";
 
 const Tabs = () => {
@@ -16,6 +16,9 @@ const Tabs = () => {
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
+  useEffect(() => {
+    setActiveTab(tabs.find((tab) => tab.to === location.pathname).to);
+  }, [location]);
   return (
     <ul className="flex border-b border-b-slate-400 my-3 w-full">
       {tabs.map((tab) => (

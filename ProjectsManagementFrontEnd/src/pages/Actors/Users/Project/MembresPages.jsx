@@ -49,7 +49,6 @@ const MembresPages = () => {
   const { users, loading } = useSelector((store) => store.users);
   const { error, invitationloading } = useSelector((store) => store.invitation);
   const { id } = useParams();
-  console.log(id);
   const dispatch = useDispatch();
 
   const image =

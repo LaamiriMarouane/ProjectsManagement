@@ -35,7 +35,6 @@ function ProjectEventsPage() {
     }
   };
   useEffect(() => {
-    console.log(id);
     dispatch(getProjectEvents(id));
   }, []);
 

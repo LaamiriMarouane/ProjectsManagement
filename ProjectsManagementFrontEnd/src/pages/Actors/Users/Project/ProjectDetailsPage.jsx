@@ -24,7 +24,6 @@ const ProjectDetailsPage = () => {
   const { id } = useParams();
   useEffect(() => {
     dispatch(getProjectDetails(id));
-    console.log("test", project);
   }, []);
   return (
     <div className="h-full w-full ">
