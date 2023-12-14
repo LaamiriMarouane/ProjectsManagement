@@ -15,14 +15,5 @@ public class ProjectGroupServiceImp {
     ProjectGroupRepository projectGroupRepository;
     ProjectGroupValidator projectGroupValidator;
 
-    public ProjectGroup create(ProjectGroupDTO projectGroupDTO) throws BusinessException {
-        projectGroupValidator.projectGroupValidate(projectGroupDTO);
-      return  projectGroupRepository.save(ProjectGroupMapper.convert(projectGroupDTO));
 
-    }
-    public ProjectGroup update(ProjectGroupDTO projectGroupDTO) throws BusinessException {
-        projectGroupValidator.projectGroupValidate(projectGroupDTO);
-        return  projectGroupRepository.save(ProjectGroupMapper.convert(projectGroupDTO));
-
-    }
 }

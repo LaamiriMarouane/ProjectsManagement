@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -63,7 +60,9 @@ public class ProjectMemberShipInvitationImp {
 
         }else{
 
-            throw new BusinessException("projectMemberShipInvitation does not exist ");
+            Map error=  new HashMap();
+            error.put("error","projectMemberShipInvitation does not exist ");
+            throw  new BusinessException("error",1111, error);
         }
     }
     public ResponseEntity<ProjectMemberShipInvitationDTO> declineInvitation(String InvitationId) throws BusinessException {
@@ -78,15 +77,17 @@ public class ProjectMemberShipInvitationImp {
 
         }else{
 
-            throw new BusinessException("projectMemberShipInvitation does not exist ");
+            Map error=  new HashMap();
+            error.put("error","projectMemberShipInvitation does not exist ");
+            throw  new BusinessException("error",1111, error);
         }
 
 
     }
-    public ResponseEntity<ProjectMemberShipInvitationDTO> sendInvitation(ProjectMemberShipInvitationDTO projectMemberShipInvitationDTO){
+    public ResponseEntity<ProjectMemberShipInvitationDTO> sendInvitation(String toUserId ,String projectId){
         User fromUser= UserContext.currentUser();
-        User toUser= userRepository.findById(projectMemberShipInvitationDTO.getTo().getId()).get();
-        Project project=projectRepository.findById(projectMemberShipInvitationDTO.getProject().getId()).get();
+        User toUser= userRepository.findById(toUserId).get();
+        Project project=projectRepository.findById(projectId).get();
         ProjectMemberShipInvitation invitation=new ProjectMemberShipInvitation();
         invitation.setTo(toUser);
         invitation.setFrom(fromUser);

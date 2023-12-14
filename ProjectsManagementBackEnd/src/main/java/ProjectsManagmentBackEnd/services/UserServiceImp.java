@@ -17,7 +17,9 @@ import ProjectsManagmentBackEnd.services.validation.user.UserValidator;
 import ProjectsManagmentBackEnd.utils.JwtTokenUtil;
 import ProjectsManagmentBackEnd.utils.JwtUser;
 import ProjectsManagmentBackEnd.utils.UserContext;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -33,6 +35,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -40,6 +43,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
+@Order(2)
 public class UserServiceImp {
     private UserRepository userRepository;
 
@@ -55,7 +59,9 @@ public class UserServiceImp {
 
     private UserDetailsService userDetailsService;
 
-    public void register(UserDTO userInfo) throws BusinessException {
+
+
+    public void register(UserDTO userInfo,RoleType userRole) throws BusinessException {
        userValidator.userValide(userInfo);
         User user=new User();
         user.setFirstName(userInfo.getFirstName());
@@ -64,7 +70,7 @@ public class UserServiceImp {
         user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         user.setUsername(userInfo.getUsername());
         user.setEnabled(true);
-      Role role =roleRepository.findByName(RoleType.APP_USER).get();
+      Role role =roleRepository.findByName(userRole).get();
         //to do set roles *********
        user.setRole(role);
         //to do set roles *********
@@ -85,6 +91,9 @@ public class UserServiceImp {
 
 
     public ResponseEntity<List<UserShortDTO>> search(String subString) {
+        if(subString.equals("")){
+            return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+        }
         User currentUser= UserContext.currentUser();
        List<User> userList= userRepository.findAllByUsernameContainingOrEmailContaining(subString,subString);
        List<UserShortDTO> userShortDTOList=userList.stream()
@@ -117,4 +126,5 @@ public class UserServiceImp {
             System.out.println("msg->"+e);
         }
     }
+
 }

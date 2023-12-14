@@ -14,7 +14,6 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(name = "role")
 public class Role {
     @Id
     @GeneratedValue(generator = "uuid2")
@@ -28,8 +27,7 @@ public class Role {
     private Set<Permission>permissions;
 
 
-    @OneToOne
-    private ProjectRole projectRole;
+
 
 
 }

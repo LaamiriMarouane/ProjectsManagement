@@ -11,4 +11,5 @@ public class UserShortDTO {
     private String id;
     private String username;
     private String email;
+    private RoleDTO roleDTO;
 }

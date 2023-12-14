@@ -20,8 +20,9 @@ public class ProjectMapper {
             out.setLongName(in.getLongName());
             out.setShortName(in.getShortName());
             out.setLastUpdate(in.getLastUpdate());
-           out.setProjectGroups(in.getProjectGroups().stream().map(ProjectGroupMapper::convert).collect(Collectors.toList()));
-          //  out.setEvents(in.getEvents());
+           out.setMembers(ProjectGroupMapper.convert(in.getMembers()));
+           out.setAdmins(ProjectGroupMapper.convert(in.getAdmins()));
+            out.setEvents(in.getEvents());
 
 
 
@@ -42,8 +43,9 @@ public class ProjectMapper {
             out.setLongName(in.getLongName());
             out.setShortName(in.getShortName());
             out.setLastUpdate(in.getLastUpdate());
-           // out.setEvents(in.getEvents());
-            out.setProjectGroups(in.getProjectGroups().stream().map(ProjectGroupMapper::convert).collect(Collectors.toList()));
+            out.setMembers(ProjectGroupMapper.convertToMembersGroup(in.getMembers()));
+            out.setAdmins(ProjectGroupMapper.convertToAdminGroup(in.getAdmins()));
+            out.setEvents(in.getEvents());
             return out;
         }
         return null;
@@ -55,6 +57,10 @@ public class ProjectMapper {
             out.setId(in.getId());
             out.setLongName(in.getLongName());
             out.setShortName(in.getShortName());
+            out.setDescription(in.getDescription());
+            out.setTheme(in.getTheme());
+            out.setType(in.getType());
+            out.setLastUpdate(in.getLastUpdate());
             return out;
         }
         return null;

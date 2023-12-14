@@ -1,6 +1,8 @@
 package ProjectsManagmentBackEnd.controllers;
 
+import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
+import ProjectsManagmentBackEnd.dtos.project.ProjectShortDTO;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.holders.ApiPaths;
 import ProjectsManagmentBackEnd.services.ProjectServiceImp;
@@ -17,7 +19,7 @@ public class ProjectController {
 
     ProjectServiceImp projectService;
     @GetMapping()
-    public ResponseEntity<List<ProjectDTO>> getAll()  {
+    public ResponseEntity<List<ProjectShortDTO>> getAll()  {
         return projectService.getAll();
     }
     @GetMapping("/my-projects")
@@ -28,6 +30,8 @@ public class ProjectController {
     public ResponseEntity<ProjectDTO> getProjectDetails(@PathVariable("projectId") String id) throws BusinessException {
         return projectService.getDetails(id);
     }
+
+
 
     @PutMapping("/addAdmin/{projectId}/{userId}")
     public ResponseEntity addAdmin(@PathVariable("projectId") String projectId, @PathVariable("userId") String userId) throws BusinessException {

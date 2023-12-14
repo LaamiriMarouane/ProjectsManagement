@@ -2,6 +2,11 @@ package ProjectsManagmentBackEnd.dtos.project;
 
 import ProjectsManagmentBackEnd.dtos.ProjectGroupDTO;
 import ProjectsManagmentBackEnd.entity.event.Event;
+import ProjectsManagmentBackEnd.entity.event.ProjectEvent;
+import ProjectsManagmentBackEnd.entity.project.AdminsProjectGroup;
+import ProjectsManagmentBackEnd.entity.project.MembersProjectGroup;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,8 +31,9 @@ public class ProjectDTO {
     private String theme;
     private String type;
     private Date lastUpdate;
+    private ProjectGroupDTO admins;
+    private ProjectGroupDTO members;
     private boolean isPublic;
     private boolean isActive;
-    private List<ProjectGroupDTO> projectGroups;
-    private Set<Event> events;
+    private Set<ProjectEvent> events;
 }

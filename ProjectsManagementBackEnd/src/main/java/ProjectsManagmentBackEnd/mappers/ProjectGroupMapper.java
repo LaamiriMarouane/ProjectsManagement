@@ -1,6 +1,8 @@
 package ProjectsManagmentBackEnd.mappers;
 
 import ProjectsManagmentBackEnd.dtos.ProjectGroupDTO;
+import ProjectsManagmentBackEnd.entity.project.AdminsProjectGroup;
+import ProjectsManagmentBackEnd.entity.project.MembersProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 
 import java.util.stream.Collectors;
@@ -20,13 +22,23 @@ public class ProjectGroupMapper {
         }
         return null;
     }
-    public static ProjectGroup  convert(ProjectGroupDTO in) {
+    public static MembersProjectGroup convertToMembersGroup(ProjectGroupDTO in) {
 
         if (in != null) {
-            final ProjectGroup out = new ProjectGroup();
+            final MembersProjectGroup out = new MembersProjectGroup();
             out.setId(in.getId());
             out.setGroupName(in.getGroupName());
-            out.setGroupType(in.getGroupType());
+
+            return out;
+        }
+        return null;
+    }
+    public static AdminsProjectGroup  convertToAdminGroup(ProjectGroupDTO in) {
+
+        if (in != null) {
+            final AdminsProjectGroup out = new AdminsProjectGroup();
+            out.setId(in.getId());
+            out.setGroupName(in.getGroupName());
 
             return out;
         }

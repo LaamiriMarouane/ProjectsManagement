@@ -26,9 +26,9 @@ public class ProjectMemberShipInvitationController {
     public ResponseEntity<List<ProjectMemberShipInvitationDTO>> getReceived(){
         return projectMemberShipInvitationImp.getAllReceived();
     }
-    @PostMapping()
-    public ResponseEntity<ProjectMemberShipInvitationDTO> send(@RequestBody ProjectMemberShipInvitationDTO projectMemberShipInvitationDTO ){
-        return projectMemberShipInvitationImp.sendInvitation(projectMemberShipInvitationDTO);
+    @PostMapping("/{projectId}/{userId}")
+    public ResponseEntity<ProjectMemberShipInvitationDTO> send(@PathVariable String userId,@PathVariable String projectId ){
+        return projectMemberShipInvitationImp.sendInvitation(userId, projectId);
     }
 
     @PutMapping("/accept/{invitationId}")

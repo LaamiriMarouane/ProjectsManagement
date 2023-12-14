@@ -35,8 +35,11 @@ public class Project {
     @OneToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     private Set<ProjectDocs> resources ;
 
-    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<ProjectGroup> projectGroups;
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private AdminsProjectGroup admins;
+
+    @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
+    private MembersProjectGroup members;
 
     @OneToMany
     private Set<ProjectEvent> events;

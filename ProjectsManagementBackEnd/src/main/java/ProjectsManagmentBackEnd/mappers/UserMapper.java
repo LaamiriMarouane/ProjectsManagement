@@ -23,7 +23,6 @@ public class UserMapper {
         if (in != null) {
             final User out = new User();
             out.setId(in.getId());
-//            out.setEmail(in.getEmail());
             out.setEmail(in.getEmail());
             out.setUsername(in.getUsername());
 
@@ -39,8 +38,6 @@ public class UserMapper {
             out.setId(in.getId());
             out.setEmail(in.getEmail());
             out.setUsername(in.getUsername());
-
-
 
             return out;
         }

@@ -1,11 +1,14 @@
 package ProjectsManagmentBackEnd.services;
 
+import ProjectsManagmentBackEnd.dtos.user.UserDTO;
 import ProjectsManagmentBackEnd.entity.user.Permission;
 import ProjectsManagmentBackEnd.entity.user.Role;
 import ProjectsManagmentBackEnd.entity.user.RoleType;
+import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.repository.RoleRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,11 +17,13 @@ import java.util.Set;
 
 @Service
 @AllArgsConstructor
+@Order(1)
 public class RoleServiceImp {
     private RoleRepository roleRepository;
+    private  UserServiceImp userServiceImp;
 
     @PostConstruct
-    public void initRoles() {
+    public void init() throws BusinessException {
         Role appUser = initializeRole(RoleType.APP_USER);
         Role appAdmin = initializeRole(RoleType.APP_ADMIN);
         Role projectAdmin = initializeRole(RoleType.PROJECT_ADMIN);
@@ -60,6 +65,14 @@ public class RoleServiceImp {
         roleGuest.setPermissions(Set.of(Permission.GUEST_READ));
 
         roleRepository.saveAll(List.of(appUser, appAdmin, projectAdmin, projectManager, roleGuest));
+       UserDTO userDTO= new UserDTO();
+       userDTO.setEmail("marwnadev@gmail.com");
+       userDTO.setFirstName("admin");
+        userDTO.setLastName("admin");
+        userDTO.setUsername("admin");
+       userDTO.setPassword("eE123456_a");
+       userDTO.setConfirmationPassword("eE123456_a");
+        userServiceImp.register(userDTO,RoleType.APP_ADMIN);
     }
 
     private Role initializeRole(RoleType roleType) {

@@ -48,6 +48,7 @@ public class DemandServiceImp {
         if(demandState==DemandState.COMPLETED){
             demand.get().setDemandState(DemandState.COMPLETED);
             demand.get().setValidationTime(new Date());
+            // to do  change user roles
             projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
 
         }else{
@@ -55,7 +56,7 @@ public class DemandServiceImp {
 
         }
         demandRepository.save( demand.get());
-        // to do create a new Project and change user roles
+
         return ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demand.get()));
     }
 
@@ -103,7 +104,9 @@ public class DemandServiceImp {
         User user =userRepository.findById(demandDTO.getUser().getId()).get();
         if(demandToUpdate.isPresent()){
             if(demandToUpdate.get().getDemandState()==DemandState.REJECTED){
-                throw new BusinessException("Demand can not be updated");
+                Map error=  new HashMap();
+                error.put("error","Demand can not be updated ");
+                throw  new BusinessException("error",1111, error);
             }else{
                 Demand demandUpdated = demandRepository.save( DemandMapper.convert(demandDTO,user));
                 return   ResponseEntity.status(HttpStatus.OK).body(DemandMapper.convert(demandUpdated));
@@ -111,7 +114,9 @@ public class DemandServiceImp {
             }
 
         }else {
-            throw new BusinessException("Demand does not exist");
+            Map error=  new HashMap();
+            error.put("error","Demand does not exist");
+            throw  new BusinessException("error",1111, error);
         }
 
     }

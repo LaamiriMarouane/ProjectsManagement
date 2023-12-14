@@ -24,7 +24,6 @@ public class RoleDTO {
     @Enumerated
     private Set<Permission> permissions;
 
-
     @OneToOne
     private ProjectRole projectRole;
 }

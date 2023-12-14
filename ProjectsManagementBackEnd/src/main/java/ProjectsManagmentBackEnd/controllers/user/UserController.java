@@ -2,22 +2,27 @@ package ProjectsManagmentBackEnd.controllers.user;
 
 
 import ProjectsManagmentBackEnd.dtos.user.UserDTO;
+import ProjectsManagmentBackEnd.dtos.user.UserShortDTO;
+import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.holders.ApiPaths;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationRequest;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
 import ProjectsManagmentBackEnd.services.UserServiceImp;
+import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
+import java.util.List;
 
 
 @RestController
 @RequestMapping(ApiPaths.V1)
 @AllArgsConstructor
+
 public class UserController {
 
 
@@ -31,14 +36,16 @@ public class UserController {
     }
 
     @GetMapping(ApiPaths.USERS+ApiPaths.SEARCH+"={subString}")
-    public ResponseEntity search( @PathVariable("subString") String subString)  {
+    public ResponseEntity<List<UserShortDTO>> search(@PathVariable("subString") String subString)  {
         return userService.search(subString);
     }
 
     @PostMapping(ApiPaths.REGISTER )
     public  void register(@RequestBody UserDTO userInfo) throws BusinessException {
-            userService.register(userInfo);
+            userService.register(userInfo, RoleType.APP_USER);
     }
+
+
 
 
 

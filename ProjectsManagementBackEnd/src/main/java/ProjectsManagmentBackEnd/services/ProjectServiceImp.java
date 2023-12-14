@@ -1,16 +1,17 @@
 package ProjectsManagmentBackEnd.services;
 
+import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
-import ProjectsManagmentBackEnd.entity.project.GroupType;
+import ProjectsManagmentBackEnd.dtos.project.ProjectShortDTO;
+import ProjectsManagmentBackEnd.entity.project.AdminsProjectGroup;
+import ProjectsManagmentBackEnd.entity.project.MembersProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.Project;
 import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
 import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.mappers.ProjectMapper;
-import ProjectsManagmentBackEnd.repository.ProjectGroupRepository;
-import ProjectsManagmentBackEnd.repository.ProjectRepository;
-import ProjectsManagmentBackEnd.repository.UserRepository;
+import ProjectsManagmentBackEnd.repository.*;
 import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,24 +25,28 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProjectServiceImp {
     ProjectRepository projectRepository;
+    AdminsProjectGroupRepository adminsProjectGroupRepository;
+    MembersProjectGroupRepository membersProjectGroupRepository;
     ProjectGroupRepository projectGroupRepository;
     UserRepository userRepository;
-    public ResponseEntity<List<ProjectDTO>> getAll() {
-        List<ProjectDTO> projectDTOList;
+    public ResponseEntity<List<ProjectShortDTO>> getAll() {
+        List<ProjectShortDTO> projectDTOList;
         User user= UserContext.currentUser();
         if(user.getRole().getName()== RoleType.APP_ADMIN){
-            projectDTOList=projectRepository.findAll().stream().map(ProjectMapper::convert).collect(Collectors.toList());
+            projectDTOList=projectRepository.findAll().stream().map(ProjectMapper::convertShort).collect(Collectors.toList());
         }else{
-            projectDTOList=projectRepository.findAllByIsPublicIsAndIsActiveIs(true,true).stream().map(ProjectMapper::convert).collect(Collectors.toList());
+            projectDTOList=projectRepository.findAllByIsPublicIsAndIsActiveIs(true,true).stream().map(ProjectMapper::convertShort).collect(Collectors.toList());
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(projectDTOList);
 
-    } public ResponseEntity<List<ProjectDTO>> getAllByUser() {
+    }
+    public ResponseEntity<List<ProjectDTO>> getAllByUser() {
         List<ProjectDTO> projectDTOList;
         User user= UserContext.currentUser();
-        List<ProjectGroup>userGroups=projectGroupRepository.findAllByUsersContaining(user);
-        projectDTOList=projectRepository.findAllByProjectGroupsContaining(userGroups).stream().map(ProjectMapper::convert).collect(Collectors.toList());
+        List<MembersProjectGroup>userMemberRoleGroups=membersProjectGroupRepository.findAllByUsersContaining(user);
+        List<AdminsProjectGroup>userAdminRoleGroups=adminsProjectGroupRepository.findAllByUsersContaining(user);
+        projectDTOList=projectRepository.findProjectsByAdminOrMember(userAdminRoleGroups,userMemberRoleGroups).stream().map(ProjectMapper::convert).collect(Collectors.toList());
 
         return ResponseEntity.status(HttpStatus.OK).body(projectDTOList);
 
@@ -52,27 +57,29 @@ public class ProjectServiceImp {
             return ResponseEntity.status(HttpStatus.OK).body(ProjectMapper.convert(project.get()));
 
         }else{
-            throw  new BusinessException("project not found");
+           Map error=  new HashMap();
+           error.put("error","project not found");
+            throw  new BusinessException("error",1111, error);
         }
     }
     public void create(Project project, User user){
         //to do add admin role to the user in creating the demand
-        ProjectGroup adminsGroup =new ProjectGroup();
+        AdminsProjectGroup adminsGroup =new AdminsProjectGroup();
         adminsGroup.setGroupName(project.getShortName()+"_adm");
-        adminsGroup.setGroupType(GroupType.ADMIN_GROUP);
         Set<User> userSet=new HashSet<>();
         userSet.add(user);
         adminsGroup.setUsers(userSet);
         adminsGroup.setProject(project);
-        ProjectGroup membersGroup =new ProjectGroup();
+        project.setAdmins(adminsGroup);
+//        adminsProjectGroupRepository.save(adminsGroup);
+        MembersProjectGroup membersGroup =new MembersProjectGroup();
         membersGroup.setGroupName(project.getShortName());
         membersGroup.setProject(project);
-        membersGroup.setGroupType(GroupType.MEMBER_GROUP);
-        List<ProjectGroup> projectGroups=new ArrayList<>();
-        projectGroups.add(adminsGroup);
-        projectGroups.add(membersGroup);
-        project.setProjectGroups(projectGroups);
+        project.setMembers(membersGroup);
+  //      membersProjectGroupRepository.save(membersGroup);
+
         project.setActive(true);
+
         projectRepository.save(project);
 
     }
@@ -81,33 +88,39 @@ public class ProjectServiceImp {
       if(project.isPresent()){
           User member=userRepository.findById(userId).get();
           //to do add role project_member to the user added ;
-          if(project.get().getProjectGroups().get(0).getGroupType()==GroupType.MEMBER_GROUP){
-              project.get().getProjectGroups().get(0).getUsers().add(member);
-          }else{
-              project.get().getProjectGroups().get(1).getUsers().add(member);
-          }
+         project.get().getMembers().getUsers().add(member);
           projectRepository.save(project.get());
           return ResponseEntity.status(HttpStatus.OK).build();
 
       }else{
-          throw  new BusinessException("project not found");
+          Map error=  new HashMap();
+          error.put("error","project not found");
+          throw  new BusinessException("error",1111, error);
       }
 
     }
     public ResponseEntity addAdmin(String projectId, String userId) throws BusinessException {
         Optional<Project> project=projectRepository.findById(projectId);
         if(project.isPresent()){
-            User admin=userRepository.findById(userId).get();
+            User FutureAdmin=userRepository.findById(userId).get();
             //to do add role project_admin to the user added ;
-            if(project.get().getProjectGroups().get(0).getGroupType()==GroupType.ADMIN_GROUP){
-                project.get().getProjectGroups().get(0).getUsers().add(admin);
-            }else{
-                project.get().getProjectGroups().get(1).getUsers().add(admin);
-            }
+
+           if(project.get().getMembers().getUsers().contains(FutureAdmin)){
+               project.get().getMembers().getUsers().remove(FutureAdmin);
+               project.get().getAdmins().getUsers().add(FutureAdmin);
+           }else {
+               Map error=  new HashMap();
+               error.put("error","member not found");
+               throw  new BusinessException("error",1111, error);
+
+           }
+
             return ResponseEntity.status(HttpStatus.OK).build();
 
         }else{
-            throw  new BusinessException("project not found");
+            Map error=  new HashMap();
+            error.put("error","project not found");
+            throw  new BusinessException("error",1111, error);
         }
     }
 
