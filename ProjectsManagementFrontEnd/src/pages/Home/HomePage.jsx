@@ -10,7 +10,7 @@ import { Link } from "react-router-dom";
 import { getAllPublicProjects } from "../../features/project/projectSlice";
 
 const HomePage = () => {
-  const { projects } = useSelector((state) => state.project);
+  const { projects, projectsloading } = useSelector((state) => state.project);
   const dispatch = useDispatch();
   // const [filterType, setFilterType] = useState("");
   // const [currentPage, setCurrentPage] = useState(1);
@@ -58,35 +58,44 @@ const HomePage = () => {
       {/* <Filter types={projectTypes} onFilterChange={setFilterType} themes={projectThemes} /> */}
       <div className="mb-8 w-full">
         <div className="space-y-3">
-          {projects.map((project) => (
-            <div key={project.id} className="bg-white px-4 py-2 rounded shadow">
-              <h2 className="text-lg font-bold">{project.shortName}</h2>
-              <p className="text-gray-600 mb-1 py-2 w-full border-t border-b border-slate-100">
-                {project.description}
-              </p>
-              <div className="flex justify-between items-center">
-                <p className="text-sm text-gray-500">
-                  <span className="font-bold">Type:</span> {project.type}
-                </p>
-                <p className="text-sm text-gray-500">
-                  <span className="font-bold">Theme:</span> {project.theme}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between mt-3 text-sm font-semibold">
-                <Link
-                  to={"/details"}
-                  className="text-black underline flex items-center hover:text-blue-700"
-                >
-                  <FaLink className="mr-2" />
-                  Show More
-                </Link>
-                <em className="text-sm text-gray-500 mb-1">
-                  added on {project.demandeCreatingtime}
-                </em>
-              </div>
+          {projectsloading ? (
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+              <Spinner />
             </div>
-          ))}
+          ) : (
+            projects.map((project) => (
+              <div
+                key={project.id}
+                className="bg-white px-4 py-2 rounded shadow"
+              >
+                <h2 className="text-lg font-bold">{project.shortName}</h2>
+                <p className="text-gray-600 mb-1 py-2 w-full border-t border-b border-slate-100">
+                  {project.description}
+                </p>
+                <div className="flex justify-between items-center">
+                  <p className="text-sm text-gray-500">
+                    <span className="font-bold">Type:</span> {project.type}
+                  </p>
+                  <p className="text-sm text-gray-500">
+                    <span className="font-bold">Theme:</span> {project.theme}
+                  </p>
+                </div>
+
+                <div className="flex items-center justify-between mt-3 text-sm font-semibold">
+                  <Link
+                    to={"/details"}
+                    className="text-black underline flex items-center hover:text-blue-700"
+                  >
+                    <FaLink className="mr-2" />
+                    Show More
+                  </Link>
+                  <em className="text-sm text-gray-500 mb-1">
+                    added on {project.demandeCreatingtime}
+                  </em>
+                </div>
+              </div>
+            ))
+          )}
         </div>
         {/* Pagination Controls */}
         <div className="flex justify-center gap-4 mt-4 items-center">

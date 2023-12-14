@@ -4,10 +4,13 @@ import { useForm } from "react-hook-form";
 import ColorPickerModal from "../userComponents/ColorPickerModalComponent";
 import { useDispatch } from "react-redux";
 import { PostUserEvent } from "../../../features/events/UserEventsSlice";
+import { PostProjectEvent } from "../../../features/events/PorjectEventSlice";
+import { useParams } from "react-router-dom";
 
 const AddEventForm = ({ setOpen, selectedStartDate, isUserEvent }) => {
   const [colorPickerModalOpen, setColorPickerModalOpen] = useState(false);
   const [eventColor, setEventColor] = useState("purple");
+  const { id } = useParams();
 
   const {
     register,
@@ -27,6 +30,7 @@ const AddEventForm = ({ setOpen, selectedStartDate, isUserEvent }) => {
     if (isUserEvent) {
       dispatch(PostUserEvent(formData));
     } else {
+      dispatch(PostProjectEvent({ projectId: id, formData }));
     }
     reset();
     setOpen(false);

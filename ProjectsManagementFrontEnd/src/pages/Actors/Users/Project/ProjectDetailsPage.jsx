@@ -3,6 +3,7 @@ import ProjectDetailsComponent from "../../../components/project/ProjectDetailsC
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getProjectDetails } from "../../../../features/project/projectSlice";
+import Spinner from "../../../../utils/Spinner";
 
 const prorjectDetails = {
   id: 1,
@@ -18,7 +19,7 @@ const prorjectDetails = {
   creatingtime: "01/09/2023",
 };
 const ProjectDetailsPage = () => {
-  const { project } = useSelector((state) => state.project);
+  const { project, projectsloading } = useSelector((state) => state.project);
   const dispatch = useDispatch();
   const { id } = useParams();
   useEffect(() => {
@@ -27,7 +28,13 @@ const ProjectDetailsPage = () => {
   }, []);
   return (
     <div className="h-full w-full ">
-      {project && <ProjectDetailsComponent prorjectDetails={project} />}
+      {projectsloading ? (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+          <Spinner />
+        </div>
+      ) : (
+        <ProjectDetailsComponent prorjectDetails={project} />
+      )}
     </div>
   );
 };

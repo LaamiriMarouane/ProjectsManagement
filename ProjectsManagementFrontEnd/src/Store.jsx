@@ -3,6 +3,7 @@ import authReducer from "./features/auth/authSlice";
 import registerReducer from "./features/auth/registerSlice";
 import demandReducer from "./features/demandsSlice";
 import userEventsReducer from "./features/events/UserEventsSlice";
+import projectEventsReducer from "./features/events/PorjectEventSlice";
 import userReducer from "./features/userSlice";
 import invitationReducer from "./features/invitationSlice";
 import projectReducer from "./features/project/projectSlice";
@@ -13,6 +14,7 @@ const store = configureStore({
     userInfo: registerReducer,
     demand: demandReducer,
     userEvents: userEventsReducer,
+    projectEvents: projectEventsReducer,
     users: userReducer,
     invitation: invitationReducer,
     project: projectReducer,

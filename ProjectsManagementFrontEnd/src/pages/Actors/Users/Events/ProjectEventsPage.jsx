@@ -8,12 +8,16 @@ import listPlugin from "@fullcalendar/list";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../../utils/Spinner";
 import AddEventModalComponent from "../../../components/userComponents/AddEventModalComponent";
-import { getProjectDetails } from "../../../../features/project/projectSlice";
+import { useParams } from "react-router-dom";
+import { getProjectEvents } from "../../../../features/events/PorjectEventSlice";
 function ProjectEventsPage() {
   const [addEventModalOpen, setAddEventModalOpen] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const dispatch = useDispatch();
-  const { project, loading } = useSelector((store) => store.project);
+  const { projectEvents, loading } = useSelector(
+    (store) => store.projectEvents
+  );
+  const { id } = useParams();
   const handleDateClick = (selected) => {
     const calendarApi = selected.view.calendar;
     calendarApi.unselect();
@@ -31,7 +35,8 @@ function ProjectEventsPage() {
     }
   };
   useEffect(() => {
-    dispatch(getProjectDetails());
+    console.log(id);
+    dispatch(getProjectEvents(id));
   }, []);
 
   return (
@@ -64,7 +69,7 @@ function ProjectEventsPage() {
             eventClick={handleEventClick}
             // loading={true}
             //eventsSet={(events) => setCurrentEvents(events)}
-            initialEvents={project.events}
+            initialEvents={projectEvents}
           />
         )}
       </div>
