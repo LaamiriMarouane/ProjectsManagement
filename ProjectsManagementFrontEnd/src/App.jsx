@@ -17,25 +17,33 @@ import SideBarLayout from "./pages/Layout/SideBarLayout";
 import ConsultPage from "./pages/Actors/Users/demandsPages/ConsultPage";
 import UserEventsPage from "./pages/Actors/Users/Events/userEventsPage";
 import TabsProjectDetailsLayout from "./pages/Layout/TabsProjectDetailsLayout";
-import ProjectDetailsPage from "./pages/Project/ProjectDetailsPage";
-import MembresPages from "./pages/Project/MembresPages";
+import ProjectDetailsPage from "./pages/Actors/Users/Project/ProjectDetailsPage";
+import MembresPages from "./pages/Actors/Users/Project/MembresPages";
 import HomePage from "./pages/Home/HomePage";
+import ProjectEventsPage from "./pages/Actors/Users/Events/ProjectEventsPage";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
       <Route element={<PrivateRoutes navto="/login" isLogedIn={true} />}>
         <Route path="/" element={<NavBarLayout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/home" element={<HomePage />} />
-          <Route path="/details" element={<ProjectDetailsPage />} />
-          <Route path="/" element={<SideBarLayout />}>
+          <Route path="/projects" element={<HomePage />} />
+          <Route path="/user/" element={<SideBarLayout />}>
             <Route path="/user/demands" element={<ConsultPage />} />
             <Route path="/user/agenda" element={<UserEventsPage />} />
-            <Route path="/user/details" element={<TabsProjectDetailsLayout />} >
-              <Route path="/user/details" element={<ProjectDetailsPage />} />
-              <Route path="/user/details/ressources" element={<h1>Ressource</h1>} />
-              <Route path="/user/details/agenda" element={<h1>Agenda</h1>} />
-              <Route path="/user/details/membres" element={<MembresPages />} />
+          </Route>
+          <Route element={<SideBarLayout />}>
+            <Route element={<TabsProjectDetailsLayout />}>
+              <Route path="/projects/:id" element={<ProjectDetailsPage />} />
+              <Route
+                path="/projects/:id/ressources"
+                element={<h1>Ressource</h1>}
+              />
+              <Route
+                path="/projects/:id/agenda"
+                element={<ProjectEventsPage />}
+              />
+              <Route path="/projects/:id/membres" element={<MembresPages />} />
             </Route>
           </Route>
         </Route>

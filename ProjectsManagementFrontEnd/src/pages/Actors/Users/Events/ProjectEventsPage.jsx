@@ -1,20 +1,19 @@
-import FullCalendar from "@fullcalendar/react";
 import React, { useEffect, useState } from "react";
+import FullCalendar from "@fullcalendar/react";
 
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
-import { getUserEvents } from "../../../../features/events/UserEventsSlice";
 import { useDispatch, useSelector } from "react-redux";
 import Spinner from "../../../../utils/Spinner";
 import AddEventModalComponent from "../../../components/userComponents/AddEventModalComponent";
-
-function UserEventsPage() {
+import { getProjectDetails } from "../../../../features/project/projectSlice";
+function ProjectEventsPage() {
   const [addEventModalOpen, setAddEventModalOpen] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState("");
   const dispatch = useDispatch();
-  const { userEvents, loading } = useSelector((store) => store.userEvents);
+  const { project, loading } = useSelector((store) => store.project);
   const handleDateClick = (selected) => {
     const calendarApi = selected.view.calendar;
     calendarApi.unselect();
@@ -32,10 +31,11 @@ function UserEventsPage() {
     }
   };
   useEffect(() => {
-    dispatch(getUserEvents());
+    dispatch(getProjectDetails());
   }, []);
+
   return (
-    <div className="mt-16  h-[calc(100%-100px)]">
+    <div className="h-[calc(100%-100px)]">
       <div>
         {loading ? (
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
@@ -64,7 +64,7 @@ function UserEventsPage() {
             eventClick={handleEventClick}
             // loading={true}
             //eventsSet={(events) => setCurrentEvents(events)}
-            initialEvents={userEvents}
+            initialEvents={project.events}
           />
         )}
       </div>
@@ -73,11 +73,11 @@ function UserEventsPage() {
           setOpen={setAddEventModalOpen}
           open={addEventModalOpen}
           selectedStartDate={selectedStartDate}
-          isUserEvent={true}
+          isUserEvent={false}
         />
       </div>
     </div>
   );
 }
 
-export default UserEventsPage;
+export default ProjectEventsPage;
