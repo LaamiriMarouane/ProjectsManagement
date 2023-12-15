@@ -1,15 +1,9 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
-import { IoIosAddCircle } from "react-icons/io";
-import { FaTableList } from "react-icons/fa6";
-import ListAcceptedProject from "../../../components/adminComponents/ListAcceptedProjects";
-import { AiOutlinePoweroff } from "react-icons/ai";
 import DemandComponent from "../../../components/adminComponents/DemandComponent";
-import { Link } from "react-router-dom";
 import AdminCommandComponent from "../../../components/adminComponents/AdminCommandComponent";
 import { getAcceptedDemands } from "../../../../features/demandsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../../../utils/Spinner";
+import Spinner from "../../../components/tools/Spinner";
 
 function AdminPlateformAcceptedDemandsPage() {
   const { acceptedDemands, DemandErrors, acceptedDemandsLoading } = useSelector(

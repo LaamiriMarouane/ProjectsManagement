@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { MdGroupAdd } from "react-icons/md";
-import { getSearchUsers, resetUsers } from "../../../../features/userSlice";
+import { getSearchUsers, resetUsers } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { postSendInvitation } from "../../../../features/invitationSlice";
+import { postSendInvitation } from "../../features/invitationSlice";
 const persons = [
   {
     id: 1,
@@ -51,8 +51,7 @@ const MembresPages = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
 
-  const image =
-    "https://img.freepik.com/premium-vector/user-profile-icon-flat-style-member-avatar-vector-illustration-isolated-background-human-permission-sign-business-concept_157943-15752.jpg";
+  const image = 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
   const [searchTerm, setSearchTerm] = useState("");
   const [addMember, setAddMember] = useState(false);
 
@@ -165,7 +164,7 @@ const MembresPages = () => {
                         className="bg-black text-white text-sm font-semibold px-2 py-1 rounded"
                         onClick={() => handleAdd(user.id)}
                       >
-                        Add
+                        Invit
                       </button>
                     </li>
                   ))}
@@ -181,7 +180,7 @@ const MembresPages = () => {
           }}
         >
           <MdGroupAdd size={22} />
-          Add Membres
+          Invit Membres
         </button>
       </div>
       <div className="flex">
@@ -263,7 +262,7 @@ const MembresPages = () => {
               >
                 <img
                   className=" hover:z-20 rounded-full h-14 w-14 object-cover object-center transition-transform transform origin-center hover:scale-[3]"
-                  src={person.image}
+                  src={image}
                   alt=""
                 />
                 <div className="ml-3 overflow-hidden">
@@ -294,7 +293,7 @@ const MembresPages = () => {
               >
                 <img
                   className=" hover:z-20 rounded-full h-14 w-14 object-cover object-center transition-transform transform origin-center hover:scale-[3]"
-                  src={person.image}
+                  src={image}
                   alt=""
                 />
                 <div className="ml-3 overflow-hidden">

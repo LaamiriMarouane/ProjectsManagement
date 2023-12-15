@@ -6,10 +6,10 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../../../utils/Spinner";
 import AddEventModalComponent from "../../../components/userComponents/AddEventModalComponent";
 import { useParams } from "react-router-dom";
 import { getProjectEvents } from "../../../../features/events/PorjectEventSlice";
+import Spinner from "../../../components/tools/Spinner";
 function ProjectEventsPage() {
   const [addEventModalOpen, setAddEventModalOpen] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState("");

@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
-import ProjectDetailsComponent from "../../../components/project/ProjectDetailsComponent";
+import ProjectDetailsComponent from "../components/project/ProjectDetailsComponent";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getProjectDetails } from "../../../../features/project/projectSlice";
-import Spinner from "../../../../utils/Spinner";
+import { getProjectDetails } from "../../features/project/projectSlice";
+import Spinner from "../components/tools/Spinner";
 
 const prorjectDetails = {
   id: 1,

@@ -45,7 +45,7 @@ const UserDemandFrom = ({
       className="max-w-xl mx-auto bg-white px-8 py-5 rounded-xl shadow-sm shadow-blue-600"
     >
       <div className="flex w-full items-center justify-center mb-2 text-2xl font-bold">
-        Create Project
+        { isUpdate ? 'Update Info' : 'Create Project' }        
       </div>
 
       <div className="flex items-center gap-5 justify-center">

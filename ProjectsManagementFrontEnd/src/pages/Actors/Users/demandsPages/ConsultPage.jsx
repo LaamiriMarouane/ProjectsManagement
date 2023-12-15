@@ -9,7 +9,7 @@ import {
   getAcceptedDemands,
   getNewDemands,
 } from "../../../../features/demandsSlice";
-import Spinner from "../../../../utils/Spinner";
+import Spinner from "../../../components/tools/Spinner";
 
 const ConsultPage = () => {
   const [updateInfo, setIsUpdate] = useState({

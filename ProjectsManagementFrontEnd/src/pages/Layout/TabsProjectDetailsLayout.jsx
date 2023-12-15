@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Outlet } from "react-router-dom";
-import Tabs from "../../utils/Tabs";
+import Tabs from "../components/tools/Tabs";
 
 const TabsProjectDetailsLayout = () => {
   return (

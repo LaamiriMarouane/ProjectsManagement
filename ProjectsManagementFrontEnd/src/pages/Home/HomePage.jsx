@@ -5,9 +5,9 @@ import {
   FaLongArrowAltLeft,
   FaLongArrowAltRight,
 } from "react-icons/fa";
-import Filter from "../../utils/Filter";
 import { Link } from "react-router-dom";
 import { getAllPublicProjects } from "../../features/project/projectSlice";
+import Spinner from "../components/tools/Spinner";
 
 const HomePage = () => {
   const { projects, projectsloading } = useSelector((state) => state.project);

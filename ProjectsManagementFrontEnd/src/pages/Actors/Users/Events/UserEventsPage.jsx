@@ -7,8 +7,8 @@ import interactionPlugin from "@fullcalendar/interaction";
 import listPlugin from "@fullcalendar/list";
 import { getUserEvents } from "../../../../features/events/UserEventsSlice";
 import { useDispatch, useSelector } from "react-redux";
-import Spinner from "../../../../utils/Spinner";
 import AddEventModalComponent from "../../../components/userComponents/AddEventModalComponent";
+import Spinner from "../../../components/tools/Spinner";
 
 function UserEventsPage() {
   const [addEventModalOpen, setAddEventModalOpen] = useState(false);
