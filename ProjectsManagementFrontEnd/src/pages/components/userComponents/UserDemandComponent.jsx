@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import UserDemandFrom from "../forms/UserDemandFrom";
-import { IoMdClose } from "react-icons/io";
 
 const UserDemandComponent = ({ demand, setIsUpdate }) => {
   const {

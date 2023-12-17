@@ -6,6 +6,7 @@ import {
 } from "../../../features/demandsSlice";
 
 function DemandComponent({ demand, demandType }) {
+  console.log(demand);
   const {
     id,
     projectName,

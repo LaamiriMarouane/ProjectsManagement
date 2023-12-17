@@ -2,31 +2,41 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { CgProfile } from "react-icons/cg";
 import { FaUser } from "react-icons/fa";
+import { useDispatch, useSelector } from "react-redux";
+import { DeleteAuthentication } from "../../../features/auth/authSlice";
 
 const NavBar = () => {
+  const { auth } = useSelector((store) => store.auth);
+
+  const isAuth = !!auth.user;
+
   return (
     <header className="fixed top-0 w-full mx-auto bg-slate-50 shadow-md px-4 py-2">
       <div className="flex justify-between items-center">
         <a href="/" className="text-3xl font-semibold">
           MMH
         </a>
-          <DropdownMenu/>
-          {/* <Link to={"/profile"} className={"flex justify-around items-center gap-2 font-bold text-sm text-blue-800"}>
-            user-name
-            <CgProfile size={23}/>
-          </Link> */}
-        
-        {/* <div className="flex justify-around items-center gap-5">
-          <Link to={"/register"} className={"font-bold text-sm text-blue-800"}>
-            Register
-          </Link>
-          <Link
-            to="/login"
-            className='font-bold text-sm px-3 py-2 rounded bg-blue-800 text-white'
-          >
-            Login
-          </Link>
-        </div> */}
+        {isAuth ? (
+          <DropdownMenu username={auth?.user?.username} />
+        ) : (
+          <>
+            {" "}
+            <div className="flex justify-around items-center gap-5">
+              <Link
+                to={"/register"}
+                className={"font-bold text-sm text-blue-800"}
+              >
+                Register
+              </Link>
+              <Link
+                to="/login"
+                className="font-bold text-sm px-3 py-2 rounded bg-blue-800 text-white"
+              >
+                Login
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </header>
   );
@@ -34,25 +44,26 @@ const NavBar = () => {
 
 export default NavBar;
 
-const DropdownMenu = () => {
+const DropdownMenu = ({ username }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const dispatch = useDispatch();
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
 
   const handleLogout = () => {
-    console.log('Logout clicked');
+    dispatch(DeleteAuthentication());
     setIsOpen(false);
   };
 
   const handleSettings = () => {
-    console.log('Settings clicked');
+    console.log("Settings clicked");
     setIsOpen(false);
   };
 
   const handleProfile = () => {
-    console.log('Profile clicked');
+    console.log("Profile clicked");
     setIsOpen(false);
   };
 
@@ -65,15 +76,15 @@ const DropdownMenu = () => {
   };
 
   useEffect(() => {
-    document.addEventListener('click',  handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
 
     return () => {
-      document.removeEventListener('click', handleClickOutside);
+      document.removeEventListener("click", handleClickOutside);
     };
   }, []);
 
   return (
-    <div className="relative inline-block text-left" ref={dropdownRef}>
+    <div className="relative  inline-block text-left" ref={dropdownRef}>
       <div>
         <button
           type="button"
@@ -81,12 +92,12 @@ const DropdownMenu = () => {
           onClick={toggleDropdown}
         >
           <FaUser className="mr-1" />
-          Username
+          {username.toUpperCase()}
         </button>
       </div>
 
       {isOpen && (
-        <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="origin-top-right absolute z-[100000] right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
           <div
             className="py-1"
             role="menu"
@@ -120,4 +131,3 @@ const DropdownMenu = () => {
     </div>
   );
 };
-

@@ -10,10 +10,10 @@ async function getReceivedInvitationApi() {
   return await useAxios().get("/invitations");
 }
 async function putDeclineInvitationApi(invitationId) {
-  return await useAxios().get(`/invitations/decline/${invitationId}`);
+  return await useAxios().put(`/invitations/decline/${invitationId}`);
 }
-async function putAcceptInvitationApi() {
-  return await useAxios().get(`/invitations/accept/${invitationId}`);
+async function putAcceptInvitationApi(invitationId) {
+  return await useAxios().put(`/invitations/accept/${invitationId}`);
 }
 
 export {

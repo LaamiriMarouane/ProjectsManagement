@@ -83,14 +83,15 @@ const HomePage = () => {
 
                 <div className="flex items-center justify-between mt-3 text-sm font-semibold">
                   <Link
-                    to={"/details"}
+                    to={`/projects/${project.id}`}
                     className="text-black underline flex items-center hover:text-blue-700"
                   >
                     <FaLink className="mr-2" />
                     Show More
                   </Link>
                   <em className="text-sm text-gray-500 mb-1">
-                    added on {project.demandeCreatingtime}
+                    update on xxx
+                    {/* {project.} */}
                   </em>
                 </div>
               </div>

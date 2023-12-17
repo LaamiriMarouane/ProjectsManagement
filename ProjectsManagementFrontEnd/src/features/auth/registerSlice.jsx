@@ -22,7 +22,7 @@ const registerSlice = createSlice({
   name: "userInfo",
   initialState: {
     userInfo: {},
-    loading: false,
+    loading: true,
     successful: false,
   },
   reducers: {

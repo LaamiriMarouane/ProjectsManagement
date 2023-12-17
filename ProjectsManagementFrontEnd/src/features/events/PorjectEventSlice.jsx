@@ -4,6 +4,7 @@ import {
   PostProjectEventApi,
   getProjectEventsApi,
 } from "../../api/events/eventApi";
+import { setAuthentication } from "../auth/authSlice";
 
 export const PostProjectEvent = createAsyncThunk(
   "projectEvent/Add",
@@ -16,20 +17,23 @@ export const PostProjectEvent = createAsyncThunk(
 
       return res.data;
     } catch (error) {
-      return rejectWithValue(error?.response?.data?.message);
+      const errorMsg = error?.response?.data?.message || error?.message;
+      const status = error?.response?.status;
+      return rejectWithValue({ msg: errorMsg, status });
     }
   }
 );
 export const getProjectEvents = createAsyncThunk(
   "projectEvent/get",
-  async (id, { rejectWithValue }) => {
+  async (id, { rejectWithValue, dispatch }) => {
     try {
       const res = await getProjectEventsApi(id);
-
+      dispatch(setAuthentication(res.data.jwtAuthenticationResponse));
       return res.data;
     } catch (error) {
       const errorMsg = error?.response?.data?.message || error?.message;
-      return rejectWithValue(errorMsg);
+      const status = error?.response?.status;
+      return rejectWithValue({ msg: errorMsg, status });
     }
   }
 );
@@ -39,6 +43,7 @@ const projectEventSlice = createSlice({
   initialState: {
     projectEvents: [{}],
     loading: false,
+    projectEventsError: "",
   },
 
   extraReducers: (builder) => {
@@ -48,7 +53,7 @@ const projectEventSlice = createSlice({
         state.loading = true;
       })
       .addCase(PostProjectEvent.fulfilled, (state, action) => {
-        state.projectEvents = [...state.userEvents, action.payload];
+        state.projectEvents = [...state.projectEvents, action.payload];
 
         state.loading = false;
       })
@@ -61,12 +66,12 @@ const projectEventSlice = createSlice({
         state.loading = true;
       })
       .addCase(getProjectEvents.fulfilled, (state, action) => {
-        state.projectEvents = [...action.payload];
+        state.projectEvents = [...action.payload?.events];
         state.loading = false;
       })
       .addCase(getProjectEvents.rejected, (state, action) => {
-        console.log("rejected", action.payload);
         state.loading = false;
+        state.projectEventsError = action.payload;
       });
   },
 });

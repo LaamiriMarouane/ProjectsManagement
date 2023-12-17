@@ -1,11 +1,23 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import { getSearchUsersApi } from "../api/userApi";
+import { getSearchUsersApi, getUsersListApi } from "../api/userApi";
 
 export const getSearchUsers = createAsyncThunk(
-  "users/get",
+  "searchUsers/get",
   async (subString, { rejectWithValue }) => {
     try {
       const res = await getSearchUsersApi(subString);
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+export const getUsers = createAsyncThunk(
+  "users/get",
+  async ({ page, pageSize }, { rejectWithValue }) => {
+    try {
+      const res = await getUsersListApi(page, pageSize);
       return res.data;
     } catch (error) {
       const errorMsg = error?.response?.data?.message || error?.message;
@@ -17,8 +29,12 @@ export const getSearchUsers = createAsyncThunk(
 const userSlice = createSlice({
   name: "users",
   initialState: {
-    users: [],
-    loading: false,
+    users: {
+      users: [],
+      totalRows: 0,
+    },
+
+    loading: true,
   },
   reducers: {
     resetUsers: (state, { payload }) => {
@@ -38,6 +54,18 @@ const userSlice = createSlice({
       })
       .addCase(getSearchUsers.rejected, (state, action) => {
         console.log("rejected", action.payload);
+        state.loading = false;
+      });
+    builder
+      .addCase(getUsers.pending, (state, action) => {
+        state.loading = true;
+      })
+      .addCase(getUsers.fulfilled, (state, action) => {
+        state.users = action.payload;
+
+        state.loading = false;
+      })
+      .addCase(getUsers.rejected, (state, action) => {
         state.loading = false;
       });
   },

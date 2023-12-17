@@ -8,6 +8,8 @@ import {
   putUpdateDemandApi,
   putRejectDemanddApi,
   putValidateDemandApi,
+  getUserAcceptedDemandsApi,
+  getUserNewDemandsApi,
 } from "../api/demandApi";
 
 export const PostCreateDemand = createAsyncThunk(
@@ -46,11 +48,12 @@ export const getDemands = createAsyncThunk(
     }
   }
 );
-export const getNewDemands = createAsyncThunk(
-  "Demands/getNew",
+
+export const getRejectedDemands = createAsyncThunk(
+  "Demands/getRejected",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await getNewDemandsApi();
+      const res = await getRejectedDemandsApi();
       return res.data;
     } catch (error) {
       const errorMsg = error?.response?.data?.message || error?.message;
@@ -58,11 +61,35 @@ export const getNewDemands = createAsyncThunk(
     }
   }
 );
-export const getRejectedDemands = createAsyncThunk(
-  "Demands/getRejected",
+export const getUserNewDemands = createAsyncThunk(
+  "UserDemands/getNew",
   async (_, { rejectWithValue }) => {
     try {
-      const res = await getRejectedDemandsApi();
+      const res = await getUserNewDemandsApi();
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+export const getUserAcceptedDemands = createAsyncThunk(
+  "UserDemands/getAccepted",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getUserAcceptedDemandsApi();
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
+export const getNewDemands = createAsyncThunk(
+  "Demands/getNew",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getNewDemandsApi();
       return res.data;
     } catch (error) {
       const errorMsg = error?.response?.data?.message || error?.message;
@@ -116,7 +143,6 @@ const demandSlice = createSlice({
     Demands: [],
     DemandErrors: "",
     DemandsLoading: true,
-
     newDemandsLoading: true,
     acceptedDemandsLoading: true,
     rejectedDemandsLoading: true,
@@ -178,6 +204,18 @@ const demandSlice = createSlice({
         state.newDemandsLoading = false;
       });
     builder
+      .addCase(getUserNewDemands.pending, (state, action) => {
+        state.newDemandsLoading = true;
+      })
+      .addCase(getUserNewDemands.fulfilled, (state, action) => {
+        state.newDemands = [...action.payload];
+
+        state.newDemandsLoading = false;
+      })
+      .addCase(getUserNewDemands.rejected, (state, action) => {
+        state.newDemandsLoading = false;
+      });
+    builder
       .addCase(getRejectedDemands.pending, (state, action) => {
         state.rejectedDemandsLoading = true;
       })
@@ -201,6 +239,19 @@ const demandSlice = createSlice({
         state.acceptedDemandsLoading = false;
       })
       .addCase(getAcceptedDemands.rejected, (state, action) => {
+        console.log("rejected", action.payload);
+        state.acceptedDemandsLoading = false;
+      });
+    builder
+      .addCase(getUserAcceptedDemands.pending, (state, action) => {
+        state.acceptedDemandsLoading = true;
+      })
+      .addCase(getUserAcceptedDemands.fulfilled, (state, action) => {
+        state.acceptedDemands = [...action.payload];
+
+        state.acceptedDemandsLoading = false;
+      })
+      .addCase(getUserAcceptedDemands.rejected, (state, action) => {
         console.log("rejected", action.payload);
         state.acceptedDemandsLoading = false;
       });

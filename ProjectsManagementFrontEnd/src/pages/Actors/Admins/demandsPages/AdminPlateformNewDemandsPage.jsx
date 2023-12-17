@@ -13,7 +13,6 @@ const AdminPlateformNewDemandsPage = () => {
   useEffect(() => {
     dispatch(getNewDemands());
   }, []);
-
   return (
     <>
       <div className="container mx-auto mt-16 my-8">

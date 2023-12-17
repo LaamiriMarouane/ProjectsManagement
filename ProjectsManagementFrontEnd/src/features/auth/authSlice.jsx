@@ -23,7 +23,7 @@ const authSlice = createSlice({
     auth: localStorage.getItem("user")
       ? JSON.parse(localStorage.getItem("user"))
       : {},
-    loading: false,
+    loading: true,
   },
   reducers: {
     setAuthentication: (state, { payload }) => {
@@ -48,7 +48,6 @@ const authSlice = createSlice({
         state.loading = true;
       })
       .addCase(authentication.fulfilled, (state, { payload }) => {
-        console.log(payload);
         localStorage.setItem(
           "user",
           JSON.stringify({

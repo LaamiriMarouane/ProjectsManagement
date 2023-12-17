@@ -6,8 +6,8 @@ import { IoMdClose } from "react-icons/io";
 import UserDemandFrom from "../../../components/forms/UserDemandFrom";
 import { MdAdd } from "react-icons/md";
 import {
-  getAcceptedDemands,
-  getNewDemands,
+  getUserAcceptedDemands,
+  getUserNewDemands,
 } from "../../../../features/demandsSlice";
 import Spinner from "../../../components/tools/Spinner";
 
@@ -26,8 +26,8 @@ const ConsultPage = () => {
   } = useSelector((store) => store.demand);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(getNewDemands());
-    dispatch(getAcceptedDemands());
+    dispatch(getUserNewDemands());
+    dispatch(getUserAcceptedDemands());
   }, []);
 
   return (

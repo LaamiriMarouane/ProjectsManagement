@@ -1,30 +1,26 @@
 import React, { useEffect } from "react";
 import ProjectDetailsComponent from "../components/project/ProjectDetailsComponent";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams } from "react-router-dom";
+import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { getProjectDetails } from "../../features/project/projectSlice";
 import Spinner from "../components/tools/Spinner";
 
-const prorjectDetails = {
-  id: 1,
-  projectName: "Dev Web",
-  projectLongName: "Dev Web for testing",
-  user: "Hamza ELKADDARI",
-  status: false,
-  type: "IT",
-  theme: "Développement",
-  description:
-    "Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias, Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum velit repellat magni aliquam molestias",
-  public: true,
-  creatingtime: "01/09/2023",
-};
 const ProjectDetailsPage = () => {
-  const { project, projectsloading } = useSelector((state) => state.project);
+  const { project, projectsError, projectsloading } = useSelector(
+    (state) => state.project
+  );
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
   useEffect(() => {
     dispatch(getProjectDetails(id));
   }, []);
+  //haddle errors
+  // useEffect(() => {
+  //   if (!projectsloading && projectsError !== "") {
+  //     navigate("/error", { state: { projectsError } });
+  //   }
+  // }, [projectsloading, projectsError]);
   return (
     <div className="h-full w-full ">
       {projectsloading ? (

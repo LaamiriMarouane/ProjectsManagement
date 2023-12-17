@@ -15,6 +15,15 @@ async function getRejectedDemandsApi() {
 async function getAcceptedDemandsApi() {
   return await useAxios().get("/demands/accepted");
 }
+async function getUserNewDemandsApi() {
+  return await useAxios().get("/demands/users/new");
+}
+async function getUserRejectedDemandsApi() {
+  return await useAxios().get("/demands/users/rejected");
+}
+async function getUserAcceptedDemandsApi() {
+  return await useAxios().get("/demands/users/accepted");
+}
 async function getdemandDetailsApi(id) {
   return await useAxios().get(`/demands/${id}`);
 }
@@ -46,4 +55,7 @@ export {
   putRejectDemanddApi,
   deleteDemanddApi,
   putUpdateDemandApi,
+  getUserAcceptedDemandsApi,
+  getUserRejectedDemandsApi,
+  getUserNewDemandsApi,
 };
