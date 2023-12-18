@@ -5,12 +5,16 @@ import ProjectsManagmentBackEnd.dtos.ProjectMemberShipInvitationDTO;
 import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitation;
 import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitationState;
 import ProjectsManagmentBackEnd.entity.project.Project;
+import ProjectsManagmentBackEnd.entity.user.Role;
+import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
 import ProjectsManagmentBackEnd.mappers.ProjectMemberShipInvitationMapper;
 import ProjectsManagmentBackEnd.repository.ProjectMemberShipInvitationRepository;
 import ProjectsManagmentBackEnd.repository.ProjectRepository;
+import ProjectsManagmentBackEnd.repository.RoleRepository;
 import ProjectsManagmentBackEnd.repository.UserRepository;
+import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
 import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -27,21 +31,39 @@ public class ProjectMemberShipInvitationImp {
     private ProjectRepository projectRepository;
     private UserRepository userRepository;
     private ProjectServiceImp projectServiceImp;
-    public ResponseEntity<List<ProjectMemberShipInvitationDTO>> getAllSentByProject(String projectId){
+    private ProjectRoleServiceImp projectRoleServiceImp;
+    private RoleRepository roleRepository;
+    private  UserServiceImp userServiceImp;
+    public ResponseEntity getAllSentByProject(String projectId) throws BusinessException {
         User user= UserContext.currentUser();
         Project project=projectRepository.findById(projectId).get();
+        Optional<Role> role=projectRoleServiceImp.getUserRoleForAProject(project,user);
+        Role roleToSet;
+        if(role.isPresent()){
+            roleToSet=role.get();
+        }else{
+
+            return   ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+        }
+
         List<ProjectMemberShipInvitationDTO> projectMemberShipInvitationDTOList=
                 projectMemberShipInvitationRepository
-                        .findAllByFromAndProject(user,project)
+                        .findAllByFromAndProjectAndState(user,project,ProjectMemberShipInvitationState.NEW)
                         .stream()
                         .map(ProjectMemberShipInvitationMapper::convert).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(projectMemberShipInvitationDTOList);
+
+        JwtAuthenticationResponse newJwtAuthenticationResponse= userServiceImp.updateAuthoritiesForUser(roleToSet);
+        Map response=new HashMap<>();
+        response.put("invitations",projectMemberShipInvitationDTOList);
+        response.put("jwtAuthenticationResponse",newJwtAuthenticationResponse);
+
+        return ResponseEntity.status(HttpStatus.OK).body(response);
     }
     public ResponseEntity<List<ProjectMemberShipInvitationDTO>> getAllReceived(){
         User user= UserContext.currentUser();
         List<ProjectMemberShipInvitationDTO> projectMemberShipInvitationDTOList=
                 projectMemberShipInvitationRepository
-                        .findAllByTo(user)
+                        .findAllByToAndState(user,ProjectMemberShipInvitationState.NEW)
                         .stream()
                         .map(ProjectMemberShipInvitationMapper::convert).collect(Collectors.toList());
         return ResponseEntity.status(HttpStatus.OK).body(projectMemberShipInvitationDTOList);

@@ -12,6 +12,8 @@ public class UserMapper {
             out.setId(in.getId());
             out.setEmail(in.getEmail());
             out.setUsername(in.getUsername());
+            out.setFirstName(in.getFirstName());
+            out.setLastName(in.getLastName());
 
 
             return out;

@@ -37,7 +37,6 @@ export const getProjectDetails = createAsyncThunk(
   async (projectId, { rejectWithValue, dispatch }) => {
     try {
       const res = await getProjectDetailsApi(projectId);
-      console.log(res.data);
       dispatch(setAuthentication(res.data.jwtAuthenticationResponse));
       return res.data;
     } catch (error) {
@@ -93,7 +92,6 @@ const projectSlice = createSlice({
         state.projectsloading = true;
       })
       .addCase(getProjectDetails.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.project = action.payload;
         state.projectsloading = false;
       })

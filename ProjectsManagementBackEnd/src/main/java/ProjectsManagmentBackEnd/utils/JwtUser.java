@@ -5,6 +5,7 @@ import ProjectsManagmentBackEnd.entity.user.User;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,7 +27,7 @@ public class JwtUser implements UserDetails {
     private final Boolean enabled;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm:ss")
     private final java.sql.Timestamp lastPasswordResetDate;
-   private final Role role;
+   private  Role role;
 
 
     public JwtUser(User user) {
@@ -40,6 +41,7 @@ public class JwtUser implements UserDetails {
         lastPasswordResetDate=user.getLastPasswordResetDate();
 
     }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
 

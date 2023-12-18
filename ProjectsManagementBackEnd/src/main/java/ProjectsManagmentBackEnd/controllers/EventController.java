@@ -23,7 +23,7 @@ public class EventController {
 
     }
     @GetMapping(ApiPaths.PROJECTS+"/{projectId}")
-    public List<EventDTO> getAll(@PathVariable("projectId") String id) throws BusinessException {
+    public ResponseEntity getAll(@PathVariable("projectId") String id) throws BusinessException {
         return eventServiceImp.getAllByProject(id);
 
     }

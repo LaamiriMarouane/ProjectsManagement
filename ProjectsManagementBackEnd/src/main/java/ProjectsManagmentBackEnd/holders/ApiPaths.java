@@ -8,6 +8,7 @@ public class ApiPaths {
         public static final String V1 = "/api/v1";
         public static final String PROJECTS = "/projects";
         public static final String GROUPS = "/groups";
+        public static final String ROLES = "/roles";
         public static final String USERS = "/users";
         public static final String EVENTS ="/events" ;
         public static final String DEMANDS ="/demands" ;
@@ -21,4 +22,5 @@ public class ApiPaths {
         public static final String UPLOAD = "/upload";
 
     public static final String SEARCH ="/search";
+    public static final String STATISTICS ="/statistics" ;
 }

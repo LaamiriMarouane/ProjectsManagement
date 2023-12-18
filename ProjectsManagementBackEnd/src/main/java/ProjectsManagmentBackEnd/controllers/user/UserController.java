@@ -9,10 +9,8 @@ import ProjectsManagmentBackEnd.holders.ApiPaths;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationRequest;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
 import ProjectsManagmentBackEnd.services.UserServiceImp;
-import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.naming.AuthenticationException;
@@ -35,10 +33,12 @@ public class UserController {
 
     }
 
-    @GetMapping(ApiPaths.USERS+ApiPaths.SEARCH+"={subString}")
-    public ResponseEntity<List<UserShortDTO>> search(@PathVariable("subString") String subString)  {
-        return userService.search(subString);
+    @GetMapping(ApiPaths.USERS)
+    public ResponseEntity getAll(@RequestParam(required = false) String search,@RequestParam(defaultValue = "0") int page,@RequestParam(defaultValue = "5") int size)  {
+        return userService.getAll(search,page,size);
     }
+
+  
 
     @PostMapping(ApiPaths.REGISTER )
     public  void register(@RequestBody UserDTO userInfo) throws BusinessException {

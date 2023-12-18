@@ -23,10 +23,16 @@ public class DemandController {
         return demandService.getAll();
 
     }
+    @GetMapping(ApiPaths.USERS)
+    public ResponseEntity<List<DemandDTO>> getUserAll()  {
+        return demandService.getUserAll();
+
+    }
     @GetMapping("/demand-states")
     public ResponseEntity<List<DemandState>> getAllDemandStates()  {
         return demandService.getAllDemandStates();
     }
+
     @GetMapping("/new")
     public ResponseEntity<List<DemandDTO>> getNew()  {
         return demandService.getAllByDemandState(DemandState.NEW);
@@ -38,6 +44,18 @@ public class DemandController {
     @GetMapping("/accepted")
     public ResponseEntity<List<DemandDTO>> getAccepted()  {
         return demandService.getAllByDemandState(DemandState.COMPLETED);
+    }
+    @GetMapping(ApiPaths.USERS+"/new")
+    public ResponseEntity<List<DemandDTO>> getUserNew()  {
+        return demandService.getUserAllByDemandState(DemandState.NEW);
+    }
+    @GetMapping(ApiPaths.USERS+"/rejected")
+    public ResponseEntity<List<DemandDTO>> getUserRejected()  {
+        return demandService.getUserAllByDemandState(DemandState.REJECTED);
+    }
+    @GetMapping(ApiPaths.USERS+"/accepted")
+    public ResponseEntity<List<DemandDTO>> getUserAccepted()  {
+        return demandService.getUserAllByDemandState(DemandState.COMPLETED);
     }
     @PostMapping()
     public ResponseEntity<DemandDTO> createDemand(@RequestBody DemandDTO demandDTO) throws BusinessException {

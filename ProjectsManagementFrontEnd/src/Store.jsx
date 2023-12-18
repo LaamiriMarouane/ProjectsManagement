@@ -7,6 +7,7 @@ import projectEventsReducer from "./features/events/PorjectEventSlice";
 import userReducer from "./features/userSlice";
 import invitationReducer from "./features/invitationSlice";
 import projectReducer from "./features/project/projectSlice";
+import statisticsReducer from "./features/statistics/statisticsSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     users: userReducer,
     invitation: invitationReducer,
     project: projectReducer,
+    statistics: statisticsReducer,
   },
 });
 

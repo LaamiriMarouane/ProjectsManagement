@@ -18,7 +18,7 @@ public class ProjectMemberShipInvitationController {
     private ProjectMemberShipInvitationImp projectMemberShipInvitationImp;
 
     @GetMapping("/{projectId}")
-    public ResponseEntity<List<ProjectMemberShipInvitationDTO>> getAllByProject(@PathVariable String projectId){
+    public ResponseEntity<List<ProjectMemberShipInvitationDTO>> getAllByProject(@PathVariable String projectId) throws BusinessException {
         return projectMemberShipInvitationImp.getAllSentByProject(projectId);
 
     }

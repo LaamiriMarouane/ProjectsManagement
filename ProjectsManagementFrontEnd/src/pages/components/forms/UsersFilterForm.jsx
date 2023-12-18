@@ -1,7 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { getSearchUsers } from "../../../features/userSlice";
 
 function UsersFilterForm() {
   const {
@@ -17,7 +16,7 @@ function UsersFilterForm() {
   const onSubmit = (data) => {
     console.log(data);
     if (searchTerm) {
-      dispatch(getSearchUsers(searchTerm));
+      // dispatch((searchTerm));
     }
     reset();
   };

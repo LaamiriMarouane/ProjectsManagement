@@ -10,4 +10,5 @@ import java.util.List;
 @Repository
 public interface ProjectGroupRepository  extends JpaRepository<ProjectGroup,String> {
     List<ProjectGroup> findAllByUsersContaining(User user);
+    ProjectGroup findByGroupName(String groupName);
 }

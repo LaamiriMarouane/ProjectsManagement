@@ -20,7 +20,7 @@ public class Project {
     @GeneratedValue(generator = "uuid2")
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private String id;
-
+    @Column(unique=true)
     private String shortName;
     private String longName;
     private String description;

@@ -24,6 +24,4 @@ public class ProjectRole {
         private ProjectGroup group;
         @ManyToOne(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
         private User user;
-
-
 }

@@ -52,9 +52,7 @@ function AdminPlateformAppUsersPage() {
   useEffect(() => {
     dispatch(getUsers(paginationModel));
   }, [paginationModel]);
-  useEffect(() => {
-    console.log(paginationModel);
-  }, [paginationModel]);
+
   return (
     <div className="container mx-auto mt-16 my-8">
       <div className="w-full flex flex-row items-center gap-5 justify-between bg-zinc-100 my-4 px-8 py-5 rounded shadow">

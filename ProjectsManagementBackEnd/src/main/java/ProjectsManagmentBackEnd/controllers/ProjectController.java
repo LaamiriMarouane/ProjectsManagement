@@ -1,6 +1,5 @@
 package ProjectsManagmentBackEnd.controllers;
 
-import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
 import ProjectsManagmentBackEnd.dtos.project.ProjectShortDTO;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
@@ -30,7 +29,6 @@ public class ProjectController {
     public ResponseEntity<ProjectDTO> getProjectDetails(@PathVariable("projectId") String id) throws BusinessException {
         return projectService.getDetails(id);
     }
-
 
 
     @PutMapping("/addAdmin/{projectId}/{userId}")

@@ -20,6 +20,9 @@ import ProjectsManagmentBackEnd.utils.UserContext;
 import jakarta.annotation.PostConstruct;
 import lombok.AllArgsConstructor;
 import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -33,12 +36,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -62,7 +63,9 @@ public class UserServiceImp {
 
 
     public void register(UserDTO userInfo,RoleType userRole) throws BusinessException {
+        if(userRole!=RoleType.GUEST){
        userValidator.userValide(userInfo);
+        }
         User user=new User();
         user.setFirstName(userInfo.getFirstName());
         user.setLastName(userInfo.getLastName());
@@ -81,7 +84,6 @@ public class UserServiceImp {
         authenticate(auth.getUsername(),auth.getPassword());
         final UserDetails userDetails = userDetailsService.loadUserByUsername(auth.getUsername());
 
-
         final String token = jwtTokenUtil.generateToken(userDetails);
 
         final String refreshToken = jwtTokenUtil.refreshToken(token);
@@ -90,17 +92,46 @@ public class UserServiceImp {
     }
 
 
-    public ResponseEntity<List<UserShortDTO>> search(String subString) {
-        if(subString.equals("")){
-            return ResponseEntity.status(HttpStatus.OK).body(new ArrayList<>());
+    public ResponseEntity getAll(String subString ,int page ,int size) {
+        Pageable pageable= PageRequest.of(page, size);
+        Page<User> usersPage;
+        if(subString!=null && !subString.equals("")){
+            usersPage=  userRepository.findAllByUsernameContainingOrEmailContainingOrLastNameOrFirstName(subString,subString,subString,subString,pageable);
+
+        }else{
+            usersPage=  userRepository.findAll(pageable);
         }
-        User currentUser= UserContext.currentUser();
-       List<User> userList= userRepository.findAllByUsernameContainingOrEmailContaining(subString,subString);
-       List<UserShortDTO> userShortDTOList=userList.stream()
-               .filter(user->!user.getUsername().equals(currentUser.getUsername()))
-               .map(UserMapper::convertShort)
+        User currentUser=UserContext.currentUser();
+        List<UserDTO> userDTOList=usersPage.getContent().stream()
+               .filter(user->!user.getUsername().equals(currentUser.getUsername()) && !user.getUsername().equals("admin"))
+               .map(UserMapper::convert)
                .collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(userShortDTOList);
+        Map response=new HashMap<>();
+        response.put("users",userDTOList);
+        response.put("currentPage", usersPage.getNumber());
+        response.put("totalRows", usersPage.getTotalElements());
+        response.put("totalPages", usersPage.getTotalPages());
+        return ResponseEntity.status(HttpStatus.OK).body(response);
+    }
+
+    public JwtAuthenticationResponse updateAuthoritiesForUser(Role role) throws BusinessException {
+        Authentication existingAuthentication =  SecurityContextHolder.getContext().getAuthentication();
+        if (existingAuthentication != null && existingAuthentication.getPrincipal() instanceof UserDetails) {
+
+            JwtUser currentUser = (JwtUser) existingAuthentication.getPrincipal();
+            currentUser.setRole(role);
+
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(currentUser, null, currentUser.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            final String token = jwtTokenUtil.generateToken(currentUser);
+            final String refreshToken = jwtTokenUtil.refreshToken(token);
+            return new JwtAuthenticationResponse(currentUser, token, refreshToken);
+        }else{
+            Map error=  new HashMap();
+            error.put("error","in updating the user authorities.");
+            throw  new BusinessException("error",1111, error);
+        }
     }
 
     private void authenticate(String userName ,String password) {
@@ -109,8 +140,7 @@ public class UserServiceImp {
 
 
         try {
-            Authentication authenticatedToken=   authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
-            SecurityContextHolder.getContext().setAuthentication(authenticatedToken);
+             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(userName,password));
         }catch (UsernameNotFoundException ex) {
             throw new AuthenticationException("User is not found!", ex);
         }
@@ -126,5 +156,7 @@ public class UserServiceImp {
             System.out.println("msg->"+e);
         }
     }
+
+
 
 }

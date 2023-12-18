@@ -1,6 +1,7 @@
 package ProjectsManagmentBackEnd.repository;
 
 import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitation;
+import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitationState;
 import ProjectsManagmentBackEnd.entity.project.Project;
 import ProjectsManagmentBackEnd.entity.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface ProjectMemberShipInvitationRepository   extends JpaRepository<ProjectMemberShipInvitation,String> {
 
-    List<ProjectMemberShipInvitation> findAllByFromAndProject(User user, Project project);
-    List<ProjectMemberShipInvitation> findAllByTo(User user);
+    List<ProjectMemberShipInvitation> findAllByFromAndProjectAndState(User user, Project project,ProjectMemberShipInvitationState state);
+    List<ProjectMemberShipInvitation> findAllByToAndState(User user, ProjectMemberShipInvitationState state);
     Optional<ProjectMemberShipInvitation> findByIdAndTo(String id,User user);
 }

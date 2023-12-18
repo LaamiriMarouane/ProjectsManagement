@@ -22,7 +22,7 @@ public class ProjectMapper {
             out.setLastUpdate(in.getLastUpdate());
            out.setMembers(ProjectGroupMapper.convert(in.getMembers()));
            out.setAdmins(ProjectGroupMapper.convert(in.getAdmins()));
-            out.setEvents(in.getEvents());
+            out.setEvents(in.getEvents().stream().map(EventMapper::convert).collect(Collectors.toList()));
 
 
 
@@ -45,7 +45,7 @@ public class ProjectMapper {
             out.setLastUpdate(in.getLastUpdate());
             out.setMembers(ProjectGroupMapper.convertToMembersGroup(in.getMembers()));
             out.setAdmins(ProjectGroupMapper.convertToAdminGroup(in.getAdmins()));
-            out.setEvents(in.getEvents());
+            out.setEvents(in.getEvents().stream().map(EventMapper::convertToProjectEvent).collect(Collectors.toSet()));
             return out;
         }
         return null;

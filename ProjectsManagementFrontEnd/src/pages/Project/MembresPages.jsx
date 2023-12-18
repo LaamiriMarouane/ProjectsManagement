@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { MdGroupAdd } from "react-icons/md";
-import { getSearchUsers, resetUsers } from "../../features/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
 import { postSendInvitation } from "../../features/invitationSlice";
 import { getProjectDetails } from "../../features/project/projectSlice";
 import Spinner from "../components/tools/Spinner";
+import { getUsers, resetUsers } from "../../features/userSlice";
 
 const MembresPages = () => {
   const { users, loading } = useSelector((store) => store.users);
@@ -73,7 +73,7 @@ const MembresPages = () => {
 
   useEffect(() => {
     if (searchTerm) {
-      dispatch(getSearchUsers(searchTerm));
+      dispatch(getUsers({ page: 0, pageSize: 5, searchTerm: searchTerm }));
     } else {
       dispatch(resetUsers());
     }
@@ -89,6 +89,7 @@ const MembresPages = () => {
   //   }
   // }, [projectsloading, projectsError]);
 
+  console.log(users);
   return (
     <>
       {projectsloading ? (
@@ -128,7 +129,7 @@ const MembresPages = () => {
                           key={i}
                           className="flex items-center justify-start space-x-36 mb-1 py-1 px-1 border-b border-b-slate-300 hover:bg-slate-100 rounded-md"
                         >
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center">
                             <img
                               className=" rounded-full h-14 w-14 object-cover object-center"
                               src={image}
@@ -144,7 +145,7 @@ const MembresPages = () => {
                             </div>
                           </div>
                           <button
-                            className="bg-black text-white text-sm font-semibold px-2 py-1 rounded"
+                            className="bg-black text-white text-sm float-right font-semibold px-2 py-1 rounded"
                             onClick={() => handleAdd(user.id)}
                           >
                             Invit

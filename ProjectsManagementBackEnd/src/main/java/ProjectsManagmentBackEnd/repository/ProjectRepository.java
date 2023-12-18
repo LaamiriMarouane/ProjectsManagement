@@ -19,4 +19,8 @@ public interface ProjectRepository extends JpaRepository<Project,String> {
 
   List<Project> findAllByIsPublicIsAndIsActiveIs(boolean isPublic,boolean isActive);
 
+  Long countAllByIsActive(boolean isActive);
+  Long countAllByIsPublic(boolean isPublic);
+
+
 }

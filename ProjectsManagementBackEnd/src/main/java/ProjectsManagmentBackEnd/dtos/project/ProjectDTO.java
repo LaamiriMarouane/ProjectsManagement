@@ -1,10 +1,14 @@
 package ProjectsManagmentBackEnd.dtos.project;
 
+import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.dtos.ProjectGroupDTO;
+import ProjectsManagmentBackEnd.dtos.user.UserShortDTO;
 import ProjectsManagmentBackEnd.entity.event.Event;
 import ProjectsManagmentBackEnd.entity.event.ProjectEvent;
 import ProjectsManagmentBackEnd.entity.project.AdminsProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.MembersProjectGroup;
+import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotBlank;
@@ -27,13 +31,14 @@ public class ProjectDTO {
     @NotBlank(message = "longName must not be empty.")
     private String longName;
     private String description;
-
     private String theme;
     private String type;
     private Date lastUpdate;
+    private UserShortDTO owner;
     private ProjectGroupDTO admins;
     private ProjectGroupDTO members;
     private boolean isPublic;
     private boolean isActive;
-    private Set<ProjectEvent> events;
+    private List<EventDTO> events;
+    private JwtAuthenticationResponse jwtAuthenticationResponse;
 }

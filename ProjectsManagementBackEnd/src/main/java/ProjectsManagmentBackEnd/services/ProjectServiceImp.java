@@ -1,17 +1,18 @@
 package ProjectsManagmentBackEnd.services;
 
-import ProjectsManagmentBackEnd.dtos.EventDTO;
 import ProjectsManagmentBackEnd.dtos.project.ProjectDTO;
 import ProjectsManagmentBackEnd.dtos.project.ProjectShortDTO;
 import ProjectsManagmentBackEnd.entity.project.AdminsProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.MembersProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.Project;
-import ProjectsManagmentBackEnd.entity.project.ProjectGroup;
+import ProjectsManagmentBackEnd.entity.user.Role;
 import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
+import ProjectsManagmentBackEnd.mappers.ProjectGroupMapper;
 import ProjectsManagmentBackEnd.mappers.ProjectMapper;
 import ProjectsManagmentBackEnd.repository.*;
+import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
 import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -24,11 +25,14 @@ import java.util.stream.Collectors;
 @Service
 @AllArgsConstructor
 public class ProjectServiceImp {
-    ProjectRepository projectRepository;
-    AdminsProjectGroupRepository adminsProjectGroupRepository;
-    MembersProjectGroupRepository membersProjectGroupRepository;
-    ProjectGroupRepository projectGroupRepository;
-    UserRepository userRepository;
+    private ProjectRepository projectRepository;
+    private AdminsProjectGroupRepository adminsProjectGroupRepository;
+    private MembersProjectGroupRepository membersProjectGroupRepository;
+    private RoleRepository roleRepository;
+    private RoleServiceImp roleServiceImp;
+    private ProjectRoleServiceImp projectRoleServiceImp;
+    private UserServiceImp userServiceImp;
+    private UserRepository userRepository;
     public ResponseEntity<List<ProjectShortDTO>> getAll() {
         List<ProjectShortDTO> projectDTOList;
         User user= UserContext.currentUser();
@@ -51,10 +55,33 @@ public class ProjectServiceImp {
         return ResponseEntity.status(HttpStatus.OK).body(projectDTOList);
 
     }
+
     public ResponseEntity<ProjectDTO> getDetails(String id) throws BusinessException {
-        Optional<Project> project =projectRepository.findById(id) ;
+        Optional<Project> project =projectRepository.findById(id);
         if(project.isPresent()){
-            return ResponseEntity.status(HttpStatus.OK).body(ProjectMapper.convert(project.get()));
+            User user= UserContext.currentUser();
+
+            Optional<Role> role=projectRoleServiceImp.getUserRoleForAProject(project.get(),user);
+            ProjectDTO projectDTO=ProjectMapper.convert(project.get());
+            JwtAuthenticationResponse newJwtAuthenticationResponse;
+            Role roleToSet;
+
+            if(role.isPresent()){
+                roleToSet=role.get();
+                 newJwtAuthenticationResponse= userServiceImp.updateAuthoritiesForUser(roleToSet);
+                MembersProjectGroup projectMembersGroup = membersProjectGroupRepository.findByProject(project.get());
+                AdminsProjectGroup projectAdminGroup = adminsProjectGroupRepository.findByProject(project.get());
+                projectDTO.setAdmins(ProjectGroupMapper.convert(projectAdminGroup));
+                projectDTO.setMembers(ProjectGroupMapper.convert(projectMembersGroup));
+                projectDTO.setJwtAuthenticationResponse(newJwtAuthenticationResponse);
+            }else{
+                roleToSet= userRepository.findById(user.getId()).get().getRole();
+                newJwtAuthenticationResponse= userServiceImp.updateAuthoritiesForUser(roleToSet);
+                projectDTO.setJwtAuthenticationResponse(newJwtAuthenticationResponse);
+            }
+
+
+            return ResponseEntity.status(HttpStatus.OK).body(projectDTO);
 
         }else{
            Map error=  new HashMap();
@@ -63,7 +90,6 @@ public class ProjectServiceImp {
         }
     }
     public void create(Project project, User user){
-        //to do add admin role to the user in creating the demand
         AdminsProjectGroup adminsGroup =new AdminsProjectGroup();
         adminsGroup.setGroupName(project.getShortName()+"_adm");
         Set<User> userSet=new HashSet<>();
@@ -71,17 +97,15 @@ public class ProjectServiceImp {
         adminsGroup.setUsers(userSet);
         adminsGroup.setProject(project);
         project.setAdmins(adminsGroup);
-//        adminsProjectGroupRepository.save(adminsGroup);
         MembersProjectGroup membersGroup =new MembersProjectGroup();
         membersGroup.setGroupName(project.getShortName());
         membersGroup.setProject(project);
         project.setMembers(membersGroup);
-  //      membersProjectGroupRepository.save(membersGroup);
-
         project.setActive(true);
-
-        projectRepository.save(project);
-
+       Project savedProject= projectRepository.save(project);
+        //adding owner role to the user in creating the demand
+      Role adminRole=  roleRepository.save(roleServiceImp.projectOwnerRole());
+        projectRoleServiceImp.addUserRoleForAProject(savedProject,user,adminRole);
     }
     public ResponseEntity addMember(String projectId, String userId) throws BusinessException {
       Optional<Project> project=projectRepository.findById(projectId);
@@ -89,7 +113,10 @@ public class ProjectServiceImp {
           User member=userRepository.findById(userId).get();
           //to do add role project_member to the user added ;
          project.get().getMembers().getUsers().add(member);
-          projectRepository.save(project.get());
+         Project savedProject= projectRepository.save(project.get());
+         Role memberRole=  roleRepository.save(roleServiceImp.projectMemberRole());
+         projectRoleServiceImp.addUserRoleForAProject(savedProject,member,memberRole);
+
           return ResponseEntity.status(HttpStatus.OK).build();
 
       }else{
@@ -104,19 +131,18 @@ public class ProjectServiceImp {
         if(project.isPresent()){
             User FutureAdmin=userRepository.findById(userId).get();
             //to do add role project_admin to the user added ;
-
            if(project.get().getMembers().getUsers().contains(FutureAdmin)){
                project.get().getMembers().getUsers().remove(FutureAdmin);
                project.get().getAdmins().getUsers().add(FutureAdmin);
+               Project savedProject= projectRepository.save(project.get());
+               Role adminRole=  roleRepository.save(roleServiceImp.projectAdminRole());
+               projectRoleServiceImp.updateUserRoleForAProject(savedProject,FutureAdmin,adminRole);
            }else {
                Map error=  new HashMap();
                error.put("error","member not found");
                throw  new BusinessException("error",1111, error);
-
            }
-
             return ResponseEntity.status(HttpStatus.OK).build();
-
         }else{
             Map error=  new HashMap();
             error.put("error","project not found");

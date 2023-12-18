@@ -39,17 +39,19 @@ public class DemandServiceImp {
     }
     public ResponseEntity<DemandDTO> handleDemandDecision(String demandId,DemandState demandState)  throws BusinessException {
        Optional<Demand> demand=demandRepository.findById(demandId);
-        User user=UserContext.currentUser();
+
         if (!demand.isPresent()){
             Map errorMap=new HashMap<>();
             errorMap.put("error validating demand ","demand not found.");
             throw new BusinessException("error",errorMap);
         }
+       User user= userRepository.findById(demand.get().getUser().getId()).get();
         if(demandState==DemandState.COMPLETED){
             demand.get().setDemandState(DemandState.COMPLETED);
             demand.get().setValidationTime(new Date());
             // to do  change user roles
             projectServiceImp.create(DemandMapper.convertToProject(demand.get()),user);
+
 
         }else{
             demand.get().setDemandState(DemandState.REJECTED);
@@ -61,24 +63,28 @@ public class DemandServiceImp {
     }
 
     public ResponseEntity<List<DemandDTO>> getAll() {
+        List<DemandDTO> demandDTOList=demandRepository.findAll().stream().map(DemandMapper::convert).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
+
+    }public ResponseEntity<List<DemandDTO>> getUserAll() {
         List<DemandDTO> demandDTOList;
         User user=UserContext.currentUser();
-        if(user.getRole().getName()== RoleType.APP_ADMIN){
-            demandDTOList=demandRepository.findAll().stream().map(DemandMapper::convert).collect(Collectors.toList());
-        }else{
             demandDTOList=demandRepository.findAllByUser(user).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
-        }
+        return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
+
+    }
+    public ResponseEntity<List<DemandDTO>> getUserAllByDemandState(DemandState demandState) {
+
+        User user=UserContext.currentUser();
+
+        List<DemandDTO> demandDTOList=demandRepository.findAllByUserAndDemandState(user,demandState).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
+
         return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
 
     }
     public ResponseEntity<List<DemandDTO>> getAllByDemandState(DemandState demandState) {
-        List<DemandDTO> demandDTOList;
-        User user=UserContext.currentUser();
-        if(user.getRole().getName()== RoleType.APP_ADMIN){
-            demandDTOList=demandRepository.findAllByDemandState(demandState).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
-        }else{
-            demandDTOList=demandRepository.findAllByUserAndDemandState(user,demandState).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
-        }
+        List<DemandDTO> demandDTOList=demandRepository.findAllByDemandState(demandState).get().stream().map(DemandMapper::convert).collect(Collectors.toList());
+
         return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
 
     }
