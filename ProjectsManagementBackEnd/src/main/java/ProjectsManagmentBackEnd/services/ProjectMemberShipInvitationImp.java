@@ -32,8 +32,8 @@ public class ProjectMemberShipInvitationImp {
     private UserRepository userRepository;
     private ProjectServiceImp projectServiceImp;
     private ProjectRoleServiceImp projectRoleServiceImp;
-    private RoleRepository roleRepository;
     private  UserServiceImp userServiceImp;
+    private  EmailSenderServiceImp emailSenderServiceImp;
     public ResponseEntity getAllSentByProject(String projectId) throws BusinessException {
         User user= UserContext.currentUser();
         Project project=projectRepository.findById(projectId).get();
@@ -106,7 +106,7 @@ public class ProjectMemberShipInvitationImp {
 
 
     }
-    public ResponseEntity<ProjectMemberShipInvitationDTO> sendInvitation(String toUserId ,String projectId){
+    public ResponseEntity<ProjectMemberShipInvitationDTO> sendInvitation(String toUserId ,String projectId) throws BusinessException {
         User fromUser= UserContext.currentUser();
         User toUser= userRepository.findById(toUserId).get();
         Project project=projectRepository.findById(projectId).get();
@@ -119,6 +119,8 @@ public class ProjectMemberShipInvitationImp {
         invitation= projectMemberShipInvitationRepository.save(invitation);
         ProjectMemberShipInvitationDTO invitationDTO=ProjectMemberShipInvitationMapper.convert(invitation);
         //send email maybe
+        emailSenderServiceImp.sendMail(toUser.getEmail(),toUser.getUsername(), fromUser.getUsername(),project.getShortName());
+
 
         return ResponseEntity.status(HttpStatus.OK).body(invitationDTO);
     }

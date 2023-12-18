@@ -27,7 +27,7 @@ public class ProjectMemberShipInvitationController {
         return projectMemberShipInvitationImp.getAllReceived();
     }
     @PostMapping("/{projectId}/{userId}")
-    public ResponseEntity<ProjectMemberShipInvitationDTO> send(@PathVariable String userId,@PathVariable String projectId ){
+    public ResponseEntity<ProjectMemberShipInvitationDTO> send(@PathVariable String userId,@PathVariable String projectId ) throws BusinessException {
         return projectMemberShipInvitationImp.sendInvitation(userId, projectId);
     }
 
