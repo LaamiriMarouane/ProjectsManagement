@@ -89,7 +89,6 @@ const MembresPages = () => {
   //   }
   // }, [projectsloading, projectsError]);
 
-  console.log(users);
   return (
     <>
       {projectsloading ? (
@@ -115,7 +114,11 @@ const MembresPages = () => {
                       onChange={(e) => setSearchTerm(e.target.value)}
                     />
                     <button
-                      onClick={() => setAddMember(false)}
+                      onClick={() => {
+                        setAddMember(false);
+                        dispatch(resetUsers());
+                        setSearchTerm("");
+                      }}
                       className=" py-1 px-2 text-sm font-semibold bg-slate-300 rounded-lg"
                     >
                       Cancel

@@ -57,7 +57,7 @@ public class RoleServiceImp {
 
         roleRepository.saveAll(List.of(appUser, appAdmin,roleGuest));
        UserDTO userDTO= new UserDTO();
-       userDTO.setEmail("marwnadev@gmail.com");
+       userDTO.setEmail("marwnev@gmail.com");
        userDTO.setFirstName("admin");
         userDTO.setLastName("admin");
         userDTO.setUsername("admin");

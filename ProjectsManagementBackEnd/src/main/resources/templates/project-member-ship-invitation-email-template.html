@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title th:remove="all">MMH</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body style="min-height: 400px; min-width: 100%; width: 100%; height: 100%;">
+<h1 style="text-align: center; margin-bottom: 20px;">MMH</h1>
+<div style="margin: 10px auto; max-width: 55%; min-height: 100%; height: 300px; background-color: #EFF5F5; border: 1px solid lightgray; border-radius: 5px; padding: 10px;">
+  <div style="margin: 15px auto; padding: 10px; max-width: 80%; height: 300px;">
+    <h2 th:text="'Hi, ' + ${toUserName}"></h2>
+    <p style="margin-top: 10px;" th:text="'You are invited to collaborate on the ' + ${projectName} + ' by ' + ${fromUserName}"></p>
+
+    <div style="margin: 35px auto; width: fit-content;">
+      <a href="#" th:href="@{http://127.0.0.1:5173/user/invitations}" style="color: #EFF5F5; text-decoration: none; font-size: 18px; padding: 15px 25px; background-color: #2E4F4F; border-radius: 5px;">
+        Validate
+      </a>
+    </div>
+  </div>
+</div>
+</body>
+
+</html>

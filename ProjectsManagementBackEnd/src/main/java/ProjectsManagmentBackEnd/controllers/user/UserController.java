@@ -38,7 +38,7 @@ public class UserController {
         return userService.getAll(search,page,size);
     }
 
-  
+
 
     @PostMapping(ApiPaths.REGISTER )
     public  void register(@RequestBody UserDTO userInfo) throws BusinessException {
