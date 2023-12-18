@@ -127,7 +127,7 @@ const MembresPages = () => {
                       users?.users.map((user, i) => (
                         <li
                           key={i}
-                          className="flex items-center justify-start space-x-36 mb-1 py-1 px-1 border-b border-b-slate-300 hover:bg-slate-100 rounded-md"
+                          className="flex items-center justify-between space-x-36 mb-1 py-1 px-1 border-b border-b-slate-300 hover:bg-slate-100 rounded-md"
                         >
                           <div className="flex items-center">
                             <img

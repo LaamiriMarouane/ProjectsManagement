@@ -21,11 +21,12 @@ import ProjectEventsPage from "./pages/Actors/Users/Events/ProjectEventsPage";
 import NavSideBarLayout from "./pages/Layout/NavSideBarLayout";
 import InvitPage from "./pages/Project/InvitPage";
 import RecevedInvitationsPage from "./pages/Project/RecevedInvitationsPage";
-import ProjectDetailsPage from "./pages/Project/ProjectDetailsPage";
 import MembresPages from "./pages/Project/MembresPages";
 import UserProjectsPage from "./pages/Actors/Users/Project/UserProjectsPage";
 import AdminPlateformDashBordPage from "./pages/Actors/Admins/AdminPlateformDashBordPage";
 import AdminPlateformAppUsersPage from "./pages/Actors/Admins/AdminPlateformAppUsersPage";
+import ProjectDetailsPage from "./pages/project/ProjectDetailsPage";
+import RessourcesPage from "./pages/project/RessourcesPage";
 
 const allRoles = [
   "APP_USER",
@@ -68,7 +69,7 @@ const router = createBrowserRouter(
             <Route path="/projects/:id" element={<ProjectDetailsPage />} />
             <Route
               path="/projects/:id/ressources"
-              element={<h1>Ressource</h1>}
+              element={<RessourcesPage/>}
             />
           </Route>
         </Route>

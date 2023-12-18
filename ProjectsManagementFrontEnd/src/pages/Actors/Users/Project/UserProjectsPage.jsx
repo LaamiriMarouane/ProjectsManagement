@@ -17,7 +17,9 @@ const UserProjectsPage = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
           <Spinner />
         </div>
-      ) : (
+      ) : projects.length === 0 ? <div className="w-full h-[30rem] flex items-center justify-center">
+        You have no project at the moment
+      </div> : (
         projects.map((project) => (
           <UserProjectsComponent key={project.id} project={project} />
         ))
@@ -59,9 +61,8 @@ const UserProjectsComponent = ({ project }) => {
           {theme} - {type}
         </div>
         <div
-          className={`text-sm italic font-semibold  ${
-            active ? "text-green-400" : "text-red-400"
-          }`}
+          className={`text-sm italic font-semibold  ${active ? "text-green-400" : "text-red-400"
+            }`}
         >
           {active ? "enabled" : "disabled"}
         </div>
