@@ -134,6 +134,9 @@ const invitationSlice = createSlice({
         state.invitationloading = true;
       })
       .addCase(putAcceptInvitation.fulfilled, (state, { payload }) => {
+        state.receivedInvitation = state.receivedInvitation.filter(
+          (invitation) => invitation?.id !== payload.id
+        );
         state.invitationloading = false;
       })
       .addCase(putAcceptInvitation.rejected, (state, action) => {
@@ -146,6 +149,9 @@ const invitationSlice = createSlice({
         state.invitationloading = true;
       })
       .addCase(putDeclineInvitation.fulfilled, (state, { payload }) => {
+        state.receivedInvitation = state.receivedInvitation.filter(
+          (invitation) => invitation?.id !== payload.id
+        );
         state.invitationloading = false;
       })
       .addCase(putDeclineInvitation.rejected, (state, action) => {

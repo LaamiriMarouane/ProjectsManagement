@@ -52,7 +52,6 @@ const HomePage = () => {
   useEffect(() => {
     dispatch(getAllPublicProjects());
   }, []);
-
   return (
     <div className="container max-w-[1200px] mx-auto mt-20 ">
       {/* <Filter types={projectTypes} onFilterChange={setFilterType} themes={projectThemes} /> */}
@@ -62,9 +61,11 @@ const HomePage = () => {
             <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
               <Spinner />
             </div>
-          ) : projects.length === 0 ? <div className="w-full h-[30rem] flex items-center justify-center">
-            No Project at the moment
-          </div> : (
+          ) : projects.length === 0 ? (
+            <div className="w-full h-[30rem] flex items-center justify-center">
+              No Project at the moment
+            </div>
+          ) : (
             projects.map((project) => (
               <div
                 key={project.id}

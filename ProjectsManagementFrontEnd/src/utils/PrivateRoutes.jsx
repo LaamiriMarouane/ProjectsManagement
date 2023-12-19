@@ -11,6 +11,9 @@ function PrivateRoutes({ navto, isLogedIn, roles }) {
     if (!auth.user) {
       return <Outlet />;
     } else {
+      if (auth?.user?.role?.name === "APP_ADMIN") {
+        return <Navigate to={"/admin/dashbord"} />;
+      }
       return <Navigate to={"/"} />;
     }
   } else {
