@@ -23,6 +23,6 @@ public class Folder extends ProjectResource {
     @JoinColumn(name = "parent_folder_id")
     private Folder parentFolder;
 
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
+    //@Enumerated(EnumType.STRING)
+   // private FileType fileType;
 }

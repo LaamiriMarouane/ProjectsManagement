@@ -82,13 +82,6 @@ const MembresPages = () => {
     dispatch(getProjectDetails(id));
   }, []);
 
-  //haddle errors
-  // useEffect(() => {
-  //   if (!projectsloading && projectsError !== "") {
-  //     navigate("/error", { state: { projectsError } });
-  //   }
-  // }, [projectsloading, projectsError]);
-
   return (
     <>
       {projectsloading ? (
@@ -150,8 +143,9 @@ const MembresPages = () => {
                           <button
                             className="bg-black text-white text-sm float-right font-semibold px-2 py-1 rounded"
                             onClick={() => handleAdd(user.id)}
+                            disabled={invitationloading}
                           >
-                            Invit
+                            Add
                           </button>
                         </li>
                       ))}

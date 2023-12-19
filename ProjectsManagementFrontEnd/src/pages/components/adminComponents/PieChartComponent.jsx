@@ -1,24 +1,15 @@
 import React, { useCallback, useState } from "react";
 import { PieChart, Pie, Sector, Cell, Legend, Tooltip } from "recharts";
 
-const data = [
-  { name: "New Demands", value: 400 },
-  { name: "Accepted Demands", value: 300 },
-  { name: "Rejected Demands", value: 300 },
-];
-
-function PieChartComponent() {
+function PieChartComponent({ colors, data }) {
   const [activeIndex, setActiveIndex] = useState(0);
-  const onPieEnter = useCallback(
-    (_, index) => {
-      setActiveIndex(index);
-    },
-    [setActiveIndex]
-  );
-  const COLORS = ["#0088FE", "#00C49F", "#FF6666"];
+  const onPieEnter = useCallback((_, index) => {
+    setActiveIndex(index);
+  }, []);
   return (
     <PieChart width={400} height={400}>
       <Pie
+        isAnimationActive={true}
         activeIndex={activeIndex}
         activeShape={renderActiveShape}
         data={data}
@@ -29,9 +20,10 @@ function PieChartComponent() {
         fill="#8884d8"
         dataKey="value"
         onMouseEnter={onPieEnter}
+        // animationBegin={5000}
       >
         {data.map((entry, index) => (
-          <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+          <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
         ))}
       </Pie>
       <Legend align="center" verticalAlign="bottom" height={36} />
