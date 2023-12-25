@@ -5,25 +5,29 @@ import ProjectsManagmentBackEnd.dtos.project.ProjectShortDTO;
 import ProjectsManagmentBackEnd.entity.project.AdminsProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.MembersProjectGroup;
 import ProjectsManagmentBackEnd.entity.project.Project;
+import ProjectsManagmentBackEnd.entity.ressources.Folder;
 import ProjectsManagmentBackEnd.entity.user.Role;
 import ProjectsManagmentBackEnd.entity.user.RoleType;
 import ProjectsManagmentBackEnd.entity.user.User;
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
+import ProjectsManagmentBackEnd.holders.ApiPaths;
 import ProjectsManagmentBackEnd.mappers.ProjectGroupMapper;
 import ProjectsManagmentBackEnd.mappers.ProjectMapper;
 import ProjectsManagmentBackEnd.repository.*;
 import ProjectsManagmentBackEnd.security.JwtAuthenticationResponse;
+import ProjectsManagmentBackEnd.utils.FileSystem;
 import ProjectsManagmentBackEnd.utils.UserContext;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class ProjectServiceImp {
     private ProjectRepository projectRepository;
     private AdminsProjectGroupRepository adminsProjectGroupRepository;
@@ -33,6 +37,32 @@ public class ProjectServiceImp {
     private ProjectRoleServiceImp projectRoleServiceImp;
     private UserServiceImp userServiceImp;
     private UserRepository userRepository;
+    private FolderResourceRepository folderResourceRepository;
+    private final FileSystem fileSystem;
+
+    public ProjectServiceImp(
+            ProjectRepository projectRepository,
+            AdminsProjectGroupRepository adminsProjectGroupRepository,
+            MembersProjectGroupRepository membersProjectGroupRepository,
+            RoleRepository roleRepository,
+            RoleServiceImp roleServiceImp,
+            ProjectRoleServiceImp projectRoleServiceImp,
+            UserServiceImp userServiceImp,
+            UserRepository userRepository,
+            FolderResourceRepository folderResourceRepository
+    ) {
+        this.projectRepository = projectRepository;
+        this.adminsProjectGroupRepository = adminsProjectGroupRepository;
+        this.membersProjectGroupRepository = membersProjectGroupRepository;
+        this.roleRepository = roleRepository;
+        this.roleServiceImp = roleServiceImp;
+        this.projectRoleServiceImp = projectRoleServiceImp;
+        this.userServiceImp = userServiceImp;
+        this.userRepository = userRepository;
+        this.folderResourceRepository = folderResourceRepository;
+        this.fileSystem = new FileSystem();
+    }
+
     public ResponseEntity<List<ProjectShortDTO>> getAll() {
         List<ProjectShortDTO> projectDTOList;
         User user= UserContext.currentUser();
@@ -89,7 +119,7 @@ public class ProjectServiceImp {
             throw  new BusinessException("error",1111, error);
         }
     }
-    public void create(Project project, User user){
+    public void create(Project project, User user) throws IOException {
         AdminsProjectGroup adminsGroup =new AdminsProjectGroup();
         adminsGroup.setGroupName(project.getShortName()+"_adm");
         Set<User> userSet=new HashSet<>();
@@ -103,6 +133,36 @@ public class ProjectServiceImp {
         project.setMembers(membersGroup);
         project.setActive(true);
        Project savedProject= projectRepository.save(project);
+       /* --------- Create Folder Root to init the resources -------- */
+
+        Folder rootFolder = new Folder();
+        rootFolder.setName( savedProject.getLongName() );
+        rootFolder.setProject( savedProject );
+        rootFolder.setPath( ApiPaths.LOCAL_STORAGE + File.separator + rootFolder.getName());
+        folderResourceRepository.save( rootFolder );
+        savedProject.setRootFolder(rootFolder);
+        savedProject = projectRepository.save(savedProject);
+
+        Folder src = new Folder();
+        src.setName( "src" );
+        src.setParentFolder( rootFolder );
+        src.setPath( rootFolder.getPath() + File.separator + "src" );
+        folderResourceRepository.save( src );
+
+        Folder web = new Folder();
+        web.setName( "web" );
+        web.setParentFolder( rootFolder );
+        web.setPath( rootFolder.getPath() + File.separator + "web" );
+        folderResourceRepository.save( web );
+
+        rootFolder.getSubResources().add(src);
+        rootFolder.getSubResources().add(web);
+        folderResourceRepository.save( rootFolder );
+        this.fileSystem.saveResource( rootFolder );
+        this.fileSystem.saveResource( src );
+        this.fileSystem.saveResource( web );
+
+        /* --------- Create Folder Root to init the resources END -------- */
         //adding owner role to the user in creating the demand
       Role adminRole=  roleRepository.save(roleServiceImp.projectOwnerRole());
         projectRoleServiceImp.addUserRoleForAProject(savedProject,user,adminRole);

@@ -17,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -37,7 +38,7 @@ public class DemandServiceImp {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(DemandMapper.convert( demandRepository.save(newDemand)));
     }
-    public ResponseEntity<DemandDTO> handleDemandDecision(String demandId,DemandState demandState)  throws BusinessException {
+    public ResponseEntity<DemandDTO> handleDemandDecision(String demandId,DemandState demandState)  throws BusinessException, IOException {
        Optional<Demand> demand=demandRepository.findById(demandId);
 
         if (!demand.isPresent()){

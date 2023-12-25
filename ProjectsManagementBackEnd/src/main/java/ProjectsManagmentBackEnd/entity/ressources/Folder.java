@@ -1,28 +1,18 @@
 package ProjectsManagmentBackEnd.entity.ressources;
 
+import ProjectsManagmentBackEnd.entity.project.Project;
 import ProjectsManagmentBackEnd.entity.project.ProjectResource;
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
+@Data
 public class Folder extends ProjectResource {
-    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Folder> subFolders;
-
-    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<File> files;
-
-    @ManyToOne
-    @JoinColumn(name = "parent_folder_id")
-    private Folder parentFolder;
-
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
+    @OneToMany( mappedBy = "parentFolder" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL)
+    private List<ProjectResource> subResources = new ArrayList<>();
+    @OneToOne
+    private Project project;
 }

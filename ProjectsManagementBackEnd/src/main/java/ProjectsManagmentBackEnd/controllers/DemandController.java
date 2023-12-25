@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -66,11 +67,11 @@ public class DemandController {
         return demandService.update(demandDTO);
     }
     @PutMapping("/validate/{id}")
-    public ResponseEntity<DemandDTO> validateDemand( @PathVariable("id") String demandId) throws BusinessException {
+    public ResponseEntity<DemandDTO> validateDemand( @PathVariable("id") String demandId) throws BusinessException, IOException {
         return demandService.handleDemandDecision(demandId, DemandState.COMPLETED);
     }
     @PutMapping("/reject/{id}")
-    public ResponseEntity<DemandDTO> rejectDemand( @PathVariable("id") String demandId) throws BusinessException {
+    public ResponseEntity<DemandDTO> rejectDemand( @PathVariable("id") String demandId) throws BusinessException, IOException {
         return demandService.handleDemandDecision(demandId, DemandState.REJECTED);
     }
     @DeleteMapping("/delete/{id}")

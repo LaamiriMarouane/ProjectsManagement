@@ -21,7 +21,6 @@ public class ProjectGroup {
     @GenericGenerator(name = "uuid2", strategy = "uuid2")
     private String id;
     private  String groupName;
-
     @ManyToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_project_group",

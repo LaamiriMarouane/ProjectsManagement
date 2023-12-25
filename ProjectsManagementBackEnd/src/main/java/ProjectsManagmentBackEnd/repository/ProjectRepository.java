@@ -21,6 +21,4 @@ public interface ProjectRepository extends JpaRepository<Project,String> {
 
   Long countAllByIsActive(boolean isActive);
   Long countAllByIsPublic(boolean isPublic);
-
-
 }

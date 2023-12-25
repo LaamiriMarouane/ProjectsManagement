@@ -2,6 +2,7 @@ package ProjectsManagmentBackEnd.entity.project;
 
 
 import ProjectsManagmentBackEnd.entity.event.ProjectEvent;
+import ProjectsManagmentBackEnd.entity.ressources.Folder;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Setter;
 import org.hibernate.annotations.GenericGenerator;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -30,8 +32,8 @@ public class Project {
     private boolean isActive;
 
     private Date lastUpdate;
-    @OneToMany(cascade = CascadeType.MERGE,fetch = FetchType.LAZY)
-    private Set<ProjectResource> resources ;
+    @OneToOne(cascade = CascadeType.ALL)
+    private Folder rootFolder ;
 
     @OneToOne(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private AdminsProjectGroup admins;
@@ -41,6 +43,4 @@ public class Project {
 
     @OneToMany
     private Set<ProjectEvent> events;
-
-
 }
