@@ -1,11 +1,14 @@
 package ProjectsManagmentBackEnd.entity.ressources;
 
+import ProjectsManagmentBackEnd.entity.project.Project;
 import ProjectsManagmentBackEnd.entity.project.ProjectResource;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -14,15 +17,9 @@ import java.util.Set;
 @NoArgsConstructor
 public class Folder extends ProjectResource {
     @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<Folder> subFolders;
+    private List<ProjectResource> subResources = new ArrayList<>();
 
-    @OneToMany(mappedBy = "parentFolder", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private Set<File> files;
+    @OneToOne
+    private Project project;
 
-    @ManyToOne
-    @JoinColumn(name = "parent_folder_id")
-    private Folder parentFolder;
-
-    @Enumerated(EnumType.STRING)
-    private FileType fileType;
 }
