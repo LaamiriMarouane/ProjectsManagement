@@ -21,11 +21,18 @@ const RecevedInvitationsPage = () => {
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
           <Spinner />
         </div>
-      ) : receivedInvitation.length === 0 ? <div className="w-full h-[30rem] flex items-center justify-center">
-        No invitation receved at the moment
-      </div> : (
+      ) : receivedInvitation.length === 0 ? (
+        <div className="w-full h-[30rem] flex items-center justify-center">
+          No invitation received at the moment
+        </div>
+      ) : (
         receivedInvitation.map((invitation) => {
-          return <RecevedInvitationsComponent invitation={invitation} />;
+          return (
+            <RecevedInvitationsComponent
+              key={invitation.id}
+              invitation={invitation}
+            />
+          );
         })
       )}
     </div>

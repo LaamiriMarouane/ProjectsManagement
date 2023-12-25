@@ -174,10 +174,14 @@ public class ProjectServiceImp {
       if(project.isPresent()){
           User member=userRepository.findById(userId).get();
           //to do add role project_member to the user added ;
-         project.get().getMembers().getUsers().add(member);
-         Project savedProject= projectRepository.save(project.get());
-         Role memberRole=  roleRepository.save(roleServiceImp.projectMemberRole());
-         projectRoleServiceImp.addUserRoleForAProject(savedProject,member,memberRole);
+         if(!project.get().getMembers().getUsers().contains(member)){
+             project.get().getMembers().getUsers().add(member);
+             Project savedProject= projectRepository.save(project.get());
+             Role memberRole=  roleRepository.save(roleServiceImp.projectMemberRole());
+             projectRoleServiceImp.addUserRoleForAProject(savedProject,member,memberRole);
+
+         }
+
 
           return ResponseEntity.status(HttpStatus.OK).build();
 
