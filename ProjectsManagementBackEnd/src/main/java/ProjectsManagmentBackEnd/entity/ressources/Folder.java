@@ -9,7 +9,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
 public class Folder extends ProjectResource {
     @OneToMany( mappedBy = "parentFolder" ,fetch = FetchType.LAZY , cascade = CascadeType.ALL)
     private List<ProjectResource> subResources = new ArrayList<>();

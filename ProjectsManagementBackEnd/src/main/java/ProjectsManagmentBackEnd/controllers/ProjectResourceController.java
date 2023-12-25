@@ -19,7 +19,7 @@ public class ProjectResourceController {
     private final ProjectResourceServiceImp projectResourceService;
 
     @PostMapping("/folders")
-    public void createFolder(@RequestBody FolderDTO folderDTO, @RequestParam String parentFolderId) throws IOException {
+    public void createFolder(@RequestBody FolderDTO folderDTO,@RequestParam String parentFolderId) throws IOException {
         projectResourceService.createFolder(folderDTO, parentFolderId);
     }
 

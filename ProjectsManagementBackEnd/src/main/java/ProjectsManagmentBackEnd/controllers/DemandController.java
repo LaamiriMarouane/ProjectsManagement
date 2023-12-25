@@ -67,7 +67,7 @@ public class DemandController {
         return demandService.update(demandDTO);
     }
     @PutMapping("/validate/{id}")
-    public ResponseEntity<DemandDTO> validateDemand( @PathVariable("id") String demandId) throws BusinessException, IOException {
+    public ResponseEntity<DemandDTO> validateDemand(@PathVariable("id") String demandId) throws BusinessException, IOException {
         return demandService.handleDemandDecision(demandId, DemandState.COMPLETED);
     }
     @PutMapping("/reject/{id}")

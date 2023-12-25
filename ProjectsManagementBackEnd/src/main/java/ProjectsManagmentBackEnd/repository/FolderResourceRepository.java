@@ -16,9 +16,6 @@ public interface FolderResourceRepository extends JpaRepository<Folder , String>
     List<ProjectResource> findSubResourcesByFolderId(@Param("folderId") String folderId);
     @Query("SELECT f FROM Folder f WHERE f.parentFolder IS NULL")
     Folder findRootFolder();
-    @Query("SELECT f FROM Folder f WHERE f.parentFolder IS NULL AND f.name = :name")
-    Folder findRootFolderByName(@Param("name") String name);
     Optional<Folder> findByName(String name);
 
-    List<Folder> findByParentFolderIdAndProjectId(String parentFolderId, String projectId);
 }

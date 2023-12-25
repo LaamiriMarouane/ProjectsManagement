@@ -79,7 +79,6 @@ public class ProjectResourceServiceImp {
     public List<ProjectResourceDTO> getRootHierarchy(String projectId) {
         Project project = projectRepository.findById(projectId).orElseThrow(()-> new RuntimeException("Project not existed"));
         Folder rootFolder = project.getRootFolder();
-        System.out.println("-------------- rootFolder is :"+rootFolder.getName()+ rootFolder.getProject().getLongName());
         return getHierarchyForFolder(rootFolder).getSubResources();
     }
 

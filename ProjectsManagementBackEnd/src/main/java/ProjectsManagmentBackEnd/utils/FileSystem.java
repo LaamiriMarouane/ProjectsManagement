@@ -2,15 +2,14 @@ package ProjectsManagmentBackEnd.utils;
 
 import ProjectsManagmentBackEnd.entity.project.ProjectResource;
 import ProjectsManagmentBackEnd.entity.ressources.Folder;
-import lombok.Data;
 import lombok.NoArgsConstructor;
+
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-@Data
 @NoArgsConstructor
 public class FileSystem {
     public void saveResource(ProjectResource resource) throws IOException {

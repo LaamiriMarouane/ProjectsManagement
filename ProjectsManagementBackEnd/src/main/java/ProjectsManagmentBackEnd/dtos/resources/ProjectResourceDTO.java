@@ -1,9 +1,10 @@
 package ProjectsManagmentBackEnd.dtos.resources;
 
+import lombok.Getter;
+import lombok.Setter;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
 public class ProjectResourceDTO {
     private String id;
     private String name;

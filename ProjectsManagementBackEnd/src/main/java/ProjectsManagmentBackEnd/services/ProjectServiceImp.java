@@ -133,6 +133,7 @@ public class ProjectServiceImp {
         project.setMembers(membersGroup);
         project.setActive(true);
        Project savedProject= projectRepository.save(project);
+
        /* --------- Create Folder Root to init the resources -------- */
 
         Folder rootFolder = new Folder();
@@ -163,6 +164,7 @@ public class ProjectServiceImp {
         this.fileSystem.saveResource( web );
 
         /* --------- Create Folder Root to init the resources END -------- */
+
         //adding owner role to the user in creating the demand
       Role adminRole=  roleRepository.save(roleServiceImp.projectOwnerRole());
         projectRoleServiceImp.addUserRoleForAProject(savedProject,user,adminRole);
