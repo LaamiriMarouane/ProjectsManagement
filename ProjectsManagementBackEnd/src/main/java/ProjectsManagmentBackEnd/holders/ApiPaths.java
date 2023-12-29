@@ -23,5 +23,6 @@ public class ApiPaths {
         public static final String UPLOAD = "/upload";
         public static final String SEARCH ="/search";
         public static final String STATISTICS ="/statistics" ;
-        public static final String LOCAL_STORAGE = "";
+        public static final String CHAT ="/chat" ;
+        public static final String LOCAL_STORAGE = "D:\\Docs\\Studies\\Master\\projects\\Java\\projectsResources";
 }

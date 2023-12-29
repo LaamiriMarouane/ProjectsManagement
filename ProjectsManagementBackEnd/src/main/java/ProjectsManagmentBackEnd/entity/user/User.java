@@ -1,6 +1,7 @@
 package ProjectsManagmentBackEnd.entity.user;
 
 import ProjectsManagmentBackEnd.entity.ProjectMemberShipInvitation.ProjectMemberShipInvitation;
+import ProjectsManagmentBackEnd.entity.chat.ChatContact;
 import ProjectsManagmentBackEnd.entity.demand.Demand;
 import ProjectsManagmentBackEnd.entity.event.Event;
 import ProjectsManagmentBackEnd.entity.event.UserEvent;
@@ -59,6 +60,8 @@ public class User {
 
     @OneToMany
     private List<Demand>demands;
+    @OneToMany
+    private List<ChatContact>contacts;
 
     @Temporal(TemporalType.TIMESTAMP)
     private  java.sql.Timestamp lastPasswordResetDate;

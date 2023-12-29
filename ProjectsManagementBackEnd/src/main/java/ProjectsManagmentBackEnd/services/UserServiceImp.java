@@ -96,14 +96,14 @@ public class UserServiceImp {
         Pageable pageable= PageRequest.of(page, size);
         Page<User> usersPage;
         if(subString!=null && !subString.equals("")){
-            usersPage=  userRepository.findAllByUsernameContainingOrEmailContainingOrLastNameOrFirstName(subString,subString,subString,subString,pageable);
+            usersPage=  userRepository.findAllByUsernameContainingOrEmailContainingOrLastNameContainingOrFirstNameContaining(subString,subString,subString,subString,pageable);
 
         }else{
             usersPage=  userRepository.findAll(pageable);
         }
         User currentUser=UserContext.currentUser();
         List<UserDTO> userDTOList=usersPage.getContent().stream()
-               .filter(user->!user.getUsername().equals(currentUser.getUsername()) && !user.getUsername().equals("admin"))
+               .filter(user->!user.getUsername().equals(currentUser.getUsername()) && !user.getUsername().equals("admin")  && !user.getUsername().equals("guest"))
                .map(UserMapper::convert)
                .collect(Collectors.toList());
         Map response=new HashMap<>();

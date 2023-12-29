@@ -66,7 +66,6 @@ public class ProjectResourceServiceImp {
                 .stream()
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("Parent Folder Not Existed"));
-
         file.setParentFolder( parentFolder );
         file.setPath( file.getParentFolder().getPath()+ java.io.File.separator + file.getName());
         fileResourceRepository.save(file);

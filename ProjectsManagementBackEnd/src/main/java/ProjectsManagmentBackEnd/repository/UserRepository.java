@@ -14,8 +14,7 @@ public interface UserRepository extends JpaRepository<User,String> {
 
     Optional<User> findByUsernameOrEmail(String username,String email);
     Page<User> findAll(Pageable pageable);
-    Page<User> findAllByUsernameContainingOrEmailContainingOrLastNameOrFirstName(String username, String email,String lastname,String firstname,Pageable pageable);
-    List<User> findAllByUsernameContainingOrEmailContainingOrLastNameOrFirstName(String username, String email,String lastname,String firstname);
+    Page<User> findAllByUsernameContainingOrEmailContainingOrLastNameContainingOrFirstNameContaining(String username, String email,String lastname,String firstname,Pageable pageable);
 
     boolean existsUserByUsernameOrEmail(String username,String email);
 
