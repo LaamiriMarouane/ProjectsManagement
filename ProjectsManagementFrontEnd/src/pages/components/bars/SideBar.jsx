@@ -47,42 +47,50 @@ function Sidebar() {
             All Projects
           </Link>
         </li>
-        {role !== "GUEST" &&(
-            <>
-              <li className="flex items-center">
-                <Link
-                  to="/user/demands"
-                  className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
-                >
-                  My Demands
-                </Link>
-              </li>
-              <li className="flex items-center">
-                <Link
-                  to="/user/projects"
-                  className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
-                >
-                  My Projects
-                </Link>
-              </li>
-              <li className="flex items-center">
-                <Link
-                  to="/user/agenda"
-                  className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
-                >
-                  My Agenda
-                </Link>
-              </li>
-              <li className="flex items-center">
-                <Link
-                  to="/user/invitations"
-                  className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
-                >
-                  My Invitations
-                </Link>
-              </li>
-            </>
-          )}
+        {role !== "GUEST" && (
+          <>
+            <li className="flex items-center">
+              <Link
+                to="/user/demands"
+                className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
+              >
+                My Demands
+              </Link>
+            </li>
+            <li className="flex items-center">
+              <Link
+                to="/user/projects"
+                className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
+              >
+                My Projects
+              </Link>
+            </li>
+            <li className="flex items-center">
+              <Link
+                to="/user/agenda"
+                className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
+              >
+                My Agenda
+              </Link>
+            </li>
+            <li className="flex items-center">
+              <Link
+                to="/user/invitations"
+                className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
+              >
+                My Invitations
+              </Link>
+            </li>
+            <li className="flex items-center">
+              <Link
+                to="/user/chat"
+                className="text-sm w-full font-semibold px-4 py-4 border-b border-b-slate-400 hover:bg-slate-100"
+              >
+                My Chat
+              </Link>
+            </li>
+          </>
+        )}
       </ul>
     </div>
   );

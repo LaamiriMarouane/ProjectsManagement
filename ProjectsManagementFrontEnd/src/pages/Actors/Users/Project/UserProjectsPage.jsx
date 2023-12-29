@@ -12,19 +12,23 @@ const UserProjectsPage = () => {
     dispatch(getMyProjects());
   }, []);
   return (
-    <div className="mt-20 grid grid-cols-2 gap-4 ">
+    <>
       {projectsloading ? (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+        <div className="absolute top-1/2 left-1/2 bottom-1/2  transform -translate-x-1/2 -translate-y-1/2  ">
           <Spinner />
         </div>
-      ) : projects.length === 0 ? <div className="w-full h-[30rem] flex items-center justify-center">
-        You have no project at the moment
-      </div> : (
-        projects.map((project) => (
-          <UserProjectsComponent key={project.id} project={project} />
-        ))
+      ) : projects.length === 0 ? (
+        <div className=" absolute top-1/2 left-1/2 bottom-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
+          You have no project at the moment
+        </div>
+      ) : (
+        <div className="mt-20   grid grid-cols-2 relative gap-4 ">
+          {projects.map((project) => (
+            <UserProjectsComponent key={project.id} project={project} />
+          ))}
+        </div>
       )}
-    </div>
+    </>
   );
 };
 
@@ -61,8 +65,9 @@ const UserProjectsComponent = ({ project }) => {
           {theme} - {type}
         </div>
         <div
-          className={`text-sm italic font-semibold  ${active ? "text-green-400" : "text-red-400"
-            }`}
+          className={`text-sm italic font-semibold  ${
+            active ? "text-green-400" : "text-red-400"
+          }`}
         >
           {active ? "enabled" : "disabled"}
         </div>

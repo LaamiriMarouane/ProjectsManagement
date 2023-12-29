@@ -27,6 +27,7 @@ import AdminPlateformDashBordPage from "./pages/Actors/Admins/AdminPlateformDash
 import AdminPlateformAppUsersPage from "./pages/Actors/Admins/AdminPlateformAppUsersPage";
 import ProjectDetailsPage from "./pages/project/ProjectDetailsPage";
 import RessourcesPage from "./pages/project/RessourcesPage";
+import UserChatPage from "./pages/Actors/Users/UserChatPage";
 
 const allRoles = [
   "APP_USER",
@@ -69,7 +70,7 @@ const router = createBrowserRouter(
             <Route path="/projects/:id" element={<ProjectDetailsPage />} />
             <Route
               path="/projects/:id/ressources"
-              element={<RessourcesPage/>}
+              element={<RessourcesPage />}
             />
           </Route>
         </Route>
@@ -104,6 +105,7 @@ const router = createBrowserRouter(
           <Route path="/user/demands" element={<ConsultPage />} />
           <Route path="/user/projects" element={<UserProjectsPage />} />
           <Route path="/user/agenda" element={<UserEventsPage />} />
+          <Route path="/user/chat" element={<UserChatPage />} />
           <Route
             path="/user/invitations"
             element={<RecevedInvitationsPage />}

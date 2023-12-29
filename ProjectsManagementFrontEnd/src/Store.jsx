@@ -8,6 +8,7 @@ import userReducer from "./features/userSlice";
 import invitationReducer from "./features/invitationSlice";
 import projectReducer from "./features/project/projectSlice";
 import statisticsReducer from "./features/statistics/statisticsSlice";
+import chatReducer from "./features/chatSlice";
 
 const store = configureStore({
   reducer: {
@@ -20,6 +21,7 @@ const store = configureStore({
     invitation: invitationReducer,
     project: projectReducer,
     statistics: statisticsReducer,
+    chat: chatReducer,
   },
 });
 

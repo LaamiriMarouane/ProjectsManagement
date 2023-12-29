@@ -32,8 +32,12 @@ function AdminPlateformDashBordPage() {
     }
   }, [statistics]);
   return (
-    <div className="container mx-auto mt-16 my-8 w-[90%] flex  flex-col items-center justify-center">
-      {!loading && (
+    <div className="container mx-auto mt-16 my-8 w-[90%] flex   flex-col items-center justify-center">
+      {loading ? (
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+          <Spinner />
+        </div>
+      ) : (
         <>
           {" "}
           <div className="flex items-center justify-between w-full mx-auto ">
@@ -49,23 +53,23 @@ function AdminPlateformDashBordPage() {
               <MdDashboard size={60} />
             </ItemCart>
           </div>
+          <div className="flex items-center justify-between w-full mx-auto">
+            <div className="w-[450px] h-[450px] relative bg-zinc-100 rounded-xl p-9 shadow flex flex-col items-center justify-center mt-5">
+              <h2 className="text-2xl font-semibold text-blue-900 absolute top-2 ">
+                Demends Statistics
+              </h2>
+
+              <PieChartComponent colors={DemandsCOLORS} data={demandsData} />
+            </div>
+            <div className="w-[450px] h-[450px] relative bg-zinc-100 rounded-xl p-9 shadow flex flex-col items-center justify-center mt-5">
+              <h2 className="text-2xl font-semibold text-blue-900 absolute top-2 ">
+                Projects Statistics
+              </h2>
+              <PieChartComponent colors={ProjectsCOLORS} data={prjectsData} />
+            </div>
+          </div>
         </>
       )}
-      <div className="flex items-center justify-between w-full mx-auto">
-        <div className="w-[450px] h-[450px] relative bg-zinc-100 rounded-xl p-9 shadow flex flex-col items-center justify-center mt-5">
-          <h2 className="text-2xl font-semibold text-blue-900 absolute top-2 ">
-            Demends Statistics
-          </h2>
-
-          <PieChartComponent colors={DemandsCOLORS} data={demandsData} />
-        </div>
-        <div className="w-[450px] h-[450px] relative bg-zinc-100 rounded-xl p-9 shadow flex flex-col items-center justify-center mt-5">
-          <h2 className="text-2xl font-semibold text-blue-900 absolute top-2 ">
-            Projects Statistics
-          </h2>
-          <PieChartComponent colors={ProjectsCOLORS} data={prjectsData} />
-        </div>
-      </div>
     </div>
   );
 }

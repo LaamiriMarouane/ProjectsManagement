@@ -16,6 +16,8 @@ const MembresPages = () => {
   const { project, projectsError, projectsloading } = useSelector(
     (state) => state.project
   );
+  const { auth } = useSelector((store) => store.auth);
+  const role = auth.user.role.name;
 
   const image =
     "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
@@ -154,20 +156,22 @@ const MembresPages = () => {
               </div>
             )}
 
-            <button
-              className="bg-transparent text-blue-800 text-sm font-semibold border border-blue-800 px-2 py-1 rounded-xl flex items-center gap-2"
-              onClick={() => {
-                setAddMember(true);
-              }}
-            >
-              <MdGroupAdd size={22} />
-              Invit Membres
-            </button>
+            {(role == "PROJECT_OWNER" || role == "PROJECT_ADMIN") && (
+              <button
+                className="bg-transparent text-blue-800 text-sm font-semibold border border-blue-800 px-2 py-1 rounded-xl flex items-center gap-2"
+                onClick={() => {
+                  setAddMember(true);
+                }}
+              >
+                <MdGroupAdd size={22} />
+                Invit Membres
+              </button>
+            )}
           </div>
           <div className="flex">
             <div className="w-full">
               <h2 className="text-xl font-semibold text-gray-600 tracking-wider">
-                Participants
+                Membres
               </h2>
               {/* {(isParticipantsPermissions || isAdminsPermissions) && (
                 <div className="h-full w-screen fixed top-0 left-0 bottom-0 bg-black/80 z-40 flex items-center">
