@@ -3,7 +3,7 @@ package ProjectsManagmentBackEnd.utils;
 import ProjectsManagmentBackEnd.entity.project.ProjectResource;
 import ProjectsManagmentBackEnd.entity.ressources.Folder;
 import lombok.NoArgsConstructor;
-
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,13 +11,22 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 
 @NoArgsConstructor
+@Component
 public class FileSystem {
-    public void saveResource(ProjectResource resource) throws IOException {
-        if (resource instanceof Folder) {
-            saveFolder((Folder) resource);
-        } else if (resource instanceof ProjectsManagmentBackEnd.entity.ressources.File) {
-            saveFile((ProjectsManagmentBackEnd.entity.ressources.File) resource);
+
+    public void saveFolder(Folder folder) throws IOException {
+        new File(folder.getPath()).mkdir();
+        if (folder.getSubResources() != null && !folder.getSubResources().isEmpty()) {
+            for (ProjectResource subResource : folder.getSubResources()) {
+                if ( subResource instanceof Folder ) saveFolder( (Folder) subResource);
+                else if ( subResource instanceof ProjectsManagmentBackEnd.entity.ressources.File f ) saveFile( f, null );
+            }
         }
+
+    }
+
+    public void saveFile(ProjectsManagmentBackEnd.entity.ressources.File file, byte[] fileContent) throws IOException {
+        Files.write(Path.of(file.getPath()), fileContent);
     }
 
     public void renameResource(ProjectResource resource, String newName) throws IOException {
@@ -37,25 +46,11 @@ public class FileSystem {
     }
 
     public byte[] getFileContent(ProjectsManagmentBackEnd.entity.ressources.File file) throws IOException {
-        if (file == null || !(file instanceof ProjectsManagmentBackEnd.entity.ressources.File)) {
+        if (file == null ) {
             throw new IllegalArgumentException("Resource not a valid file");
         }
-        String filePath = calculateFilePath((ProjectsManagmentBackEnd.entity.ressources.File) file);
+        String filePath = file.getPath();
         return Files.readAllBytes(Path.of(filePath));
-}
-
-    private void saveFolder(Folder folder) throws IOException {
-        new File(folder.getPath()).mkdir();
-        if( folder.getSubResources() != null && !folder.getSubResources().isEmpty() ) {
-            for (ProjectResource subResource : folder.getSubResources()) {
-                saveResource(subResource);
-            }
-        }
-
-    }
-
-    private void saveFile(ProjectsManagmentBackEnd.entity.ressources.File file) throws IOException {
-        new File(file.getPath()).createNewFile();
     }
 
 
@@ -83,7 +78,7 @@ public class FileSystem {
     }
 
     private String calculateFolderPath(Folder folder) {
-        return folder.getParentFolder().getPath() + File.separator + folder.getName() ;
+        return folder.getParentFolder().getPath() + File.separator + folder.getName();
     }
 
     private String calculateFilePath(ProjectsManagmentBackEnd.entity.ressources.File file) {

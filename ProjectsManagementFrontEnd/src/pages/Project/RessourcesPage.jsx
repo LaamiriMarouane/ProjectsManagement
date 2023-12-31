@@ -1,365 +1,241 @@
-// FileExplorer.js
 import React, { useState, useEffect } from 'react';
 import { TreeView } from '@mui/x-tree-view/TreeView';
 import { TreeItem } from '@mui/x-tree-view/TreeItem';
-import { FaFolder, FaFolderOpen } from 'react-icons/fa';
-import { GoFile } from "react-icons/go";
+import { FaFile, FaFolder, FaFolderOpen, FaRegFileCode } from 'react-icons/fa';
+import { VscNewFile } from "react-icons/vsc";
 import { BsFolderPlus } from "react-icons/bs";
-import { AiOutlineFileAdd } from "react-icons/ai";
-import { RiDeleteBinLine, RiPencilLine } from "react-icons/ri";
 import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { irBlack as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
-import js from 'react-syntax-highlighter/dist/esm/languages/hljs/javascript';
-import ts from 'react-syntax-highlighter/dist/esm/languages/hljs/typescript';
-import java from 'react-syntax-highlighter/dist/esm/languages/hljs/java';
+import { atomOneDark as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFileContent, createFile, createFolder, getAllResources } from '../../features/project/resourceSlice'
+import { useParams } from 'react-router-dom';
+import { MdCreateNewFolder } from 'react-icons/md';
 
 
 const RessourcesPage = () => {
-    const [fileTree, setFileTree] = useState([]);
-    const [selectedFileContent, setSelectedFileContent] = useState('');
-    const [expandedNodes, setExpandedNodes] = useState([]);
-    const [selectedItem, setSelectedItem] = useState(null);
-    SyntaxHighlighter.registerLanguage('js', js)
-    SyntaxHighlighter.registerLanguage('jsx', js)
-    SyntaxHighlighter.registerLanguage('ts', ts)
-    SyntaxHighlighter.registerLanguage('tsx', ts)
-    SyntaxHighlighter.registerLanguage('java', java)
-
-    const codeJava =
-        `import React from "react";
-import ReactDOM from "react-dom/client";
-import App from "./App.jsx";
-import "./index.css";
-import store from "./Store";
-import { Provider } from "react-redux";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-
-ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <Provider store={store}>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <App />
-      </LocalizationProvider>
-    </Provider>
-  </React.StrictMode>
-);
-}`;
-
-    const htmlCode =
-        `
-<!DOCTYPE html>
-<html>
-<body>
-
-<p>
-This paragraph
-contains a lot of lines
-in the source code,
-but the browser 
-ignores it.
-</p>
-
-<p>
-This paragraph
-contains      a lot of spaces
-in the source     code,
-but the    browser 
-ignores it.
-</p>
-
-<p>
-The number of lines in a paragraph depends on the size of the browser window. If you resize the browser window, the number of lines in this paragraph will change.
-</p>
-
-</body>
-</html>
-`;
-
+    const dispatch = useDispatch();
+    const { resources, fileContent, error } = useSelector(state => state.resources)
+    const { project } = useSelector((state) => state.project);
+    const { id } = useParams()
 
     useEffect(() => {
-        const mockFileTree = [
-            {
-                id: 0,
-                name: 'Project Name',
-                isFolder: true,
-                children: [
-                    {
-                        id: 1,
-                        name: 'src',
-                        isFolder: true,
-                        children: [
-                            { id: 11, name: 'components', isFolder: true },
-                            {
-                                id: 12,
-                                name: 'App.jsx',
-                                isFolder: false,
-                                content: codeJava,
-                                language: 'jsx',
-                            },
-                        ],
-                    },
-                    {
-                        id: 2,
-                        name: 'web',
-                        isFolder: true,
-                        children: [
-                            { id: 21, name: 'README.md', isFolder: false, content: '# My Documentation' },
-                            { id: 22, name: 'LICENSE.txt', isFolder: false, content: 'MIT License' },
-                            {
-                                id: 23,
-                                name: 'index.html',
-                                isFolder: false,
-                                language: 'html',
-                                content: htmlCode
-                            },
-                        ],
-                    }
-                ]
-            }
-        ];
-
-        setFileTree(mockFileTree);
+        dispatch(getAllResources(id));
     }, []);
 
-
-
-
-
-    const handleNodeToggle = (event, nodes) => {
-        setExpandedNodes(nodes);
+    const [expandedNodes, setExpandedNodes] = useState([]);
+    const [parentFolderId, setParentFolderId] = useState('');
+    const [newFolderName, setNewFolderName] = useState('');
+    const [fileIsSelected, setfileIsSelected] = useState(false);
+    const [fileId, setFileId] = useState('');
+    const [isCreateFolder, setIsCreateFolder] = useState(false);
+    const [currentLangage, setCurrentLangage] = useState('javascript');
+    const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
+    
+    const handleToggle = (nodeIds) => {
+        setExpandedNodes(nodeIds);
     };
 
-    const addNewItem = (parentId, newItem) => {
-        setFileTree((prevFileTree) => {
-            const updatedFileTree = [...prevFileTree];
-            const parentFolder = findItemById(updatedFileTree, parentId);
+    const renderTree = (nodes) => (
+        <TreeItem
+            key={nodes.id}
+            nodeId={nodes.id}
+            onClick={() => {
+                if (nodes.type === 'FOLDER') {
+                    setParentFolderId(nodes.id);
+                } else {
+                    setParentFolderId(nodes.parentId);
+                }
+            }}
+            endIcon={nodes.type === 'FOLDER' ? (
+                <FaFolder className='text-yellow-400' />
+            ) : (
+                (nodes.fileExtension === 'txt' || nodes.fileExtension === 'md') ?
+                    <FaFile />
+                    : <FaRegFileCode size={30} />
+            )}
+            label={nodes.type === 'FOLDER' ? (
+                <div className='text-sm font-semibold' onClick={() => setfileIsSelected(false)}>
+                    {nodes.name}
+                </div>
+            ) : (
+                <div className='text-sm font-semibold' onClick={() => { setfileIsSelected(true); handleFileClick(nodes.id, nodes.fileExtension) }}>
+                    {nodes.name}
+                </div>
+            )}
+        >
+            {Array.isArray(nodes.subResources) && nodes.subResources.length > 0
+                ? nodes.subResources.map((node) => renderTree(node))
+                : null}
+        </TreeItem>
+    );
 
-            if (parentFolder) {
-                parentFolder.children = [...(parentFolder.children || []), newItem];
+    const handleFileClick = (fileId, fileExtension) => {
+        setFileId(fileId);
+        dispatch(getFileContent(fileId));
+        switch (fileExtension) {
+            case 'js':
+                setCurrentLangage('javascript');
+                break;
+            case 'java':
+                setCurrentLangage('java');
+                break;
+            case 'ts':
+                setCurrentLangage('typescript');
+                break;
+            case 'html':
+                setCurrentLangage('html');
+                setIsChoiceModalOpen(true);
+                break;
+            case 'py':
+                setCurrentLangage('py');
+                break;
+            default:
+                break;
+        }
+        
+    };
+
+    const handleChoice = (choice) => {
+        setIsChoiceModalOpen(false);
+        if (choice === 'browser') {
+
+          if (currentLangage === 'html' && fileId) {
+            const blob = new Blob([fileContent], { type: 'text/html' });
+            const blobUrl = URL.createObjectURL(blob);
+            window.open(blobUrl, '_blank');
+            URL.revokeObjectURL(blobUrl)
+
+          }
+
+        } 
+      };
+
+    const handleCreateFile = () => {
+        const fileInput = document.createElement('input');
+        fileInput.type = 'file';
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                dispatch(createFile({ file: file, parentId: parentFolderId, projectId: id }));
+
             }
-
-            return updatedFileTree;
         });
+        fileInput.click();
     };
 
-    const handleAddItemClick = (isFolder = false) => {
-        if (selectedItem.isFolder) {
-            let newItemName = prompt(`Enter the name for the new ${isFolder ? 'Folder' : 'File'}:`);
-            let fileExtenssion = '';
-
-            if (!isFolder && newItemName) {
-                fileExtenssion = prompt(`What is the file extension:`);
-            }
-
-            const parentId = selectedItem ? selectedItem.id : 0;
-
-            const newItem = {
-                id: Date.now(),
-                name: newItemName,
-                isFolder: isFolder,
-
-                ...(isFolder
-                    ? {
-                        children: [],
-                    }
-                    : {
-                        language: fileExtenssion || '',
-                        content: fileExtenssion !== ('txt' || 'md') ? `# New File Language (${fileExtenssion})` : '# New File',
-                    }),
-            };
-
-            addNewItem(parentId, newItem);
+    const handleCreateFolder = () => {
+        if (newFolderName !== '' && newFolderName !== null) {
+            dispatch(createFolder({
+                folder: {
+                    name: newFolderName,
+                    parentId: parentFolderId,
+                },
+                projectId: id
+            }));
         }
+        setIsCreateFolder(false);
     };
-
-
-    const removeItem = (itemId) => {
-        const confirmDelete = window.confirm(`Are you sure about deleting the item ${selectedItem.name}?`);
-        if (confirmDelete) {
-            setFileTree((prevFileTree) => {
-                const updatedFileTree = removeItemById([...prevFileTree], itemId);
-                return updatedFileTree;
-            });
-            setSelectedItem(null);
-        }
-    };
-
-    const removeItemById = (items, itemId) => {
-        return items.reduce((acc, item) => {
-            if (item.id === itemId) {
-                return acc;
-            }
-
-            if (item.children) {
-                item.children = removeItemById(item.children, itemId);
-            }
-
-            return [...acc, item];
-        }, []);
-    };
-
-    const editItem = (itemId, newName) => {
-        setFileTree((prevFileTree) => {
-            const updatedFileTree = updateItemNameById([...prevFileTree], itemId, newName);
-            return updatedFileTree;
-        });
-    };
-
-    const updateItemNameById = (items, itemId, newName) => {
-        return items.map((item) => {
-            if (item.id === itemId) {
-                return { ...item, name: newName };
-            }
-
-            if (item.children) {
-                item.children = updateItemNameById(item.children, itemId, newName);
-            }
-
-            return item;
-        });
-    };
-
-    // Add this function to find an item by its ID in the tree
-    const findItemById = (items, itemId) => {
-        for (const item of items) {
-            if (item.id === itemId) {
-                return item;
-            }
-
-            if (item.children) {
-                const foundItem = findItemById(item.children, itemId);
-                if (foundItem) {
-                    return foundItem;
-                }
-            }
-        }
-
-        return null;
-    };
-
-    const handleFileClick = (file) => {
-        if (!selectedItem.isFolder) {
-
-            if (file.language === 'html') {
-                const q = prompt('Do you want to fetch the content of html file [1] or open it on the browser [2] ? ');
-                if (q === '2') {
-                    const htmlContent = file.content || '<html><body>No content available</body></html>';
-                    const htmlBlob = new Blob([htmlContent], { type: 'text/html' });
-                    const url = URL.createObjectURL(htmlBlob);
-
-                    window.open(url, '_blank');
-                }
-                else {
-                    setSelectedFileContent(file.content || 'File content not available.');
-                }
-            } else {
-                setSelectedFileContent(file.content || 'File content not available.');
-            }
-        }
-    };
-
-
-
-    const renderTreeItems = (items) => {
-        return items.map((item) => (
-            <TreeItem
-                key={item.id}
-                nodeId={item.id}
-                onClick={() => { setSelectedItem(item); handleFileClick(item); }}
-                label={
-                    <span>
-                        {item.name}
-                    </span>
-                }
-                endIcon={
-                    item.isFolder ? (
-                        expandedNodes.includes(item.id) ? (
-                            <FaFolderOpen className='text-yellow-400' />
-                        ) : (
-                            <FaFolder className='text-yellow-400' />
-                        )
-                    ) : (
-                        <GoFile />
-                    )
-                }
-            >
-                {item.children && renderTreeItems(item.children)}
-            </TreeItem>
-        ));
-    };
-
-    const handleEditClick = (item) => {
-        const newName = prompt('Enter the new name:', selectedItem.name);
-        if (newName) {
-            editItem(selectedItem.id, newName);
-        }
-    };
-
 
     return (
-        <div className='flex items-start justify-between w-full max-h-max bg-white rounded-md shadow-md px-3 py-2 h-full space-x-2'>
-            <div className='w-[40%] h-full border-r border-r-slate-400 px-2'>
-                <div className="flex items-center justify-between">
-                    <h2>File Explorer</h2>
-                    <div className="flex items-center gap-2">
+        <div className='relative flex items-start justify-between w-full bg-white rounded-md shadow-md px-3 py-2 space-x-2'
+            style={{
+                height: 'calc(100vh - 150px)'
+            }}
+        >
+            {error && <div className="absolute top-3 left-[30%] w-full max-w-md p-2 bg-red-100 text-red-600">{error}</div>}
+            {isChoiceModalOpen && (
+                <div className='fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center'>
+                    <div className='bg-white p-4 rounded-md'>
+                        <p className='mb-4'>Chose what way you need</p>
                         <button
-                            className="cursor-pointer mr-1"
-                            onClick={() => handleAddItemClick(true)}
+                            className='mr-2 px-4 py-2 bg-blue-500 text-white rounded'
+                            onClick={() => handleChoice('browser')}
                         >
-                            <BsFolderPlus />
+                            Open in Browser
                         </button>
                         <button
-                            className="cursor-pointer mr-1"
-                            onClick={() => handleAddItemClick(false)}
+                            className='px-4 py-2 bg-green-500 text-white rounded'
+                            onClick={() => handleChoice('fetch')}
                         >
-                            <AiOutlineFileAdd />
+                            Fetch Content
                         </button>
                     </div>
                 </div>
-                {selectedItem && (
-                    <div className="flex items-center justify-between py-2 px-2 border border-slate-400 rounded-lg shadow my-1">
-                        <div className="flex items-center gap-2">
-                            <span className="text-sm font-bold">{selectedItem.isFolder ? 'Selected Folder : ' : 'Selected File : '}</span>
-                            <span className="text-sm font-normal">{selectedItem.name}</span>
-                        </div>
-                        <div className="flex items-center">
-                            <RiPencilLine
-                                className="cursor-pointer border-r border-r-slate-300 px-1"
-                                onClick={handleEditClick}
-                                size={28}
-                            />
-                            <RiDeleteBinLine
-                                className="cursor-pointer text-red-600 ml-1"
-                                onClick={() => removeItem(selectedItem.id)}
-                                size={20}
-                            />
-                        </div>
+            )}
+            <div className='w-[40%] h-full border-r border-r-slate-400 px-2 overflow-auto'>
+                <div className="flex items-center justify-between mb-3 border-b border-b-slate-300">
+                    <h2> {project.longName} </h2>
+                    <div className='flex gap-4'>
+                        <button
+                            className='hover:bg-slate-200 p-1 rounded-full'
+                            onClick={parentFolderId && handleCreateFile}> <VscNewFile size={20} /> </button>
+                        <button
+                            className='hover:bg-slate-200 p-1 rounded-full'
+                            onClick={() => { parentFolderId && setIsCreateFolder(true) }}><BsFolderPlus size={20} /></button>
                     </div>
-                )}
+                    {
+                        isCreateFolder && <div className='h-full w-screen fixed top-0 left-0 bottom-0 bg-black/80 z-40 flex items-center'>
+                            <dialog className=' py-5 px-4 rounded' open={isCreateFolder} >
+                                <div className="flex flex-col items-center justify-start">
+                                    <h2 className="text-lg font-semibold mb-2">Create Folder</h2>
+                                    <div className="flex items-center gap-4 w-full">
+                                        <MdCreateNewFolder size={29} className='text-yellow-400' />
+                                        <input
+                                            type="text"
+                                            autoFocus
+                                            className='border border-black rounded-md px-2 py-1 text-sm font-semibold'
+                                            value={newFolderName}
+                                            onChange={(e) => setNewFolderName(e.target.value)}
+                                            onKeyDown={(e) => {
+                                                if (e.key === 'Enter') {
+                                                    handleCreateFolder();
+                                                }
+                                            }}
+                                        />
+                                        <button onClick={handleCreateFolder} className='p-1 bg-black text-xs text-white font-medium tracking-wider rounded'>Create</button>
+                                    </div>
+                                </div>
+                            </dialog>
+                        </div>
+                    }
+                </div>
                 <TreeView
-                    defaultExpanded={['src', 'web']}
                     defaultCollapseIcon={<FaFolderOpen className='text-yellow-400' />}
                     defaultExpandIcon={<FaFolder className='text-yellow-400' />}
                     expanded={expandedNodes}
-                    onNodeToggle={handleNodeToggle}
+                    onNodeToggle={(_, nodeIds) => handleToggle(nodeIds)}
                 >
-                    {renderTreeItems(fileTree)}
+                    <TreeItem
+                        key={project.id}
+                        nodeId={project.id}
+                        label={<p className='text-sm font-semibold' >{project.shortName}</p>}
+                        endIcon={<FaFolder className='text-yellow-400' />}
+                    >
+                        {resources.map((node) => renderTree(node))}
+                    </TreeItem>
                 </TreeView>
+
             </div>
-            <div className='w-[60%] h-full px-2'>
-                <h2>File Content</h2>
-                {selectedFileContent && (
-                    <span className="text-sm font-mono">
+            <div className='w-[60%] h-full px-2 overflow-auto'>
+                {
+                    (fileIsSelected && fileContent) ?
                         <SyntaxHighlighter
-                            language={selectedItem.language || 'plaintext'}
-                            style={codeStyle} showLineNumbers customStyle={{ borderRadius: "5px", backgroundColor: "#1C1C1C", fontFamily: selectedItem.language ? 'monospace' : 'inherit' }}>
-                            {selectedFileContent}
+                            showLineNumbers
+                            customStyle={{ borderRadius: "10px", backgroundColor: "#1C1C1C", height: "100%", fontFamily: 'monospace' }}
+                            style={codeStyle}
+                            language={currentLangage}
+                            wrapLongLines
+                        >
+                            {fileContent}
                         </SyntaxHighlighter>
-                    </span>
-                )}
+                        : (
+                            <div className="flex items-center justify-center h-full">
+                                No file selected
+                            </div>
+                        )
+                }
             </div>
-        </div>
+        </div >
     );
 };
 

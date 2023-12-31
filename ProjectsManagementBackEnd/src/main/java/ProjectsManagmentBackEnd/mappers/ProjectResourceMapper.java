@@ -16,6 +16,7 @@ public class ProjectResourceMapper {
         ProjectResourceDTO dto = new ProjectResourceDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
+        dto.setType( entity.getType() );
         if (entity.getParentFolder() != null) {
             dto.setParentId(entity.getParentFolder().getId());
         }
@@ -25,6 +26,7 @@ public class ProjectResourceMapper {
         FolderDTO dto = new FolderDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
+        dto.setType( entity.getType() );
         dto.setProjectId( entity.getProject() );
         dto.setSubResources(ProjectResourceMapper.toDtoList(entity.getSubResources()));
         if (entity.getParentFolder() != null) {
@@ -35,10 +37,14 @@ public class ProjectResourceMapper {
 
     public static Folder toEntity(FolderDTO dto) {
         Folder entity = new Folder();
-        entity.setId(dto.getId());
         entity.setName(dto.getName());
-        dto.setProjectId( entity.getProject() );
-        entity.setSubResources(ProjectResourceMapper.toEntityList(dto.getSubResources()));
+        entity.setType( dto.getType() );
+        if( dto.getProjectId() != null ) {
+            entity.setProject( dto.getProjectId() );
+        }
+        if( dto.getSubResources() != null && !dto.getSubResources().isEmpty() ) {
+            entity.setSubResources(ProjectResourceMapper.toEntityList(dto.getSubResources()));
+        }
         return entity;
     }
 
@@ -46,6 +52,7 @@ public class ProjectResourceMapper {
         FileDTO dto = new FileDTO();
         dto.setId(entity.getId());
         dto.setName(entity.getName());
+        dto.setType( entity.getType() );
         dto.setFileExtension(entity.getFileExtension());
         if (entity.getParentFolder() != null) {
             dto.setParentId(entity.getParentFolder().getId());
@@ -57,6 +64,7 @@ public class ProjectResourceMapper {
         File entity = new File();
         entity.setId(dto.getId());
         entity.setName(dto.getName());
+        entity.setType( dto.getType() );
         entity.setFileExtension(dto.getFileExtension());
         return entity;
     }

@@ -2,6 +2,7 @@ package ProjectsManagmentBackEnd.entity.project;
 
 
 import ProjectsManagmentBackEnd.entity.ressources.Folder;
+import ProjectsManagmentBackEnd.entity.ressources.ResourceType;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.GenericGenerator;
@@ -18,6 +19,7 @@ public abstract class ProjectResource {
     protected String id;
     protected  String name;
     protected  String path;
+    protected ResourceType type;
     @ManyToOne
     private Folder parentFolder;
 }

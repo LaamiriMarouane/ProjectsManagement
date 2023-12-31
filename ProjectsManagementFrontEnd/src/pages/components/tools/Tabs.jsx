@@ -68,7 +68,7 @@ const Tabs = () => {
         })}
       </ul>
       <h2 className=" text-lg font-semibold ">
-        Project Name( {!projectsloading && project.shortName} ){" "}
+        {!projectsloading && project.shortName}{" "}
       </h2>
     </div>
   );

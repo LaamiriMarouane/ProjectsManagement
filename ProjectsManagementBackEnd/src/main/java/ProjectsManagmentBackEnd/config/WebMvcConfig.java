@@ -19,7 +19,7 @@ public class WebMvcConfig  {
     @Bean
     FilterRegistrationBean corsFilter() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://127.0.0.1:5173");
+        configuration.addAllowedOrigin("http://localhost:5173");
 
         configuration.setAllowedHeaders(Arrays.asList(
                 HttpHeaders.AUTHORIZATION,

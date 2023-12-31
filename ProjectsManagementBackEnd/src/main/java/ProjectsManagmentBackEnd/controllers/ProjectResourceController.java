@@ -7,6 +7,7 @@ import ProjectsManagmentBackEnd.services.ProjectResourceServiceImp;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -18,14 +19,20 @@ public class ProjectResourceController {
 
     private final ProjectResourceServiceImp projectResourceService;
 
-    @PostMapping("/folders")
-    public void createFolder(@RequestBody FolderDTO folderDTO,@RequestParam String parentFolderId) throws IOException {
-        projectResourceService.createFolder(folderDTO, parentFolderId);
+    @PostMapping("/newFolder/{parentId}")
+    public ResponseEntity<FolderDTO> createFolder(@RequestBody FolderDTO folderDTO, @PathVariable("parentId") String parentFolderId) throws IOException {
+        return ResponseEntity.ok().body(projectResourceService.createFolder(folderDTO, parentFolderId));
     }
 
-    @PostMapping("/files")
-    public void createFile(@RequestBody FileDTO fileDTO, @RequestParam String parentFolderId) throws IOException {
-        projectResourceService.createFile(fileDTO, parentFolderId);
+    @PostMapping("/newFile/{parentId}")
+    public ResponseEntity<FileDTO> createFile(@PathVariable("parentId") String parentFolderId , @RequestParam("file") MultipartFile file) throws IOException {
+        return ResponseEntity.ok().body(projectResourceService.createFile(parentFolderId , file));
+    }
+
+    @GetMapping("/file/{fileId}/content")
+    public ResponseEntity<byte[]> getFileContent(@PathVariable String fileId) throws IOException {
+        byte[] fileContent = projectResourceService.getFileContent( fileId );
+        return ResponseEntity.ok().body(fileContent);
     }
 
     @GetMapping("/all/{projectId}")

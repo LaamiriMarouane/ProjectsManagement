@@ -3,6 +3,7 @@ package ProjectsManagmentBackEnd.exceptions.handler;
 
 
 import ProjectsManagmentBackEnd.exceptions.BusinessException;
+import ProjectsManagmentBackEnd.exceptions.ResourceAlreadyExist;
 import ProjectsManagmentBackEnd.exceptions.errors.ApiClientErrorCodes;
 import ProjectsManagmentBackEnd.exceptions.errors.ApiErrorResponse;
 import ProjectsManagmentBackEnd.exceptions.errors.ApiExceptionResponse;
@@ -87,7 +88,10 @@ public class RestExceptionHandler  {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
     }
 
-
+    @ExceptionHandler(value = ResourceAlreadyExist.class)
+    public ResponseEntity<Object> handleFolderAlreadyExistException(ResourceAlreadyExist ex) {
+        return new ResponseEntity<>(ex.getMessage() , HttpStatus.BAD_REQUEST);
+    }
 
 
 }

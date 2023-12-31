@@ -15,12 +15,6 @@ const ProjectDetailsPage = () => {
   useEffect(() => {
     dispatch(getProjectDetails(id));
   }, []);
-  //haddle errors
-  // useEffect(() => {
-  //   if (!projectsloading && projectsError !== "") {
-  //     navigate("/error", { state: { projectsError } });
-  //   }
-  // }, [projectsloading, projectsError]);
   const sendCloseProjectDemand = (projectID) => {};
 
   return (

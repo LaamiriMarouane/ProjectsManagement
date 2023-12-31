@@ -4,9 +4,9 @@ import { Outlet } from "react-router";
 
 function NavBarLayout() {
   return (
-    <div className="app h-screen w-screen">
+    <div className="app">
       <NavBar />
-      <div className="content  h-screen w-screen">
+      <div className="content">
         <Outlet />
       </div>
     </div>
