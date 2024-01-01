@@ -90,6 +90,13 @@ public class DemandServiceImp {
 
     }
 
+    public ResponseEntity<List<DemandDTO>> getAcceptedAndRejectedDemand() {
+        List<DemandState> desiredStates = List.of(DemandState.REJECTED, DemandState.COMPLETED);
+        List<DemandDTO> demandDTOList = demandRepository.findByDemandStateIn(desiredStates).stream().map(DemandMapper::convert).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(demandDTOList);
+
+    }
+
     public ResponseEntity<List<DemandState>> getAllDemandStates() {
         List<DemandState> demandDTOList;
         User user=UserContext.currentUser();

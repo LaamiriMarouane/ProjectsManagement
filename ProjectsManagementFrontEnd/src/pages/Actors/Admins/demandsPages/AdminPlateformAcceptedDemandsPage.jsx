@@ -18,7 +18,7 @@ function AdminPlateformAcceptedDemandsPage() {
     <div className="container mx-auto mt-16 my-8">
       <AdminCommandComponent />
       {acceptedDemandsLoading ? (
-        <div className="absolute top-1/2 left-1/2 ">
+        <div className="w-full h-[30rem] flex items-center justify-center ">
           <Spinner />
         </div>
       ) : (
@@ -33,7 +33,7 @@ function AdminPlateformAcceptedDemandsPage() {
                 />
               ))
             ) : (
-              <div className="text-center w-full py-3">No Notification</div>
+              <div className="text-center w-full py-3 h-[30rem] flex items-center justify-center">No Notification</div>
             )}
           </div>
         </div>

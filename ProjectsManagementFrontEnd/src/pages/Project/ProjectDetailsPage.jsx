@@ -57,10 +57,10 @@ const ProjectDetailsPage = () => {
               <span className="uppercase">- Status :</span>
               <span
                 className={`text-xs font-bold mx-1 px-1 py-1.5 rounded shadow uppercase ${
-                  project.status ? " bg-green-400" : "bg-red-400"
+                  project.active ? " bg-green-400" : "bg-red-400"
                 } `}
               >
-                {project.status ? "enabled" : "disabled"}
+                {project.active ? "enabled" : "disabled"}
               </span>
             </div>
 

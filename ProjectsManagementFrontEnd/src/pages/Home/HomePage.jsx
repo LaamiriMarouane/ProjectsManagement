@@ -1,75 +1,48 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  FaLink,
-  FaLongArrowAltLeft,
-  FaLongArrowAltRight,
+  FaLink
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { getAllPublicProjects } from "../../features/project/projectSlice";
 import Spinner from "../components/tools/Spinner";
+import { Pagination } from "@mui/material";
 
 const HomePage = () => {
   const { projects, projectsloading } = useSelector((state) => state.project);
   const dispatch = useDispatch();
-  // const [filterType, setFilterType] = useState("");
-  // const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 2;
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 3;
 
-  // const projectTypes = Array.from(
-  //   new Set(projects.map((project) => project.type))
-  // );
-  // const projectThemes = Array.from(
-  //   new Set(projects.map((project) => project.theme))
-  // );
-
-  // const filteredProjects = filterType
-  //   ? projects.filter((project) => project.type === filterType)
-  //   : projects;
-
-  // const sortedProjects = [...filteredProjects].reverse((a, b) => {
-  //   let x = b.demandeCreatingtime.split(",");
-  //   let y = a.demandeCreatingtime.split(",");
-  //   if (y[0] === x[0]) {
-  //     return x[1] - y[1];
-  //   }
-  //   return x[0] - y[0];
-  // });
-
-  // // Calculate the indexes of the current page
-  // const indexOfLastProject = currentPage * itemsPerPage;
-  // const indexOfFirstProject = indexOfLastProject - itemsPerPage;
-  // const currentProjects = sortedProjects.slice(
-  //   indexOfFirstProject,
-  //   indexOfLastProject
-  // );
-
-  // const totalPages = Math.ceil(sortedProjects.length / itemsPerPage);
-
-  // const handlePageChange = (newPage) => {
-  //   setCurrentPage(newPage);
-  // };
   useEffect(() => {
     dispatch(getAllPublicProjects());
   }, []);
+
+  const sortedProjects = [...projects].sort((a, b) =>
+    a.shortName.localeCompare(b.shortName)
+  );
+
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const paginatedProjects = sortedProjects.slice(startIndex, endIndex);
+
   return (
     <div className="container max-w-[1200px] mx-auto mt-20 ">
-      {/* <Filter types={projectTypes} onFilterChange={setFilterType} themes={projectThemes} /> */}
-      <div className="mb-8 w-full">
-        <div className="space-y-3">
+      <div className="mb-8 w-full flex flex-col justify-between space-y-1 h-full" style={{ height : 'calc(100vh - 100px)' }}>
+        <div className="space-y-3 overflow-auto">
           {projectsloading ? (
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+            <div className="w-full h-[30rem] flex items-center justify-center ">
               <Spinner />
             </div>
-          ) : projects.length === 0 ? (
+          ) : paginatedProjects.length === 0 ? (
             <div className="w-full h-[30rem] flex items-center justify-center">
               No Project at the moment
             </div>
           ) : (
-            projects.map((project) => (
+            paginatedProjects.map((project) => (
               <div
                 key={project.id}
-                className="bg-white px-4 py-2 rounded shadow"
+                className="bg-white px-4 py-2 rounded shadow w-full"
               >
                 <h2 className="text-lg font-bold">{project.shortName}</h2>
                 <p className="text-gray-600 mb-1 py-2 w-full border-t border-b border-slate-100">
@@ -102,28 +75,14 @@ const HomePage = () => {
           )}
         </div>
         {/* Pagination Controls */}
-        <div className="flex justify-center gap-4 mt-4 items-center">
-          <button
-            // onClick={() => handlePageChange(currentPage - 1)}
-            // disabled={currentPage === 1}
-            className="py-3 px-3 bg-gray-300 hover:bg-gray-500 disabled:bg-gray-50 disabled:text-gray-200 rounded-full"
-          >
-            <FaLongArrowAltLeft size={20} />
-          </button>
-          <span className="mx-4 text-sm font-bold text-black">
-            <span className="py-2 px-3.5 bg-slate-400 rounded-full">
-              {/* {currentPage} */}
-            </span>{" "}
-            {/* / {totalPages} */}
-          </span>
-          <button
-            // onClick={() => handlePageChange(currentPage + 1)}
-            // disabled={currentPage === totalPages}
-            className="py-3 px-3 bg-gray-300 hover:bg-gray-500 disabled:bg-gray-50 disabled:text-gray-200 rounded-full"
-          >
-            <FaLongArrowAltRight size={20} />
-          </button>
-        </div>
+        <Pagination
+        className="w-full flex items-center justify-center"
+          count={Math.ceil(sortedProjects.length / itemsPerPage)}
+          page={currentPage}
+          onChange={(event, newPage) => setCurrentPage(newPage)}
+          shape="rounded"
+        />
+        {/* End pagination controls */}
       </div>
     </div>
   );

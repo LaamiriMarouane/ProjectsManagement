@@ -9,6 +9,7 @@ import {
   putRejectDemanddApi,
   putValidateDemandApi,
   getUserAcceptedDemandsApi,
+  getAcceptedAndRejectedDemandsApi,
   getUserNewDemandsApi,
 } from "../api/demandApi";
 
@@ -85,6 +86,18 @@ export const getUserAcceptedDemands = createAsyncThunk(
     }
   }
 );
+export const getUserAcceptedAndRejectedDemands = createAsyncThunk(
+  "UserDemands/getAcceptedAndRejected",
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await getAcceptedAndRejectedDemandsApi();
+      return res.data;
+    } catch (error) {
+      const errorMsg = error?.response?.data?.message || error?.message;
+      return rejectWithValue(errorMsg);
+    }
+  }
+);
 export const getNewDemands = createAsyncThunk(
   "Demands/getNew",
   async (_, { rejectWithValue }) => {
@@ -139,6 +152,7 @@ const demandSlice = createSlice({
   initialState: {
     rejectedDemands: [],
     acceptedDemands: [],
+    acceptedAndRejectedDemands: [],
     newDemands: [],
     Demands: [],
     DemandErrors: "",
@@ -146,6 +160,7 @@ const demandSlice = createSlice({
     newDemandsLoading: true,
     acceptedDemandsLoading: true,
     rejectedDemandsLoading: true,
+    acceptedAndRejectedDemandsLoading: true,
   },
 
   extraReducers: (builder) => {
@@ -227,6 +242,19 @@ const demandSlice = createSlice({
       .addCase(getRejectedDemands.rejected, (state, action) => {
         console.log("rejected", action.payload);
         state.rejectedDemandsLoading = false;
+      });
+    builder
+      .addCase(getUserAcceptedAndRejectedDemands.pending, (state, action) => {
+        state.acceptedAndRejectedDemandsLoading = true;
+      })
+      .addCase(getUserAcceptedAndRejectedDemands.fulfilled, (state, action) => {
+        state.acceptedAndRejectedDemands = [...action.payload];
+
+        state.acceptedAndRejectedDemandsLoading = false;
+      })
+      .addCase(getUserAcceptedAndRejectedDemands.rejected, (state, action) => {
+        console.log("rejected", action.payload);
+        state.acceptedAndRejectedDemandsLoading = false;
       });
 
     builder

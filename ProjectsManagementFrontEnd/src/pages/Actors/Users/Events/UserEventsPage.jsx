@@ -38,7 +38,7 @@ function UserEventsPage() {
     <div className="mt-16  h-[calc(100%-100px)]">
       <div>
         {loading ? (
-          <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+          <div className="w-full h-[30rem] flex items-center justify-center">
             <Spinner />
           </div>
         ) : (

@@ -1,11 +1,11 @@
 import React from "react";
-import { IoMdCheckmarkCircleOutline } from "react-icons/io";
+import { AiFillMinusCircle } from "react-icons/ai";
 
-const AcceptedDemandComponent = ({ demand }) => {
+const RejectedDemandComponent = ({ demand }) => {
   return (
     <div className="my-1 px-2 py-6 w-full mx-auto bg-slate-50 rounded-xl shadow flex items-center space-x-2">
       <div className="shrink-0 ">
-        <IoMdCheckmarkCircleOutline style={{ color: "green" }} size={40} />
+        <AiFillMinusCircle style={{ color: "red" }} size={40} />
       </div>
       <div>
         <div className="flex items-center gap-10">
@@ -13,14 +13,14 @@ const AcceptedDemandComponent = ({ demand }) => {
             {demand?.projectName}
           </div>
           <p className="text-sm font-mono italic text-gray-500 float-right">
-            {demand?.validationTime}
+            {demand?.demandCreatingTime}
           </p>
         </div>
         <div className="text-base font-normal text-gray-500">
           {demand?.projectLongName}
         </div>
         <p className="text-gray-800">
-          You have successfully created
+          Creation rejected!
           <em className="ml-2 font-bold text-xs text-black">Project-Manag</em>{" "}
         </p>
       </div>
@@ -28,4 +28,4 @@ const AcceptedDemandComponent = ({ demand }) => {
   );
 };
 
-export default AcceptedDemandComponent;
+export default RejectedDemandComponent;

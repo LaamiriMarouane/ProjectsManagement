@@ -8,17 +8,19 @@ import { Light as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { atomOneDark as codeStyle } from 'react-syntax-highlighter/dist/esm/styles/hljs';
 import { useDispatch, useSelector } from 'react-redux';
 import { getFileContent, createFile, createFolder, getAllResources } from '../../features/project/resourceSlice'
+import { getProjectDetails } from "../../features/project/projectSlice";
 import { useParams } from 'react-router-dom';
 import { MdCreateNewFolder } from 'react-icons/md';
 
 
 const RessourcesPage = () => {
     const dispatch = useDispatch();
-    const { resources, fileContent, error } = useSelector(state => state.resources)
+    const { resources, fileContent, error, fileContentLoading } = useSelector(state => state.resources)
     const { project } = useSelector((state) => state.project);
     const { id } = useParams()
 
     useEffect(() => {
+        dispatch(getProjectDetails(id));
         dispatch(getAllResources(id));
     }, []);
 
@@ -29,8 +31,8 @@ const RessourcesPage = () => {
     const [fileId, setFileId] = useState('');
     const [isCreateFolder, setIsCreateFolder] = useState(false);
     const [currentLangage, setCurrentLangage] = useState('javascript');
-    const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
-    
+    const [isHTML, setIsHTML] = useState(false);
+
     const handleToggle = (nodeIds) => {
         setExpandedNodes(nodeIds);
     };
@@ -84,7 +86,7 @@ const RessourcesPage = () => {
                 break;
             case 'html':
                 setCurrentLangage('html');
-                setIsChoiceModalOpen(true);
+                setIsHTML(true);
                 break;
             case 'py':
                 setCurrentLangage('py');
@@ -92,23 +94,21 @@ const RessourcesPage = () => {
             default:
                 break;
         }
-        
+
     };
 
     const handleChoice = (choice) => {
-        setIsChoiceModalOpen(false);
         if (choice === 'browser') {
+            if (currentLangage === 'html' && fileId) {
+                const blob = new Blob([fileContent], { type: 'text/html' });
+                const blobUrl = URL.createObjectURL(blob);
+                window.open(blobUrl, '_blank');
+                URL.revokeObjectURL(blobUrl)
 
-          if (currentLangage === 'html' && fileId) {
-            const blob = new Blob([fileContent], { type: 'text/html' });
-            const blobUrl = URL.createObjectURL(blob);
-            window.open(blobUrl, '_blank');
-            URL.revokeObjectURL(blobUrl)
-
-          }
-
-        } 
-      };
+            }
+        }
+        setIsHTML(false);
+    };
 
     const handleCreateFile = () => {
         const fileInput = document.createElement('input');
@@ -143,25 +143,7 @@ const RessourcesPage = () => {
             }}
         >
             {error && <div className="absolute top-3 left-[30%] w-full max-w-md p-2 bg-red-100 text-red-600">{error}</div>}
-            {isChoiceModalOpen && (
-                <div className='fixed top-0 left-0 w-screen h-screen bg-black bg-opacity-50 flex items-center justify-center'>
-                    <div className='bg-white p-4 rounded-md'>
-                        <p className='mb-4'>Chose what way you need</p>
-                        <button
-                            className='mr-2 px-4 py-2 bg-blue-500 text-white rounded'
-                            onClick={() => handleChoice('browser')}
-                        >
-                            Open in Browser
-                        </button>
-                        <button
-                            className='px-4 py-2 bg-green-500 text-white rounded'
-                            onClick={() => handleChoice('fetch')}
-                        >
-                            Fetch Content
-                        </button>
-                    </div>
-                </div>
-            )}
+
             <div className='w-[40%] h-full border-r border-r-slate-400 px-2 overflow-auto'>
                 <div className="flex items-center justify-between mb-3 border-b border-b-slate-300">
                     <h2> {project.longName} </h2>
@@ -218,16 +200,25 @@ const RessourcesPage = () => {
             </div>
             <div className='w-[60%] h-full px-2 overflow-auto'>
                 {
+                    isHTML && <div className="relative">
+                        <button
+                            className='p-1 bg-slate-600 cursor-pointer text-white text-xs font-semibold shadow-white rounded absolute top-0 right-2'
+                            onClick={() => handleChoice('browser')}
+                        >
+                            Open in Browser
+                        </button>
+                    </div>
+                }
+                {
                     (fileIsSelected && fileContent) ?
                         <SyntaxHighlighter
                             showLineNumbers
                             customStyle={{ borderRadius: "10px", backgroundColor: "#1C1C1C", height: "100%", fontFamily: 'monospace' }}
                             style={codeStyle}
                             language={currentLangage}
-                            wrapLongLines
-                        >
-                            {fileContent}
-                        </SyntaxHighlighter>
+                            children={fileContent.toString()}
+
+                        />
                         : (
                             <div className="flex items-center justify-center h-full">
                                 No file selected

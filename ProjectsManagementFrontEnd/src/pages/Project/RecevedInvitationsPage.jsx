@@ -16,9 +16,9 @@ const RecevedInvitationsPage = () => {
     dispatch(getReceivedInvitations());
   }, []);
   return (
-    <div className="w-full space-y-1">
+    <div className="w-full space-y-1 h-full mt-20">
       {invitationloading ? (
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  ">
+        <div className="w-full h-[30rem] flex items-center justify-center  ">
           <Spinner />
         </div>
       ) : receivedInvitation.length === 0 ? (

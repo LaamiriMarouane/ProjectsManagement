@@ -46,6 +46,11 @@ public class DemandController {
     public ResponseEntity<List<DemandDTO>> getAccepted()  {
         return demandService.getAllByDemandState(DemandState.COMPLETED);
     }
+
+    @GetMapping("/accepted-rejected")
+    public ResponseEntity<List<DemandDTO>> getDemandsRejectedAndAccepted() {
+        return demandService.getAcceptedAndRejectedDemand();
+    }
     @GetMapping(ApiPaths.USERS+"/new")
     public ResponseEntity<List<DemandDTO>> getUserNew()  {
         return demandService.getUserAllByDemandState(DemandState.NEW);

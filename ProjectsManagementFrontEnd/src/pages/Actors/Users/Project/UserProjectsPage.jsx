@@ -12,13 +12,13 @@ const UserProjectsPage = () => {
     dispatch(getMyProjects());
   }, []);
   return (
-    <>
+    <div className="mt-20">
       {projectsloading ? (
-        <div className="absolute top-1/2 left-1/2 bottom-1/2  transform -translate-x-1/2 -translate-y-1/2  ">
+        <div className="w-full h-[30rem] flex items-center justify-center  ">
           <Spinner />
         </div>
       ) : projects.length === 0 ? (
-        <div className=" absolute top-1/2 left-1/2 bottom-1/2  transform -translate-x-1/2 -translate-y-1/2 ">
+        <div className=" w-full h-[30rem] flex items-center justify-center ">
           You have no project at the moment
         </div>
       ) : (
@@ -28,7 +28,7 @@ const UserProjectsPage = () => {
           ))}
         </div>
       )}
-    </>
+    </div>
   );
 };
 

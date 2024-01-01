@@ -18,7 +18,7 @@ const AdminPlateformNewDemandsPage = () => {
       <div className="container mx-auto mt-16 my-8">
         <AdminCommandComponent />
         {newDemandsLoading ? (
-          <div className="absolute top-1/2 left-1/2 ">
+          <div className="w-full h-[30rem] flex items-center justify-center ">
             <Spinner />
           </div>
         ) : (
@@ -36,7 +36,7 @@ const DemandeNotification = ({ demandeList }) => {
     <div className="px-48">
       <div className="rounded-lg  ">
         {demandeList?.length > 0 && (
-          <div className="bg-slate-200 px-3 py-1 border-b border-b-slate-300 rounded-tr-lg text-sm rounded-tl-lg">
+          <div className="bg-slate-200 px-3 py-1 border-b border-b-slate-300 rounded-tr-lg text-sm rounded-tl-lg ">
             You have {demandeList.length} notification
           </div>
         )}
@@ -49,7 +49,7 @@ const DemandeNotification = ({ demandeList }) => {
             />
           ))
         ) : (
-          <div className="text-center w-full py-3">No Notification</div>
+          <div className="text-center w-full py-3 h-[30rem] flex items-center justify-center">No Notification</div>
         )}
       </div>
     </div>

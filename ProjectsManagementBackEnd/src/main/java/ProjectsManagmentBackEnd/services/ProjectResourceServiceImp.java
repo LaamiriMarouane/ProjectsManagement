@@ -31,9 +31,8 @@ public class ProjectResourceServiceImp {
     private final FileSystem fileSystem;
 
     public void createRootFolderByProjectName( Project currentProject ) {
-        System.out.println("\n\tcurrent project id : { "+ currentProject.getId() +" }\n");
         Folder rootFolder = new Folder();
-        rootFolder.setName( currentProject.getLongName() );
+        rootFolder.setName( currentProject.getShortName() );
         rootFolder.setProject( currentProject );
         rootFolder.setType( ResourceType.FOLDER );
         rootFolder.setPath( ApiPaths.LOCAL_STORAGE + java.io.File.separator + rootFolder.getName());

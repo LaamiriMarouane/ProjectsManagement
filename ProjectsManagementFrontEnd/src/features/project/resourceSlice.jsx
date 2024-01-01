@@ -69,6 +69,7 @@ const resourceSlice = createSlice({
   initialState: {
     resources: [],
     fileContent: "",
+    fileContentLoading : true,
     loading: true,
     error: null,
   },
@@ -91,14 +92,14 @@ const resourceSlice = createSlice({
     builder
       .addCase(getFileContent.pending, (state) => {
         state.error = "";
-        state.loading = true;
+        state.fileContentLoading = true;
       })
       .addCase(getFileContent.fulfilled, (state, { payload }) => {
-        state.fileContent = payload;
-        state.loading = false;
+        state.fileContentLoading = false;
+        state.fileContent = payload || "";
       })
       .addCase(getFileContent.rejected, (state, action) => {
-        state.loading = false;
+        state.fileContentLoading = false;
         state.error = action.payload.msg;
       });
 

@@ -84,7 +84,7 @@ const DropdownMenu = ({ username }) => {
   }, []);
 
   return (
-    <div className="relative  inline-block text-left" ref={dropdownRef}>
+    <div className="relative inline-block text-left" ref={dropdownRef}>
       <div>
         <button
           type="button"

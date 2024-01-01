@@ -15,6 +15,9 @@ async function getRejectedDemandsApi() {
 async function getAcceptedDemandsApi() {
   return await useAxios().get("/demands/accepted");
 }
+async function getAcceptedAndRejectedDemandsApi() {
+  return await useAxios().get("/demands/accepted-rejected");
+}
 async function getUserNewDemandsApi() {
   return await useAxios().get("/demands/users/new");
 }
@@ -57,5 +60,6 @@ export {
   putUpdateDemandApi,
   getUserAcceptedDemandsApi,
   getUserRejectedDemandsApi,
+  getAcceptedAndRejectedDemandsApi,
   getUserNewDemandsApi,
 };

@@ -24,5 +24,5 @@ public class ApiPaths {
         public static final String SEARCH ="/search";
         public static final String STATISTICS ="/statistics" ;
         public static final String CHAT ="/chat" ;
-        public static final String LOCAL_STORAGE = "";
+        public static final String LOCAL_STORAGE = "C:\\Users\\Hamza\\Desktop\\Merge_git\\ResourcesStorage";
 }
